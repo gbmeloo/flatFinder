@@ -52,3 +52,5 @@ firebase.json
 firebase.rules
 firestore.indexes.json
 firestore.rules
+
+environments/environment.ts
