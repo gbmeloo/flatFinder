@@ -53,7 +53,7 @@ ng e2e
 ```
 
 ## Create a environment.ts file
-The file should be under the environments/ folder
+The file should be under the environments/ folder.
 This file should contain your firebase API Keys, the file should look like below.
 
 ```bash
