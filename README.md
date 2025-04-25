@@ -53,7 +53,22 @@ ng e2e
 ```
 
 ## Create a environment.ts file
-This file should contain your firebase API Keys
+This file should contain your firebase API Keys, the file should look like below.
+
+```bash
+export const environment = {
+  production: false,
+  firebase: {
+    apiKey: "your_api_key",
+    authDomain: "your-auth-domain.com",
+    projectId: "yout-project-id",
+    storageBucket: "your-storage-bucket",
+    messagingSenderId: "your-messenger-id",
+    appId: "your-app-id",
+    measurementId: "your-measurement-id"
+  }
+};
+
 
 Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
 
