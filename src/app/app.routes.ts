@@ -9,15 +9,15 @@ export const routes: Routes = [
         redirectTo: '/flats'
     },
     {
-        path: 'flats',
+        path: '/flats',
         component: FlatsComponent
     },
     {
-        path: 'login',
+        path: '/login',
         component: LoginComponent
     },
     {
-        path: 'register',
+        path: '/register',
         component: RegisterComponent
     }
 ];
