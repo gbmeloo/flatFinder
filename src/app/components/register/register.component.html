@@ -1,0 +1,21 @@
+<h2>FlatFinder</h2>
+<h2>Register</h2>
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+  <label>
+    First Name:
+    <input formControlName="firstName" required />
+  </label>
+  <label>
+    Last Name:
+    <input formControlName="lastName" required />
+  </label>
+  <label>
+    Date of Birth:
+    <input type="date" formControlName="dob" required />
+  </label>
+  <label>
+    Email:
+    <input type="email" formControlName="email" required />
+  </label>
+  <button type="submit" [disabled]="registerForm.invalid">Register</button>
+</form>
