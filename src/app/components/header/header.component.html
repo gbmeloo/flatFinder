@@ -2,20 +2,18 @@
     <nav class="navbar-container">
         <ul class="navbar-list">
             @if (isLoggedIn) {
-                <div id="navbar-list2">
-                    <div class="items-left">
-                        <li><a href="/flats">Flats</a></li>
-                        <li><a href="/flats-add">Add a Flat</a></li>
-                        <li><a href="/profile">Profile</a></li>
-                        <li><a href="/favorites">Favorites</a></li>
-                    </div>
+                <div class="items-left">
+                    <li><a routerLink="/flats">Flats</a></li>
+                    <li><a routerLink="/flats-add">Add a Flat</a></li>
+                    <li><a routerLink="/profile">Profile</a></li>
+                    <li><a routerLink="/favorites">Favorites</a></li>
                 </div>
                 <div class="items-right">
                     <li><a>Logout</a></li>
                 </div>
             } @else {
-                <li><a href="/login">Login</a></li>
-                <li><a href="/signup">Sign Up</a></li>
+                <li><a routerLink="/login">Login</a></li>
+                <li><a routerLink="/signup">Sign Up</a></li>
             }
         </ul>
     </nav>
