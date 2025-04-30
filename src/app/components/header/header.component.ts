@@ -13,4 +13,5 @@ export class HeaderComponent {
   logout() {
     this.isLoggedIn = false;
   }
+  
 }

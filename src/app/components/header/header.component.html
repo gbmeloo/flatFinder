@@ -9,12 +9,12 @@
                     <li><a routerLink="/favorites">Favorites</a></li>
                 </div>
                 <div class="items-right">
-                    <li><a>Logout</a></li>
+                    <li><a (click)="logout()">Logout</a></li>
                 </div>
             } @else {
                 <div class="before-login-items">
                     <li><a routerLink="/login">Login</a></li>
-                    <li><a (click)="logout()">Sign Up</a></li>
+                    <li><a routerLink="/register">Sign Up</a></li>
                 </div>
             }
         </ul>
