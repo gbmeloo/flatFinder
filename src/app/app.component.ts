@@ -10,6 +10,7 @@ import { Firestore } from '@angular/fire/firestore';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent  {
+  isLoggedIn: boolean = true;
 
   constructor(private firestore: Firestore, private auth: Auth) {}
 
