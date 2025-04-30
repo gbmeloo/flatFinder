@@ -1,1 +1,15 @@
-
+<div class="login-header">
+    <h1 class="flatfinder-title">FlatFinder</h1>
+    <h2 class="login-subtitle">Please Log In</h2>
+  </div>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+    <label>
+      Email:
+      <input type="email" formControlName="email" required />
+    </label>
+    <label>
+      Password:
+      <input type="password" formControlName="password" required minlength="6" />
+    </label>
+    <button type="submit" [disabled]="loginForm.invalid">Log In</button>
+  </form>

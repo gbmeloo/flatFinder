@@ -1,5 +1,7 @@
-<h2>FlatFinder</h2>
-<h2>Register</h2>
+<div class="register-header">
+  <h1 class="flatfinder-title">FlatFinder</h1>
+  <h2 class="register-subtitle">Please Register</h2>
+</div>
 <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
   <label>
     First Name:
@@ -16,6 +18,10 @@
   <label>
     Email:
     <input type="email" formControlName="email" required />
+  </label>
+  <label>
+    Password:
+    <input type="password" formControlName="password" required minlength="6" />
   </label>
   <button type="submit" [disabled]="registerForm.invalid">Register</button>
 </form>
