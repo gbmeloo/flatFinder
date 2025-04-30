@@ -9,4 +9,8 @@ import { RouterModule } from '@angular/router';
 })
 export class HeaderComponent {
   isLoggedIn: boolean = true;
+
+  logout() {
+    this.isLoggedIn = false;
+  }
 }

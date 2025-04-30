@@ -12,9 +12,10 @@
                     <li><a>Logout</a></li>
                 </div>
             } @else {
-                <li><a routerLink="/login">Login</a></li>
-                <li><a routerLink="/register">Register</a></li>
-                <li><a routerLink="/signup">Sign Up</a></li>
+                <div class="before-login-items">
+                    <li><a routerLink="/login">Login</a></li>
+                    <li><a (click)="logout()">Sign Up</a></li>
+                </div>
             }
         </ul>
     </nav>
