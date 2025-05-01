@@ -5,7 +5,11 @@
 }
 
 #form {
-  padding-top: 15px;  
+  padding: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
+  margin: 10px;
+  border: 100px;
+  background-color: whitesmoke;
 }
 
 #form-button {
