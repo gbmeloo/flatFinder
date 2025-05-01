@@ -29,7 +29,7 @@ export class LoginComponent {
       const { email, password } = this.loginForm.value;
       try {
         await signInWithEmailAndPassword(this.auth, email, password);
-        this.router.navigate(['/flats']); // or wherever you want to redirect
+        this.router.navigate(['/flats']);
       } catch (error) {
         alert('Login failed: ' + (error as Error).message);
       }
