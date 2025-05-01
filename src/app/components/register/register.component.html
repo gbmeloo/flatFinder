@@ -1,27 +1,20 @@
-<div class="register-header">
-  <h1 class="flatfinder-title">FlatFinder</h1>
-  <h2 class="register-subtitle">Please Register</h2>
+<div class="form-title">
+  <h2>FlatFinder</h2>
+</div>  
+<div class="body">
+  <div class="register-form-container">
+    <h2 style="margin-bottom: 50px;">Register</h2>
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+      <label>First Name:</label>
+      <input formControlName="firstName" required />
+      <label>Last Name:</label>
+      <input formControlName="lastName" required />
+      <label>Date of Birth:</label>
+      <input type="date" formControlName="dob" required />
+      <label>Email:</label>
+      <input type="email" formControlName="email" required />
+      <button type="submit" [disabled]="registerForm.invalid">Register</button>
+    </form>
+  </div>
 </div>
-<form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
-  <label>
-    First Name:
-    <input formControlName="firstName" required />
-  </label>
-  <label>
-    Last Name:
-    <input formControlName="lastName" required />
-  </label>
-  <label>
-    Date of Birth:
-    <input type="date" formControlName="dob" required />
-  </label>
-  <label>
-    Email:
-    <input type="email" formControlName="email" required />
-  </label>
-  <label>
-    Password:
-    <input type="password" formControlName="password" required minlength="6" />
-  </label>
-  <button type="submit" [disabled]="registerForm.invalid">Register</button>
-</form>
+
