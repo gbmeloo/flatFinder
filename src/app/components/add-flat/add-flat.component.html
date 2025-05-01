@@ -1,0 +1,39 @@
+<div>
+    <h1>
+        Add a Flat
+    </h1>
+</div>
+<div id="form-container">
+    <h2>Fill in the details of the flat</h2>
+    <form id="form" action="submit">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <br>
+            <input type="text" id="name" name="name" [(ngModel)]="name" required>
+        </div>
+        <div class="form-group">
+            <label for="price">Price:</label>
+            <br>
+            <input type="number" id="price" name="price" [(ngModel)]="price" required>
+        </div>
+        <div class="form-group">
+            <label for="location">Location:</label>
+            <br>
+            <input type="text" id="location" name="location" [(ngModel)]="location" required>
+        </div>
+        <div class="form-group">
+            <label for="size">Size (m²):</label>
+            <br>
+            <input type="number" id="size" name="size" [(ngModel)]="size" required>
+        </div>
+        <div class="form-group">
+            <label for="size">Image:</label>
+            <br>
+            <input type="file" id="image" name="image" >
+        </div>
+        <div id="form-button">
+            <button type="submit" (click)="addFlat()" id="submit-button">Submit</button>
+        </div>
+
+    </form>
+</div>
