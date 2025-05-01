@@ -3,7 +3,7 @@
 </div>  
 <div class="body">
   <div class="register-form-container">
-    <h2 style="margin-bottom: 50px;">Register</h2>
+    <h2 style="margin-bottom: 30px;">Register</h2>
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
       <label>First Name:</label>
       <input formControlName="firstName" required />
@@ -13,6 +13,10 @@
       <input type="date" formControlName="dob" required />
       <label>Email:</label>
       <input type="email" formControlName="email" required />
+      <label>Password:</label>
+      <input type="text" formControlName="password" required />
+      <label>Confirm Password:</label>
+      <input type="text" formControlName="confirmPassword" required />
       <button type="submit" [disabled]="registerForm.invalid">Register</button>
     </form>
   </div>

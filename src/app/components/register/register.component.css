@@ -8,7 +8,7 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  height: 50vh;
+  height: 70vh;
   margin-top: 50px;
 }
 
@@ -39,4 +39,19 @@
 .register-form input:focus {
   border-color: #007bff;
   outline: none;
+}
+
+.register-form button {
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.register-form button:hover {
+  background-color: #0056b3;
 }

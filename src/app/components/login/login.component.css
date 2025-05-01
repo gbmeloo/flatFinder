@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .login-header {
     text-align: center;
     margin-bottom: 24px;
@@ -64,4 +65,62 @@
     background: #b2eaff;
     color: #0a2342;
     cursor: not-allowed;
+=======
+.form-title {
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  .body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 50vh;
+    margin-top: 50px;
+  }
+  
+  .login-form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #f7f7f7;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    width: 350px;
+    padding: 50px 20px;
+  }
+  
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    gap: 10px;
+  }
+  
+  .login-form input {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  .login-form input:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+  
+  .login-form button {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .login-form button:hover {
+    background-color: #0056b3;
+>>>>>>> 5f11cdd (Changes to be committed:)
   }

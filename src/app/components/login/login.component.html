@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div class="login-header">
     <h1 class="flatfinder-title">FlatFinder</h1>
     <h2 class="login-subtitle">Please Log In</h2>
@@ -13,3 +14,20 @@
     </label>
     <button type="submit" [disabled]="loginForm.invalid">Log In</button>
   </form>
+=======
+<div class="form-title">
+    <h2>FlatFinder</h2>
+  </div>  
+  <div class="body">
+    <div class="login-form-container">
+      <h2 style="margin-bottom: 30px;">Login</h2>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+        <label>Email:</label>
+        <input type="email" formControlName="email" required />
+        <label>Password:</label>
+        <input type="password" formControlName="password" required />
+        <button type="submit" [disabled]="loginForm.invalid">Register</button>
+      </form>
+    </div>
+  </div>
+>>>>>>> 5f11cdd (Changes to be committed:)
