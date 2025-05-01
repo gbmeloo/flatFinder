@@ -31,6 +31,11 @@
   gap: 10px;
 }
 
+.regiter-form label {
+  font-size: 20px;
+  margin-bottom: 2px;
+}
+
 .register-form input {
   padding: 10px;
   border-radius: 5px;
@@ -54,4 +59,10 @@
 
 .register-form button:hover {
   background-color: #0056b3;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+  margin-top: -5px;
 }
