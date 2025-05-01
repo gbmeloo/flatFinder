@@ -2,22 +2,30 @@
     margin: 0;
     padding: 0;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: row;
+}
+
+.navbar-container {
+    width: 100%;
 }
 
 .navbar-list {
     list-style: none;
     display: flex;
     flex-direction: row;
-    padding: 20px 20px;
+    padding: 15px 20px;
     gap: 1rem;
     justify-content: space-between;
+    font-size: 1.3rem;
 }
 
-.navbar-list a{
+.navbar-list a {
     text-decoration: none;
     color: black;
     transition: all 0.3s ease;
     cursor: pointer;
+    display: flex;
 }
 
 .navbar-list a:hover{
@@ -26,10 +34,20 @@
 
 .items-left {
     display: flex;
-    gap: 1rem;
+    gap: 1.5rem;
+}
+
+.items-right mat-icon {
+    margin-right: 5px;
 }
 
 .before-login-items {
     display: flex;
-    gap: 1rem;
+    gap: 1.5rem;
+}
+
+.img-logo {
+    width: 4rem;
+    height: 100%;
+    margin: 5px 0 0 5px;
 }
