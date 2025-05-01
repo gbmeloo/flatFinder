@@ -19,12 +19,8 @@ export class RegisterComponent {
       lastName: ['', Validators.required],
       dob: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-<<<<<<< HEAD
-      password: ['', [Validators.required, Validators.minLength(6)]]
-=======
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required],
->>>>>>> 5f11cdd (Changes to be committed:)
     });
   }
 
