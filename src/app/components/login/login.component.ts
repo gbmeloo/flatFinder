@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Auth, signInWithEmailAndPassword } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-login',
@@ -12,18 +13,26 @@ import { Router } from '@angular/router';
 export class LoginComponent {
   loginForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private auth: Auth
+  ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (this.loginForm.valid) {
-      // Replace with your authentication logic
-      console.log(this.loginForm.value);
-      // Example: this.router.navigate(['/flats']);
+      const { email, password } = this.loginForm.value;
+      try {
+        await signInWithEmailAndPassword(this.auth, email, password);
+        this.router.navigate(['/flats']); // or wherever you want to redirect
+      } catch (error) {
+        alert('Login failed: ' + (error as Error).message);
+      }
     }
   }
 }
