@@ -5,10 +5,15 @@
 </div>
 <div id="flats-container">
     <div *ngFor="let item of flats" class="flat-card">
+        <h3>{{item.landlord_id}}</h3>
         <h2>{{ item.city }}, {{ item.street_name}}, {{item.street_number}}</h2>
         <img [src]="item.imageUrl" alt="Test" class="flat-image" />
         <p>Price: {{ item.rent_price}}$</p>
         <p>Size: {{ item.area_size}} m²</p>
+        <p>AC: @if (item.has_ac) {Yes} @else {No}</p>
+        <p>Built In: {{item.year_built}}</p>
+        <p>Available At: {{item.date_available}}</p>
+
         <button (click)="addToFavorites()">Add to Favorites</button>
     </div>
 </div>
