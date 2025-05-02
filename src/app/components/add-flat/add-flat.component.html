@@ -1,0 +1,55 @@
+<div>
+    <h1>
+        Add a Flat
+    </h1>
+</div>
+<div id="form-container">
+    <h2>Fill in the details of the flat</h2>
+    <form id="form" action="submit">
+        <div class="form-group">
+            <label for="location">City:</label>
+            <br>
+            <input type="text" id="city" name="city" [(ngModel)]="city" required>
+        </div>
+        <div class="form-group">
+            <label for="location">Street name and number</label>
+            <br>
+            <input type="text" id="st_name" name="street_name" [(ngModel)]="street_name" required>
+            <br>
+            <input type="number" id="street_number" name="street_number" [(ngModel)]="street_number" required>
+        </div>
+        <div class="form-group">
+            <label for="price">Price:</label>
+            <br>
+            <input type="number" id="price" name="price" [(ngModel)]="rent_price" required>
+        </div>
+        <div class="form-group">
+            <label for="size">Size (m²):</label>
+            <br>
+            <input type="number" id="size" name="size" [(ngModel)]="area_size" required>
+        </div>
+        <div class="form-group">
+            <label for="date">Date:</label>
+            <br>
+            <input type="date" name="date" [(ngModel)]="date_available" required>
+        </div>
+        <div class="form-group">
+            <label for="date">Year Built:</label>
+            <br>
+            <input type="number" name="year_built" [(ngModel)]="year_built" required>
+        </div>
+        <div>    
+            <label for="size">Image:</label>
+            <br>
+            <input type="file" (change)="onFileSelected($event)" id="image" name="image" >
+        </div>
+        <div class="form-group">
+            <label for="description">Has AC:</label>
+            <br>
+            <input type="checkbox" id="description" name="description"  [(ngModel)]="has_ac" required>
+        </div>
+        <div id="form-button">
+            <button type="submit" (click)="addFlat()" id="submit-button">Submit</button>
+        </div>
+    </form>
+</div>

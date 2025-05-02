@@ -10,5 +10,15 @@ import { CommonModule } from '@angular/common';
 export class FlatsComponent {
    addToFavorites() {}
    
-   flats = [{name: 'Flat 1', price: 100, imageUrl:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQlEg9QM7XyWgkhnfHvGltELrey0u26kyZ4A&s", location: "test", size: "10"},]
+   flats = [{landlord_id: '',
+    city: 'city 1',
+    rent_price: 100,
+    area_size: 200,
+    imageUrl: 'https://randomwordgenerator.com/img/picture-generator/54e5d2444253af14f1dc8460962e33791c3ad6e04e50744172287ad1954ec7_640.jpg',
+    has_ac: true, 
+    date_available: "2023-10-01",
+    street_number: 505,
+    street_name: "street A",
+    year_built: 1999
+  },]
 }
