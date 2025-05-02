@@ -4,6 +4,7 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { LoginAuthGuard } from './guard/login-auth.guard';
 import { AuthGuard } from './guard/auth.guard';
+import { AddFlatComponent } from './components/add-flat/add-flat.component';
 
 
 export const routes: Routes = [
@@ -28,8 +29,8 @@ export const routes: Routes = [
         canActivate: [LoginAuthGuard]
     },
     {
-        path: 'flats',
-        component: FlatsComponent,
+        path: 'add-flat',
+        component: AddFlatComponent,
         canActivate: [AuthGuard]
     }
 ];
