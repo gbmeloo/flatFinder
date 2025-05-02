@@ -5,7 +5,7 @@
 </div>
 <div id="flats-container">
     <div *ngFor="let item of flats" class="flat-card">
-        <h2>{{ item.city }}, {{ item.street_name}} {{item.street_number}}</h2>
+        <h2>{{ item.city }}, {{ item.street_name}}, {{item.street_number}}</h2>
         <img [src]="item.imageUrl" alt="Test" class="flat-image" />
         <p>Price: {{ item.rent_price}}$</p>
         <p>Size: {{ item.area_size}} m²</p>
