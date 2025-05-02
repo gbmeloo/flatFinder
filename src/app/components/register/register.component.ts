@@ -4,15 +4,18 @@ import { Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Auth, createUserWithEmailAndPassword } from '@angular/fire/auth';
 import { Firestore, doc, setDoc } from '@angular/fire/firestore';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, MatIconModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
 })
 export class RegisterComponent {
   registerForm: FormGroup;
+  passwordVisible: boolean = false; // Track password visibility
+  passwordVisibleConfirm: boolean = false; // Track confirm password visibility
 
   constructor(private fb: FormBuilder, private router: Router, private auth: Auth, private firestore: Firestore) {
     const formOptions: AbstractControlOptions = { validators: this.passwordMatchValidator };
@@ -65,6 +68,14 @@ export class RegisterComponent {
     }
 
     return '';
+  }
+
+  togglePasswordVisibility(): void {
+    this.passwordVisible = !this.passwordVisible;
+  }
+  
+  toggleConfirmPasswordVisibility(): void {
+    this.passwordVisibleConfirm = !this.passwordVisibleConfirm;
   }
 
   async onSubmit() {

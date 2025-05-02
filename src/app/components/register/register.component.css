@@ -1,34 +1,53 @@
-.form-title {
-  text-align: center;
-  margin-top: 50px;
-}
-
-.body {
+:host {
   display: flex;
+  height: 100vh;
+  background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('../../../../public/background.webp');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
-  height: 70vh;
-  margin-top: 50px;
 }
 
 .register-form-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: #f7f7f7;
+  background-color: rgba(255, 255, 255, 0.6); /* Semi-transparent white */
+  backdrop-filter: blur(10px); /* Apply blur effect */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 20px;
-  width: 350px;
   padding: 50px 20px;
+  margin-bottom: 100px;
+  text-align: center;
+  width: 700px;
 }
 
 .register-form {
   display: flex;
   flex-direction: column;
-  width: 90%;
+  align-items: center;
   gap: 10px;
+}
+
+.form-items {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  width: 100%;
+}
+
+.form-items-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.label-error {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .regiter-form label {
@@ -46,23 +65,84 @@
   outline: none;
 }
 
-.register-form button {
+.submit-btn {
   margin-top: 20px;
-  padding: 10px;
+  padding: 20px;
+  font-size: large;
   border-radius: 5px;
   border: none;
   background-color: #007bff;
   color: white;
   cursor: pointer;
+  width: 50%;
   transition: background-color 0.3s ease;
 }
 
-.register-form button:hover {
+.submit-btn:hover {
   background-color: #0056b3;
+}
+
+@keyframes slideInY {
+  0% {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .error {
   color: red;
   font-size: 14px;
   margin-top: -5px;
+  animation: slideInY 0.3s ease forwards;
+}
+
+
+.input-container {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #ffffff;
+}
+
+.input-container mat-icon {
+  margin-right: 10px;
+  color: #888;
+}
+
+.input-container input {
+  font-size: large;
+  border: none;
+  outline: none;
+  flex: 1;
+}
+
+.show-password-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  right: 10px;
+  color: #888;
+}
+
+.show-password-btn mat-icon {
+  font-size: 20px;
+}
+
+@media (max-width: 900px) {
+  .register-form-container {
+    margin-top: 100px;
+    width: 85%;
+    padding: 20px;
+  }
+  .form-items {
+    flex-direction: column;
+  }
+  
 }

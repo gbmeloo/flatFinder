@@ -1,32 +1,41 @@
-<div class="form-title">
-  <h2>FlatFinder</h2>
-</div>
-<div class="body">
-  <div class="login-form-container">
-    <h2 style="margin-bottom: 30px;">Login</h2>
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
-      <label>Email:</label>
-      <input type="email" formControlName="email" required />
+<div class="login-form-container">
+  <h2 style="margin-bottom: 30px;">Login</h2>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+    <div class="label-error">
+      <label>Email</label>
       @if (loginForm.get('email')?.touched && loginForm.get('email')?.invalid) {
         <div class="error">
           {{ getErrorMessage('email') }}
         </div>
       }
+    </div>
+    <div class="input-container">
+      <mat-icon>account_box</mat-icon>
+      <input type="email" formControlName="email" required />
+    </div>
 
-      <label>Password:</label>
-      <input type="password" formControlName="password" required />
+    <div class="label-error">
+      <label>Password</label>
       @if (loginForm.get('password')?.touched && loginForm.get('password')?.invalid) {
         <div class="error">
           {{ getErrorMessage('password') }}
         </div>
       }
+    </div>
+    <div class="input-container">
+      <mat-icon>lock</mat-icon>
+      <input [type]="passwordVisible ? 'text' : 'password'" formControlName="password" required />
+      <button type="button" class="show-password-btn" (click)="togglePasswordVisibility()">
+        <mat-icon>{{ passwordVisible ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+    </div>
 
-      @if (loginError) {
-        <div class="error">
-          {{ loginError }}
-        </div>
-      }
-      <button type="submit" [disabled]="loginForm.invalid">Login</button>
-    </form>
-  </div>
+    @if (loginError) {
+      <div class="error">
+        {{ loginError }}
+      </div>
+    }
+    <button type="submit" class="submit-btn" [disabled]="loginForm.invalid">Login</button>
+  </form>
+  <span class="helper-text">Don't have an account?<a routerLink="/register">Sign Up!</a></span>
 </div>

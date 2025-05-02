@@ -1,25 +1,34 @@
 <div class="navbar">
     <nav class="navbar-container">
-        <ul class="navbar-list">
-            @if (isLoggedIn) {
+        @if (isLoggedIn) {
+            <ul class="navbar-list-after">
                 <div class="items-left">
-                    <li><a routerLink="/flats">Flats</a></li>
-                    <li><a routerLink="/add-flat">Add a Flat</a></li>
-                    <li><a routerLink="/profile">Profile</a></li>
-                    <li><a routerLink="/favorites">Favorites</a></li>
-                </div>
-                <div class="middle-logo">
-                    <a routerLink="/"><img class="img-logo" src="logo_icon.jpg" /></a>
+                    <div class="img">
+                        <li><a routerLink="/"><img class="img-logo" src="logo_icon.jpg" /></a></li>
+                    </div>
+                    <div class="inner-left-items">
+                        <li><a routerLink="/flats">Flats</a></li>
+                        <li><a routerLink="/add-flat">Add a Flat</a></li>
+                        <li><a routerLink="/profile">Profile</a></li>
+                        <li><a routerLink="/favorites">Favorites</a></li>
+                    </div>
                 </div>
                 <div class="items-right">
                     <li><a (click)="logout()"><mat-icon aria-hidden="false">logout</mat-icon>Logout</a></li>
                 </div>
-            } @else {
+            </ul>
+        } @else {
+            <ul class="navbar-list-before">
                 <div class="before-login-items">
-                    <li><a routerLink="/login">Login</a></li>
-                    <li><a routerLink="/register">Sign Up</a></li>
+                    <div class="before-img">
+                        <li class="img-logo-before"><a routerLink="/"><img src="logo_icon.jpg" /></a></li>
+                    </div>
+                    <div class="before-text">
+                        <li><a routerLink="/login">Login</a></li>
+                        <li><a routerLink="/register">Sign Up</a></li>
+                    </div>
                 </div>
-            }
-        </ul>
+            </ul>
+        }
     </nav>
 </div>
