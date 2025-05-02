@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
 export class FlatsComponent {
    addToFavorites() {}
    
-   flats = [{landlord_id: '',
+   flats = [{landlord_id: 'Joshua',
     city: 'city 1',
     rent_price: 100,
     area_size: 200,
