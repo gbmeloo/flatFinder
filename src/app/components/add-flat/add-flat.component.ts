@@ -21,13 +21,25 @@ export class AddFlatComponent {
 
   flats: any[] = [];
 
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imageUrl = reader.result as string; // Save Base64 string
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
   addFlat() {
+   
     const flat = {
       landlord_id: this.landlord_id,
       city: this.city,
       rent_price: this.rent_price,
       area_size: this.area_size,
-      imageUrl: this.imageUrl,
+      imageUrl: this.imageUrl, 
       has_ac: this.has_ac,
       date_available: this.date_available,
       street_number: this.street_number,
