@@ -1,21 +1,58 @@
-<h2>FlatFinder</h2>
-<h2>Register</h2>
-<form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
-  <label>
-    First Name:
-    <input formControlName="firstName" required />
-  </label>
-  <label>
-    Last Name:
-    <input formControlName="lastName" required />
-  </label>
-  <label>
-    Date of Birth:
-    <input type="date" formControlName="dob" required />
-  </label>
-  <label>
-    Email:
-    <input type="email" formControlName="email" required />
-  </label>
-  <button type="submit" [disabled]="registerForm.invalid">Register</button>
-</form>
+<div class="form-title">
+  <h2>FlatFinder</h2>
+</div>
+<div class="body">
+  <div class="register-form-container">
+    <h2 style="margin-bottom: 30px;">Register</h2>
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+      <label>First Name:</label>
+      <input formControlName="firstName" required />
+      @if (registerForm.get('firstName')?.touched && registerForm.get('firstName')?.invalid) {
+        <div class="error">
+          {{ getErrorMessage('firstName') }}
+        </div>
+      }
+      <label>Last Name:</label>
+      <input formControlName="lastName" required />
+      @if (registerForm.get('lastName')?.touched && registerForm.get('lastName')?.invalid) {
+        <div class="error">
+          {{ getErrorMessage('lastName') }}
+        </div>
+      }
+      <label>Date of Birth:</label>
+      <input type="date" formControlName="birth_date" required />
+      @if (registerForm.get('birth_date')?.touched && registerForm.get('birth_date')?.invalid) {
+        <div class="error">
+          {{ getErrorMessage('birth_date') }}
+        </div>
+      }
+
+      <label>Email:</label>
+      <input type="email" formControlName="email" required />
+      @if (registerForm.get('email')?.touched && registerForm.get('email')?.invalid) {
+        <div class="error">
+          {{ getErrorMessage('email') }}
+        </div>
+      }
+
+      <label>Password:</label>
+      <input type="password" formControlName="password" required />
+      @if (registerForm.get('password')?.touched && registerForm.get('password')?.invalid) {
+        <div class="error">
+          {{ getErrorMessage('password') }}
+        </div>
+      }
+
+      <label>Confirm Password:</label>
+      <input type="password" formControlName="confirmPassword" required />
+      @if (registerForm.get('confirmPassword')?.touched && registerForm.hasError('mismatch')) {
+        <div class="error">
+          {{ getErrorMessage('confirmPassword') }}
+        </div>
+      }
+
+      <button type="submit" [disabled]="registerForm.invalid">Register</button>
+    </form>
+  </div>
+</div>
+

@@ -1,1 +1,32 @@
+<div class="form-title">
+  <h2>FlatFinder</h2>
+</div>
+<div class="body">
+  <div class="login-form-container">
+    <h2 style="margin-bottom: 30px;">Login</h2>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <label>Email:</label>
+      <input type="email" formControlName="email" required />
+      @if (loginForm.get('email')?.touched && loginForm.get('email')?.invalid) {
+        <div class="error">
+          {{ getErrorMessage('email') }}
+        </div>
+      }
 
+      <label>Password:</label>
+      <input type="password" formControlName="password" required />
+      @if (loginForm.get('password')?.touched && loginForm.get('password')?.invalid) {
+        <div class="error">
+          {{ getErrorMessage('password') }}
+        </div>
+      }
+
+      @if (loginError) {
+        <div class="error">
+          {{ loginError }}
+        </div>
+      }
+      <button type="submit" [disabled]="loginForm.invalid">Login</button>
+    </form>
+  </div>
+</div>
