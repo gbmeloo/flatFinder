@@ -1,5 +1,4 @@
 <div class="navbar">
-    <img class="img-logo" src="logo_icon.jpg" />
     <nav class="navbar-container">
         <ul class="navbar-list">
             @if (isLoggedIn) {
@@ -8,6 +7,9 @@
                     <li><a routerLink="/add-flat">Add a Flat</a></li>
                     <li><a routerLink="/profile">Profile</a></li>
                     <li><a routerLink="/favorites">Favorites</a></li>
+                </div>
+                <div class="middle-logo">
+                    <a routerLink="/"><img class="img-logo" src="logo_icon.jpg" /></a>
                 </div>
                 <div class="items-right">
                     <li><a (click)="logout()"><mat-icon aria-hidden="false">logout</mat-icon>Logout</a></li>

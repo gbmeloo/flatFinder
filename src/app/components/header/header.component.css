@@ -13,6 +13,7 @@
 .navbar-list {
     list-style: none;
     display: flex;
+    align-items: center;
     flex-direction: row;
     padding: 15px 20px;
     gap: 1rem;
@@ -37,6 +38,10 @@
     gap: 1.5rem;
 }
 
+.middle-logo {
+    margin: 0 10% 0 0;
+}
+
 .items-right mat-icon {
     margin-right: 5px;
 }
@@ -47,7 +52,6 @@
 }
 
 .img-logo {
-    width: 4rem;
-    height: 100%;
+    width: 200px;
     margin: 5px 0 0 5px;
 }
