@@ -3,9 +3,9 @@ import { FlatsComponent } from './components/flats/flats.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { LoginAuthGuard } from './guard/login-auth.guard';
+import { ProfileComponent } from './components/profile/profile.component';
 import { AuthGuard } from './guard/auth.guard';
 import { AddFlatComponent } from './components/add-flat/add-flat.component';
-
 
 export const routes: Routes = [
     {
@@ -31,6 +31,11 @@ export const routes: Routes = [
     {
         path: 'add-flat',
         component: AddFlatComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'profile',
+        component: ProfileComponent,
         canActivate: [AuthGuard]
     }
 ];

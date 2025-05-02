@@ -1,0 +1,45 @@
+
+<div class="container">
+    <h1>Profile</h1>
+    <form [formGroup]="profileForm" class="content" (ngSubmit)="onSubmit()">
+        <div class="input-normal">
+            <input type="text" formControlName="firstName" placeholder="First Name" required>
+            <mat-icon>badge</mat-icon>
+            @if (profileForm.get('firstName')?.touched && profileForm.get('firstName')?.invalid) {
+                <label class="lbl-message">
+                    {{ getErrorMessage('firstName') }}
+                </label>
+              }
+        </div>
+        <div class="input-normal">
+            <input type="text" formControlName="lastName" placeholder="Last Name" required>
+            <mat-icon>badge</mat-icon>
+            @if (profileForm.get('lastName')?.touched && profileForm.get('lastName')?.invalid) {
+                <label class="lbl-message">
+                    {{ getErrorMessage('lastName') }}
+                </label>
+              }
+        </div>
+        <div class="input-normal">
+            <input type="text" formControlName="email" placeholder="Email" required>
+            <mat-icon>mail</mat-icon>
+            @if (profileForm.get('email')?.touched && profileForm.get('email')?.invalid) {
+                <label class="lbl-message">
+                    {{ getErrorMessage('email') }}
+                </label>
+              }
+        </div>
+        <div class="input-normal">
+            <input type="date" formControlName="birth_date" placeholder="Birth Date" [max]="max_date" required>
+            <mat-icon>calendar_month</mat-icon>
+            @if (profileForm.get('birth_date')?.touched && profileForm.get('birth_date')?.invalid) {
+                <label class="lbl-message">
+                  {{ getErrorMessage('birth_date') }}
+                </label>
+              }
+        </div>
+        <div class="confirm">
+            <button type="submit">Save</button>
+        </div>
+    </form>
+</div>
