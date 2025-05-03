@@ -7,10 +7,10 @@
                         <li><a routerLink="/"><img class="img-logo" src="logo_icon.jpg" /></a></li>
                     </div>
                     <div class="inner-left-items">
-                        <li><a routerLink="/flats">Flats</a></li>
-                        <li><a routerLink="/add-flat">Add a Flat</a></li>
-                        <li><a routerLink="/profile">Profile</a></li>
-                        <li><a routerLink="/favorites">Favorites</a></li>
+                        <li [ngClass]="{ 'active': pageName === '/flats' }"><a routerLink="/flats">Flats</a></li>
+                        <li [ngClass]="{ 'active': pageName === '/add-flat' }"><a routerLink="/add-flat">Add a Flat</a></li>
+                        <li [ngClass]="{ 'active': pageName === '/profile' }"><a routerLink="/profile">Profile</a></li>
+                        <li [ngClass]="{ 'active': pageName === '/favorites' }"><a routerLink="/favorites">Favorites</a></li>
                     </div>
                 </div>
                 <div class="items-right">
