@@ -8,7 +8,7 @@ export class LoginAuthGuard implements CanActivate {
   constructor(private router: Router) {}
 
   canActivate(): boolean {
-    const token = sessionStorage.getItem('idToken');
+    const token = localStorage.getItem('idToken');
     if (token) {
       // If the user is logged in, redirect to the flats page
       this.router.navigate(['/flats']);

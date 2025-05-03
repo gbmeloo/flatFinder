@@ -1,17 +1,66 @@
-*:not(mat-icon) {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
+:host {
     display: flex;
-    justify-content: center;
+    height: 100vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('../../../../public/background.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     align-items: center;
-    height: 93.8vh;
-    text-align: center;
-}
+    justify-content: center;
+  }
+    
+    .profile-form-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(255, 255, 255, 0.6); /* Semi-transparent white */
+      backdrop-filter: blur(10px); /* Apply blur effect */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      width: 400px;
+      padding: 50px 20px;
+    }
+    
+    .profile-form {
+      display: flex;
+      flex-direction: column;
+      width: 90%;
+      gap: 10px;
+      animation: slideInY 0.5s ease forwards;
+    }
+    
+    .profile-form input {
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+  
+    @keyframes slideInY {
+      0% {
+        opacity: 0;
+        transform: translateY(-5px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  
+    .label-error {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+  
+    .error {
+      color: red;
+      font-size: 14px;
+      margin-top: -5px;
+      animation: slideInY 0.3s ease forwards;
+    }
 
+<<<<<<< HEAD
 .container {
     display: flex;
     flex-direction: column;
@@ -105,3 +154,69 @@ h2 {
     color: #84a3d9;
     cursor: pointer;
 }
+=======
+    .confirm-password {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      animation: slideInY 0.3s ease forwards;
+    }
+    
+    .submit-btn {
+      margin-top: 20px;
+      padding: 20px;
+      font-size: large;
+      border-radius: 5px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    
+    .submit-btn:hover {
+      background-color: #0056b3;
+    }
+    
+    .input-container {
+      display: flex;
+      align-items: center;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 10px;
+      margin-bottom: 10px;
+      background-color: #ffffff;
+    }
+    
+    .input-container mat-icon {
+      margin-right: 10px;
+      color: #888;
+    }
+    
+    .input-container input {
+      font-size: large;
+      border: none;
+      outline: none;
+      flex: 1;
+    }
+  
+    .show-password-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      right: 10px;
+      color: #888;
+    }
+    
+    .show-password-btn mat-icon {
+      font-size: 20px;
+    }
+  
+    @media (max-width: 900px) {
+      .login-form-container {
+        width: 85%;
+        padding: 20px;
+      }
+      
+    }
+>>>>>>> eab0aa9 (Major changes to login method)
