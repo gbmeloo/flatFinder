@@ -1,7 +1,7 @@
-<div class="profile-form-container" [@formResize]="showPasswordFields ? 'expanded' : 'collapsed'">
-    <h2 style="margin-bottom: 30px;">Profile</h2>
-    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="profile-form">
-
+<div class="profile-form-container">
+    
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="profile-form" >
+        <h2 style="margin-bottom: 30px; text-align: center;" >Profile</h2>
         <div class="label-error">
             <label>First Name</label>
             @if (profileForm.get('firstName')?.touched && profileForm.get('firstName')?.invalid) {
@@ -10,7 +10,7 @@
                 </div>
             }
         </div>
-            <div class="input-container">
+            <div class="input-container" >
                 <mat-icon>account_box</mat-icon>
             <input type="text" formControlName="firstName" required />
         </div>
@@ -44,42 +44,49 @@
         {{ showPasswordFields ? 'Cancel Password Change' : 'Change Password' }}
       </button>
 
-      <form *ngIf="showPasswordFields" [formGroup]="passwordForm" (ngSubmit)="onSubmit()" class="password-form">
-        <div class="label-error">
-          <label>New Password</label>
-          @if (passwordForm.get('password')?.touched && passwordForm.get('password')?.invalid) {
-            <div class="error">
-              {{ getErrorMessage('password') }}
-            </div>
-          }
-        </div>
-        <div class="input-container">
-          <mat-icon>lock</mat-icon>
-          <input [type]="passwordVisible ? 'text' : 'password'" formControlName="password" required />
-          <button type="button" class="show-password-btn" (click)="togglePasswordVisibility()">
-            <mat-icon>{{ passwordVisible ? 'visibility_off' : 'visibility' }}</mat-icon>
-          </button>
-        </div>
-      
-        <div class="label-error">
-          <label>Confirm Password</label>
-          @if (passwordForm.get('confirmPassword')?.touched && passwordForm.hasError('mismatch')) {
-            <div class="error">
-              {{ getErrorMessage('confirmPassword') }}
-            </div>
-          }
-        </div>
-        <div class="input-container">
-          <mat-icon>lock</mat-icon>
-          <input [type]="confirmPasswordVisible ? 'text' : 'password'" formControlName="confirmPassword" required />
-          <button type="button" class="show-password-btn" (click)="toggleConfirmPasswordVisibility()">
-            <mat-icon>{{ confirmPasswordVisible ? 'visibility_off' : 'visibility' }}</mat-icon>
-          </button>
-        </div>
-      </form>
-      
+      <div [@formResize]="showPasswordFields ? 'expanded' : 'collapsed'" class="password-form-container">
+        <form [formGroup]="passwordForm" (ngSubmit)="onSubmit()" class="password-form" >
+          <div class="label-error">
+            <label>New Password</label>
+            @if (passwordForm.get('password')?.touched && passwordForm.get('password')?.invalid) {
+              <div class="error">
+                {{ getErrorMessage('password') }}
+              </div>
+            }
+          </div>
+          <div class="input-container">
+            <mat-icon>lock</mat-icon>
+            <input [type]="passwordVisible ? 'text' : 'password'" formControlName="password" required />
+            <button type="button" class="show-password-btn" (click)="togglePasswordVisibility()">
+              <mat-icon>{{ passwordVisible ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+          </div>
+        
+          <div class="label-error">
+            <label>Confirm Password</label>
+            @if (passwordForm.get('confirmPassword')?.touched && passwordForm.hasError('mismatch')) {
+              <div class="error">
+                {{ getErrorMessage('confirmPassword') }}
+              </div>
+            }
+          </div>
+          <div class="input-container">
+            <mat-icon>lock</mat-icon>
+            <input [type]="confirmPasswordVisible ? 'text' : 'password'" formControlName="confirmPassword" required />
+            <button type="button" class="show-password-btn" (click)="toggleConfirmPasswordVisibility()">
+              <mat-icon>{{ confirmPasswordVisible ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+          </div>
+        </form>
+      </div>
       
       <button type="submit" class="submit-btn" [disabled]="profileForm.invalid">Update</button>
+
+      @if (updateError || updateSuccess) {
+        <div class="notification" [ngClass]="{ 'error': updateError, 'success': updateSuccess }">
+          {{ updateError || updateSuccess }}
+        </div>
+      }
     </form>
   </div>
   

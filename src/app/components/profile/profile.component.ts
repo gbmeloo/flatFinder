@@ -26,14 +26,16 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
   animations: [
     trigger('formResize', [
       state('collapsed', style({
-        height: '500px',
-        opacity: 1,
+        height: '0px',
+        opacity: 0,
         overflow: 'hidden',
+        padding: '0px'
       })),
       state('expanded', style({
         height: '*',
         opacity: 1,
         overflow: 'hidden',
+        padding: '*'
       })),
       transition('collapsed <=> expanded', [
         style({ overflow: 'hidden' }),
@@ -52,6 +54,8 @@ export class ProfileComponent {
   confirmPasswordVisible: boolean = false;
   userId: string | null = null;
   showPasswordFields: boolean = false;
+  updateError: string | null = null;
+  updateSuccess: string | null = null;
 
   constructor(private fb: FormBuilder, private auth: Auth, private firestore: Firestore) {
     const _date = new Date();
@@ -185,9 +189,12 @@ export class ProfileComponent {
   
       try {
         await updateDoc(doc(this.firestore, 'users', this.userId), updateData);
+        this.updateSuccess = 'Profile updated successfully';
+        this.updateError = null; // Clear any previous error message
         console.log('Profile updated');
       } catch (error) {
-        console.error('Error updating profile:', error);
+        this.updateError = "Error updating profile. Please try again.";
+        this.updateSuccess = null;
       }
     }
   

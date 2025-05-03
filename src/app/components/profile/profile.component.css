@@ -101,6 +101,7 @@
       padding: 10px;
       margin-bottom: 10px;
       background-color: #ffffff;
+      transition: transform 300ms ease, opacity 300ms ease;
     }
     
     .input-container mat-icon {
@@ -136,7 +137,22 @@
       gap: 10px;
       animation: slideInY 0.3s ease forwards;
     }
-  
+    
+    .notification {
+      position: relative;
+      top: 20px;
+      right: 20px;
+      animation: slideInY 0.3s ease forwards;
+    }
+
+    .notification.error {
+      color: red;
+    }
+
+    .notification.success {
+      color: #0056b3;
+    }
+
     @media (max-width: 900px) {
       .login-form-container {
         width: 85%;
