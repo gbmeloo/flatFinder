@@ -1,24 +1,33 @@
 
 <div class="container">
-    <h1>Profile</h1>
     <form [formGroup]="profileForm" class="content" (ngSubmit)="onSubmit()">
+        <h2>Profile</h2>
         <div class="input-normal">
             <input type="text" formControlName="firstName" placeholder="First Name" required>
-            <mat-icon>badge</mat-icon>
+            <mat-icon>person</mat-icon>
             @if (profileForm.get('firstName')?.touched && profileForm.get('firstName')?.invalid) {
                 <label class="lbl-message">
                     {{ getErrorMessage('firstName') }}
                 </label>
-              }
+                }
         </div>
         <div class="input-normal">
             <input type="text" formControlName="lastName" placeholder="Last Name" required>
-            <mat-icon>badge</mat-icon>
+            <mat-icon>person</mat-icon>
             @if (profileForm.get('lastName')?.touched && profileForm.get('lastName')?.invalid) {
                 <label class="lbl-message">
                     {{ getErrorMessage('lastName') }}
                 </label>
-              }
+                }
+        </div>
+        <div class="input-normal">
+            <input type="date" formControlName="birth_date" placeholder="Birth Date" [max]="max_date" required>
+            <mat-icon>calendar_month</mat-icon>
+            @if (profileForm.get('birth_date')?.touched && profileForm.get('birth_date')?.invalid) {
+                <label class="lbl-message">
+                    {{ getErrorMessage('birth_date') }}
+                </label>
+                }
         </div>
         <div class="input-normal">
             <input type="text" formControlName="email" placeholder="Email" required>
@@ -27,14 +36,42 @@
                 <label class="lbl-message">
                     {{ getErrorMessage('email') }}
                 </label>
+                }
+        </div>
+        <h2>Change Password</h2>
+        <div class="input-normal">
+            <input [type]="passwordVisible ? 'text' : 'password'" formControlName="password" placeholder="Password">
+            <mat-icon>lock</mat-icon>
+            <button type="button" class="show-password-btn" (click)="togglePasswordVisibility()">
+                <mat-icon>{{ passwordVisible ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            @if (profileForm.get('password')?.touched && profileForm.hasError('passwordrequired')) {
+                <label class="lbl-message password">
+                    {{ getErrorMessage('password') }}
+                </label>
               }
         </div>
         <div class="input-normal">
-            <input type="date" formControlName="birth_date" placeholder="Birth Date" [max]="max_date" required>
-            <mat-icon>calendar_month</mat-icon>
-            @if (profileForm.get('birth_date')?.touched && profileForm.get('birth_date')?.invalid) {
-                <label class="lbl-message">
-                  {{ getErrorMessage('birth_date') }}
+            <input [type]="newPasswordVisible ? 'text' : 'password'" formControlName="newPassword" placeholder="New Password">
+            <mat-icon>lock</mat-icon>
+            <button type="button" class="show-password-btn" (click)="toggleNewPasswordVisibility()">
+                <mat-icon>{{ newPasswordVisible ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            @if (profileForm.get('newPassword')?.touched && (profileForm.get('newPassword')?.invalid || profileForm.hasError('samepassword'))) {
+                <label class="lbl-message password">
+                    {{ getErrorMessage('newPassword') }}
+                </label>
+              }
+        </div>
+        <div class="input-normal">
+            <input [type]="newPasswordVisibleConfirm ? 'text' : 'password'" formControlName="confirmNewPassword" placeholder="Confirm New Password">
+            <mat-icon>lock</mat-icon>
+            <button type="button" class="show-password-btn" (click)="toggleConfirmNewPasswordVisibility()">
+                <mat-icon>{{ newPasswordVisibleConfirm ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            @if (profileForm.get('confirmNewPassword')?.touched && profileForm.hasError('mismatch')) {
+                <label class="lbl-message password">
+                    {{ getErrorMessage('confirmNewPassword') }}
                 </label>
               }
         </div>

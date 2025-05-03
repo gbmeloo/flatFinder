@@ -40,10 +40,6 @@ export class AuthService {
           console.log('ID Token:', idToken);
           console.log('Decoded Token:', decodedToken);
           sessionStorage.setItem('idToken', idToken);
-
-          const uid = userCredential.user.uid;
-          console.log('Uid:', uid);
-          sessionStorage.setItem('uid', uid);
           
           this.loggedIn.next(true);
           return Promise.resolve();
@@ -57,7 +53,6 @@ export class AuthService {
   logout(): void {
     
     sessionStorage.removeItem('idToken');
-    sessionStorage.removeItem('uid');
     this.loggedIn.next(false); // Notify subscribers
   }
 }
