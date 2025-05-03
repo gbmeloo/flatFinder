@@ -60,101 +60,6 @@
       animation: slideInY 0.3s ease forwards;
     }
 
-<<<<<<< HEAD
-.container {
-    display: flex;
-    flex-direction: column;
-    justify-self: center;
-    align-items: center;
-}
-
-h2 {
-    font-size: 2rem;
-    padding-top: 2rem;
-    margin-bottom: 1rem;
-    color: #5B5B62;
-    border-bottom: 5px solid #84a3d9;
-    text-align: center;
-    width: fit-content;
-    white-space: nowrap;
-}
-
-.input-normal {
-    position: relative;
-    width: 450px;
-    height: 70px;
-    margin: 0 auto;
-}
-
-.input-normal mat-icon {
-    transform: translateY(-50%);
-    position: absolute;
-    left: 10px;
-    bottom: 16px;
-    margin: 0 5px;
-    color: #E5E7E9;
-}
-
-.input-normal .show-password-btn {
-    position: absolute;
-    right: 50px;
-    bottom: -6px;
-    cursor: pointer;
-  }  
-
-.content input {    
-    font-size: 1.5rem;
-    background-color: #fff;
-    color: #444444;
-    border: 1px solid transparent;
-    border-radius: 10px;
-    box-shadow: 0px 1px 1px #00000029;
-    display: block;
-    width: -webkit-fill-available;
-    margin-top: 20px;
-    padding: 13px 10px 13px 42px;
-}
-
-.content input:focus {
-    border: 1px solid #2FB5D8;
-    color: #2FB5D8;
-}
-
-.content .confirm   {
-    width: 100%;
-    margin: 15px auto 0;
-    text-align: right;
-}
-
-.content .lbl-message {
-    font-size: 1.2rem;
-    color: red;
-    position: absolute;
-    left: 12px;
-    margin-top: 4px;
-    white-space: nowrap;
-}
-
-.content .confirm button {
-    background-color: #84a3d9;
-    border: 1px solid transparent;
-    color: #fff;
-    border-radius: 8px;
-    letter-spacing: 1px;
-    padding: 10px 20px;
-    margin: 8px auto 0;
-    text-align: center;
-    height: 53.08px;
-    font-size: 1.5rem;
-}
-
-.content .confirm button:hover {
-    background: rgba(255, 255, 255, 0.5);
-    border: 1px solid #84a3d9;
-    color: #84a3d9;
-    cursor: pointer;
-}
-=======
     .confirm-password {
       display: flex;
       flex-direction: column;
@@ -219,4 +124,3 @@ h2 {
       }
       
     }
->>>>>>> eab0aa9 (Major changes to login method)

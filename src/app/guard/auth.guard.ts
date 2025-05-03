@@ -9,12 +9,13 @@ export class AuthGuard implements CanActivate {
   constructor(private router: Router, private authService: AuthService) {}
 
   async canActivate(): Promise<boolean> {
-    const localToken = this.authService.isLoggedIn()
-    if (localToken) {
+    const loggedIn = this.authService.isLoggedIn()
+    if (loggedIn) {
       this.authService.getCurrentUser()
       .then((user) => {
         if (user) {
           const googleToken = user.accessToken;
+          const localToken = localStorage.getItem('idToken');
           return googleToken === localToken ? true : false;
         } else {
           console.log('User not found. Redirecting to login page.');

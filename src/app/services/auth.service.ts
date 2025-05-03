@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { jwtDecode } from 'jwt-decode';
 import { Auth, signInWithEmailAndPassword } from '@angular/fire/auth';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +9,7 @@ import { Auth, signInWithEmailAndPassword } from '@angular/fire/auth';
 export class AuthService {
   loggedIn = new BehaviorSubject<boolean>(this.isLoggedIn());
 
-  constructor(private auth: Auth) {
+  constructor(private auth: Auth, private router: Router) {
     // Update login state after initialization
     this.loggedIn.next(this.isLoggedIn());
   }
@@ -49,6 +49,7 @@ export class AuthService {
       await this.auth.signOut();
       localStorage.removeItem('idToken');
       this.loggedIn.next(false); // Notify subscribers
+      this.router.navigate(['/login']); // Redirect to login page
       console.log('User logged out successfully');
     } catch (error) {
       console.error('Error during logout:', error);

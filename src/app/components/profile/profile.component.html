@@ -4,9 +4,9 @@
 
         <div class="label-error">
             <label>First Name</label>
-            @if (profileForm.get('firstName')?.touched && profileForm.get('fisrtName')?.invalid) {
+            @if (profileForm.get('firstName')?.touched && profileForm.get('firstName')?.invalid) {
                 <div class="error">
-                    {{ getErrorMessage('fisrtName') }}
+                    {{ getErrorMessage('firstName') }}
                 </div>
             }
         </div>
@@ -57,7 +57,7 @@
       </div>
 
       
-      @if (profileForm.get('password')?.value !== '') {
+      @if (profileForm.get('confirmPassword')?.value !== '') {
         <div class="confirm-password">
             <div class="label-error">
                 <label>Confirm Password</label>
@@ -70,9 +70,9 @@
     
               <div class="input-container">
                 <mat-icon>lock</mat-icon>
-                <input [type]="confirmPasswordVisible ? 'text' : 'confirmPassword'" formControlName="confirmPassword" required />
-                <button type="button" class="show-password-btn" (click)="togglePasswordVisibility()">
-                  <mat-icon>{{ passwordVisible ? 'visibility_off' : 'visibility' }}</mat-icon>
+                <input [type]="confirmPasswordVisible ? 'text' : 'password'" formControlName="confirmPassword" required />
+                <button type="button" class="show-password-btn" (click)="toggleConfirmPasswordVisibility()">
+                  <mat-icon>{{ confirmPasswordVisible ? 'visibility_off' : 'visibility' }}</mat-icon>
                 </button>
               </div>
         </div>
