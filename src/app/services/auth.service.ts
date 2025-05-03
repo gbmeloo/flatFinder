@@ -1,34 +1,57 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Auth, signInWithEmailAndPassword } from '@angular/fire/auth';
+import { Auth, signInWithEmailAndPassword, User } from '@angular/fire/auth';
 import { Router } from '@angular/router';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   loggedIn = new BehaviorSubject<boolean>(this.isLoggedIn());
+  private currentUserPromise: Promise<User | null> | null = null;
 
-  constructor(private auth: Auth, private router: Router) {
-    // Update login state after initialization
-    this.loggedIn.next(this.isLoggedIn());
-  }
+  constructor(private auth: Auth, private router: Router) { }
 
   // Check if the token is valid
   isLoggedIn(): boolean {
     const token = localStorage.getItem('idToken');
-    return !!token; // Check if the token exists
+    if (!token) return false;
+
+    try {
+      const decoded: any = jwtDecode(token);
+      const exp = decoded.exp;
+      if (exp * 1000 <= Date.now()) {
+        localStorage.removeItem('idToken');
+        this.router.navigate(['/login']);
+        return false;
+      } else {
+        return true;
+      }
+    } catch {
+      return false;
+    }
   }
 
-  async getCurrentUser(): Promise<any> {
+  getCurrentUser(): Promise<User | null> {
+    if (!this.currentUserPromise) {
+      this.currentUserPromise = this.loadUserFromStorage();
+    }
+    return this.currentUserPromise;
+  }
+  
+  private async loadUserFromStorage(): Promise<User | null> {
+    const token = localStorage.getItem('idToken');
+    if (!token) return null;
+  
+    // Example: call backend or decode JWT
     try {
-      const user = this.auth.currentUser;
-      return user;
-    } catch (error) {
-      console.error('Error fetching current user:', error);
+      const decoded: any =  jwtDecode(token);
+      return decoded;
+    } catch (e){
+      console.error('Error decoding token:', e);
       return null;
     }
-    
   }
 
   async login(email: string, password: string): Promise<void> {
@@ -53,9 +76,6 @@ export class AuthService {
       console.log('User logged out successfully');
     } catch (error) {
       console.error('Error during logout:', error);
-    } finally {
-      sessionStorage.removeItem('idToken');
-      this.loggedIn.next(false); // Notify subscribers
     }
   }
 }

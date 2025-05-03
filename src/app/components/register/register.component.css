@@ -96,6 +96,7 @@
   color: red;
   font-size: 14px;
   margin-top: -5px;
+  text-align: right;
   animation: slideInY 0.3s ease forwards;
 }
 
@@ -131,8 +132,11 @@
 }
 
 .show-password-btn mat-icon {
-  font-size: 20px;
-}
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
 
 @media (max-width: 900px) {
   .register-form-container {

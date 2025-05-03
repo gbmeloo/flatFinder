@@ -4,8 +4,7 @@ import {
   FormGroup, 
   ReactiveFormsModule, 
   Validators, 
-  ValidatorFn, 
-  AbstractControlOptions, 
+  ValidatorFn,
   AbstractControl } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
@@ -13,7 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { jwtDecode } from 'jwt-decode';
 import { Auth, updatePassword } from '@angular/fire/auth';
 import { Firestore, doc, getDoc, updateDoc } from '@angular/fire/firestore';
-import { Subject, takeUntil } from 'rxjs';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-profile',
@@ -24,45 +23,57 @@ import { Subject, takeUntil } from 'rxjs';
     CommonModule,
     FormsModule
   ],
+  animations: [
+    trigger('formResize', [
+      state('collapsed', style({
+        height: '500px',
+        opacity: 1,
+        overflow: 'hidden',
+      })),
+      state('expanded', style({
+        height: '*',
+        opacity: 1,
+        overflow: 'hidden',
+      })),
+      transition('collapsed <=> expanded', [
+        style({ overflow: 'hidden' }),
+        animate('300ms ease')
+      ])
+    ])
+  ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent {
   profileForm: FormGroup;
+  passwordForm: FormGroup;
   max_date: string = "";
   passwordVisible: boolean = false;
   confirmPasswordVisible: boolean = false;
   userId: string | null = null;
-  isPasswordChanged: boolean = false;
-  private destroy$ = new Subject<void>();
+  showPasswordFields: boolean = false;
 
   constructor(private fb: FormBuilder, private auth: Auth, private firestore: Firestore) {
     const _date = new Date();
     _date.setDate(_date.getDate() - 1);
     this.max_date = _date.toISOString().split('T')[0];
 
-    const formOptions: AbstractControlOptions = { validators: this.passwordMatchValidator };
-
     this.profileForm = this.fb.group(
       {
         firstName: [ '', [ Validators.required, Validators.minLength(2) ], ],
         lastName: [ '', [ Validators.required, Validators.minLength(2) ], ],
         birth_date: [ '',  Validators.required ],
-        email: [ '',  [ Validators.required, Validators.email ] ],
-        password: [ '', [ 
-          Validators.pattern(/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/) 
-        ] ],
-        confirmPassword: ['', [Validators.required]],
-      },
-      formOptions
+        email: [ '',  [ Validators.required, Validators.email ] ]
+      }
     );
 
-      // Track changes for password and confirmPassword fields
-      this.profileForm.get('password')?.valueChanges.subscribe(() => {
-        if (!this.isPasswordChanged) {
-          this.isPasswordChanged = true;
-        }
-      });
+    this.passwordForm = this.fb.group({
+      password: ['', [
+        Validators.required,
+        Validators.pattern(/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
+      ]],
+      confirmPassword: ['', Validators.required],
+    }, { validators: this.passwordMatchValidator });
   }
 
   ngOnInit() {
@@ -83,20 +94,8 @@ export class ProfileComponent {
     } else {
       console.error('No token found in sessionStorage.');
     }
-
-    this.profileForm.get('password')?.valueChanges
-    .pipe(takeUntil(this.destroy$))
-    .subscribe(() => {
-      if (!this.isPasswordChanged) {
-        this.isPasswordChanged = true;
-      }
-    });
   }
 
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
 
   togglePasswordVisibility(): void {
     this.passwordVisible = !this.passwordVisible;
@@ -139,7 +138,13 @@ export class ProfileComponent {
   }
 
   getErrorMessage(controlName: string): string {
-    const control = this.profileForm.get(controlName);
+    let control = this.profileForm.get(controlName);
+
+    // If not found in profileForm, try passwordForm
+    if (!control) {
+      control = this.passwordForm.get(controlName);
+    }
+
 
     if (control?.hasError('required')) {
       return 'This field is required';
@@ -152,21 +157,15 @@ export class ProfileComponent {
       return `Must be at least ${requiredLength} characters long`;
     }
     if (control?.hasError('pattern')) {
-      return 'Must contain at least one uppercase letter, one number, and one special character';
+      return 'Password must contain at least one uppercase letter, one number, and one special character';
     }
-    if ((controlName === 'password' || controlName === 'newPassword') && this.profileForm.hasError('passwordrequired')) {
-      return 'Please enter original password';
-    }
-    if (controlName === 'newPassword' && this.profileForm.hasError('samepassword')) {
-      return 'New password must be different from the original password';
-    }
-    if (controlName === 'confirmNewPassword' && this.profileForm.hasError('mismatch')) {
-      return 'New passwords do not match';
+    if ((controlName === 'password') && this.passwordForm.hasError('passwordrequired')) {
+      return 'This field is required';
     }
     if (control?.hasError('pattern')) {
       return 'Password must contain at least one uppercase letter, one number, and one special character';
     }
-    if (controlName === 'confirmPassword' && this.profileForm.hasError('mismatch')) {
+    if (controlName === 'confirmPassword' && this.passwordForm.hasError('mismatch')) {
       return 'Passwords do not match';
     }
 
@@ -174,36 +173,35 @@ export class ProfileComponent {
   }
 
   async onSubmit() {
-    if (this.profileForm.valid) {
+    if (this.profileForm.valid && this.userId) {
+      const { firstName, lastName, email, birth_date } = this.profileForm.value;
+      const updateData = {
+        firstName,
+        lastName,
+        email,
+        birth_date,
+        updatedAt: new Date().toISOString(),
+      };
+  
       try {
-        if(this.userId) {
-          const { firstName, lastName, email, birth_date, password } = this.profileForm.value;
-          const updateData = {
-            firstName,
-            lastName,
-            email,
-            birth_date,
-            updatedAt: new Date().toISOString()
-          };
-          const userRef = doc(this.firestore, 'users', this.userId);
-          await updateDoc(userRef, updateData);
-
-          // Update password only if it was modified
-          if (this.isPasswordChanged && password) {
-            if (this.auth.currentUser) {
-              await updatePassword(this.auth.currentUser, password);
-              console.log('Password updated successfully');
-            } else {
-              console.error('No authenticated user found. Cannot update password.');
-            }
-          }
+        await updateDoc(doc(this.firestore, 'users', this.userId), updateData);
+        console.log('Profile updated');
+      } catch (error) {
+        console.error('Error updating profile:', error);
+      }
+    }
+  
+    if (this.passwordForm.valid && this.passwordForm.dirty) {
+      const { password } = this.passwordForm.value;
+      try {
+        if (this.auth.currentUser && password) {
+          await updatePassword(this.auth.currentUser, password);
+          console.log('Password updated');
+          this.passwordForm.reset(); // Clear password fields after update
         }
       } catch (error) {
-        console.error('Error registering user:', error);
+        console.error('Error updating password:', error);
       }
-    } else {
-      console.error('form is invalid');
     }
-    
   }
 }

@@ -1,4 +1,4 @@
-<div class="profile-form-container">
+<div class="profile-form-container" [@formResize]="showPasswordFields ? 'expanded' : 'collapsed'">
     <h2 style="margin-bottom: 30px;">Profile</h2>
     <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="profile-form">
 
@@ -39,47 +39,47 @@
         <mat-icon>mail</mat-icon>
         <input type="email" formControlName="email" required />
       </div>
-  
-      <div class="label-error">
-        <label>Password</label>
-        @if (profileForm.get('password')?.touched && profileForm.get('password')?.invalid) {
-          <div class="error">
-            {{ getErrorMessage('password') }}
-          </div>
-        }
-      </div>
-      <div class="input-container">
-        <mat-icon>lock</mat-icon>
-        <input [type]="passwordVisible ? 'text' : 'password'" formControlName="password" required />
-        <button type="button" class="show-password-btn" (click)="togglePasswordVisibility()">
-          <mat-icon>{{ passwordVisible ? 'visibility_off' : 'visibility' }}</mat-icon>
-        </button>
-      </div>
 
-      
-      @if (profileForm.get('confirmPassword')?.value !== '') {
-        <div class="confirm-password">
-            <div class="label-error">
-                <label>Confirm Password</label>
-                @if (profileForm.get('confirmPassword')?.touched && profileForm.get('confirmPassword')?.invalid) {
-                  <div class="error">
-                    {{ getErrorMessage('confirmPassword') }}
-                  </div>
-                }
-              </div>
-    
-              <div class="input-container">
-                <mat-icon>lock</mat-icon>
-                <input [type]="confirmPasswordVisible ? 'text' : 'password'" formControlName="confirmPassword" required />
-                <button type="button" class="show-password-btn" (click)="toggleConfirmPasswordVisibility()">
-                  <mat-icon>{{ confirmPasswordVisible ? 'visibility_off' : 'visibility' }}</mat-icon>
-                </button>
-              </div>
+      <button type="button" class="toggle-password-btn" (click)="showPasswordFields = !showPasswordFields">
+        {{ showPasswordFields ? 'Cancel Password Change' : 'Change Password' }}
+      </button>
+
+      <form *ngIf="showPasswordFields" [formGroup]="passwordForm" (ngSubmit)="onSubmit()" class="password-form">
+        <div class="label-error">
+          <label>New Password</label>
+          @if (passwordForm.get('password')?.touched && passwordForm.get('password')?.invalid) {
+            <div class="error">
+              {{ getErrorMessage('password') }}
+            </div>
+          }
         </div>
-        
-      }
+        <div class="input-container">
+          <mat-icon>lock</mat-icon>
+          <input [type]="passwordVisible ? 'text' : 'password'" formControlName="password" required />
+          <button type="button" class="show-password-btn" (click)="togglePasswordVisibility()">
+            <mat-icon>{{ passwordVisible ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+        </div>
       
-      <button type="submit" class="submit-btn" [disabled]="profileForm.invalid">Login</button>
+        <div class="label-error">
+          <label>Confirm Password</label>
+          @if (passwordForm.get('confirmPassword')?.touched && passwordForm.hasError('mismatch')) {
+            <div class="error">
+              {{ getErrorMessage('confirmPassword') }}
+            </div>
+          }
+        </div>
+        <div class="input-container">
+          <mat-icon>lock</mat-icon>
+          <input [type]="confirmPasswordVisible ? 'text' : 'password'" formControlName="confirmPassword" required />
+          <button type="button" class="show-password-btn" (click)="toggleConfirmPasswordVisibility()">
+            <mat-icon>{{ confirmPasswordVisible ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+        </div>
+      </form>
+      
+      
+      <button type="submit" class="submit-btn" [disabled]="profileForm.invalid">Update</button>
     </form>
   </div>
   
