@@ -3,11 +3,15 @@ import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angula
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-reset-password',
-  imports: [MatIconModule, ReactiveFormsModule, CommonModule, RouterModule],
+  imports: [
+    MatIconModule, 
+    ReactiveFormsModule, 
+    CommonModule
+  ],
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.css'
 })
