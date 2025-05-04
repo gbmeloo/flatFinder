@@ -74,17 +74,10 @@
   .submit-btn:hover {
     background-color: #0056b3;
   }
-  
-
-  .helper-text {
-    text-align: center;
-    margin-top: 20px;
-  }
 
   .helper-text a {
     color: #007bff;
     text-decoration: none;
-    margin-left: 5px;
   }
 
   .input-container {
@@ -119,6 +112,19 @@
   
   .show-password-btn mat-icon {
     font-size: 20px;
+  }
+
+  .forgot-register {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    margin-top: 10px;
+  }
+
+  .forgot-register .helper-text {
+    display: flex;
+    gap: 3px;
+    margin-top: 20px;
   }
 
   @media (max-width: 900px) {

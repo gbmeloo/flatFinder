@@ -11,9 +11,12 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { jwtDecode } from 'jwt-decode';
-import { Auth, updatePassword } from '@angular/fire/auth';
+import { Auth, updatePassword, updateEmail, sendEmailVerification } from '@angular/fire/auth';
 import { Firestore, doc, getDoc, updateDoc } from '@angular/fire/firestore';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { EmailVerificationService } from '../../services/email-verification.service';
+import { NotificationService } from '../../services/notification.service';
+
 
 @Component({
   selector: 'app-profile',
@@ -51,16 +54,23 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 export class ProfileComponent {
   profileForm: FormGroup;
   passwordForm: FormGroup;
+  email: string = '';
   max_date: string = "";
   passwordVisible: boolean = false;
   confirmPasswordVisible: boolean = false;
   userId: string | null = null;
   showPasswordFields: boolean = false;
+  showEmailFields: boolean = false;
   updateError: string | null = null;
   updateSuccess: string | null = null;
   loading: boolean = false;
 
-  constructor(private fb: FormBuilder, private auth: Auth, private firestore: Firestore) {
+  constructor(
+    private fb: FormBuilder, 
+    private auth: Auth, 
+    private firestore: Firestore,
+    private emailVerificationService: EmailVerificationService,
+    private notificationService: NotificationService) {
     const _date = new Date();
     _date.setDate(_date.getDate() - 1);
     this.max_date = _date.toISOString().split('T')[0];
@@ -69,8 +79,7 @@ export class ProfileComponent {
       {
         firstName: [ '', [ Validators.required, Validators.minLength(2) ], ],
         lastName: [ '', [ Validators.required, Validators.minLength(2) ], ],
-        birth_date: [ '',  Validators.required ],
-        email: [ '',  [ Validators.required, Validators.email ] ]
+        birth_date: [ '',  Validators.required ]
       }
     );
 
@@ -134,8 +143,8 @@ export class ProfileComponent {
           firstName: userData['firstName'] || '',
           lastName: userData['lastName'] || '',
           birth_date: userData['birth_date'] || '',
-          email: userData['email'] || '',
         });
+        this.email = userData['email'] || '';
       } else {
         console.error('User document does not exist.');
       }
@@ -180,8 +189,19 @@ export class ProfileComponent {
   }
 
   async onSubmit() {
+    this.updateError = null; // Clear any previous error message
+    this.updateSuccess = null; // Clear any previous success message
+    const isVerified = await this.emailVerificationService.isEmailVerified();
+    if (!isVerified) {
+      this.notificationService.showNotification(
+        'Please verify your email before updating your profile.',
+        'Close',
+        5000,
+        ['error-snackbar'], // Custom class for error
+      );
+      return;
+    }
     this.loading = true;
-
 
     try {
       if (this.profileForm.valid && this.userId) {
@@ -204,7 +224,6 @@ export class ProfileComponent {
           this.updateSuccess = null;
         }
       }
-    
       if (this.passwordForm.valid && this.passwordForm.dirty) {
         const { password } = this.passwordForm.value;
         try {

@@ -7,6 +7,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { AuthGuard } from './guard/auth.guard';
 import { AddFlatComponent } from './components/add-flat/add-flat.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+import { EmailVerifiedGuard } from './guard/email-verified.guard';
 
 export const routes: Routes = [
     {

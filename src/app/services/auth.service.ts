@@ -45,17 +45,8 @@ export class AuthService {
   }
   
   private async loadUserFromStorage(): Promise<User | null> {
-    const token = localStorage.getItem('idToken');
-    if (!token) return null;
-  
-    // Example: call backend or decode JWT
-    try {
-      const decoded: any =  jwtDecode(token);
-      return decoded;
-    } catch (e){
-      console.error('Error decoding token:', e);
-      return null;
-    }
+    const user = this.auth.currentUser;
+    return user ? user : null;
   }
 
   async login(email: string, password: string): Promise<void> {

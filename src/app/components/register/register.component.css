@@ -138,6 +138,10 @@
     font-size: 20px;
   }
 
+  .success-snackbar {
+    padding: 50px;
+  }
+
 @media (max-width: 900px) {
   .register-form-container {
     margin-top: 100px;

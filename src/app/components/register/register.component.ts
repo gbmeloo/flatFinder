@@ -5,6 +5,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Auth, createUserWithEmailAndPassword } from '@angular/fire/auth';
 import { Firestore, doc, setDoc } from '@angular/fire/firestore';
 import { MatIconModule } from '@angular/material/icon';
+import { NotificationService } from '../../services/notification.service';
+import { sendEmailVerification } from 'firebase/auth';
 
 @Component({
   selector: 'app-register',
@@ -17,7 +19,12 @@ export class RegisterComponent {
   passwordVisible: boolean = false; // Track password visibility
   passwordVisibleConfirm: boolean = false; // Track confirm password visibility
 
-  constructor(private fb: FormBuilder, private router: Router, private auth: Auth, private firestore: Firestore) {
+  constructor(
+    private fb: FormBuilder, 
+    private router: Router, 
+    private auth: Auth, 
+    private firestore: Firestore,
+    private notificationService: NotificationService) {
     const formOptions: AbstractControlOptions = { validators: this.passwordMatchValidator };
 
     this.registerForm = this.fb.group(
@@ -84,6 +91,14 @@ export class RegisterComponent {
       try {
         await createUserWithEmailAndPassword(this.auth, email, password).then(async (userCredential) => {
           // Registration successful
+          await sendEmailVerification(userCredential.user).then(() => {
+            this.notificationService.showNotification(
+              'Verification email sent. Please check your inbox.',
+              'Close',
+              200000,
+              ['success-snackbar'] // Custom class for success
+            );
+          });
           const uuid = userCredential.user.uid;
           const userDoc = {
             firstName,
@@ -99,6 +114,7 @@ export class RegisterComponent {
       } catch (error) {
         console.error('Error registering user:', error);
       }
+
     }
   }
 }

@@ -11,6 +11,19 @@ html, body {
     height: 100%;
     width: 100%;
   }
+
   
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+mat-snack-bar-container {
+  background-color: rgba(0, 0, 0, 0.0) !important; /* Semi-transparent white */
+  backdrop-filter: blur(5px) !important; /* Apply blur effect */
+  border-radius: 0 !important;
+}
+
+mat-snack-bar-container .mat-mdc-snackbar-surface{
+  background-color: rgba(0, 0, 0, 0.6) !important; /* Semi-transparent white */
+  backdrop-filter: blur(10px) !important; /* Apply blur effect */
+  border-radius: 0 !important;
+}

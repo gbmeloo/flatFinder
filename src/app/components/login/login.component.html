@@ -30,7 +30,7 @@
       </button>
     </div>
     <div class="forgot-password-container">
-      <span class="helper-text"><a routerLink="/reset-password" class="forgot-password">Forgot Password?</a></span>
+      
     </div>
 
     @if (loginError) {
@@ -40,5 +40,9 @@
     }
     <button type="submit" class="submit-btn" [disabled]="loginForm.invalid">Login</button>
   </form>
-  <span class="helper-text">Don't have an account?<a routerLink="/register">Sign Up!</a></span>
+  <div class="forgot-register">
+    <span class="helper-text">Don't have an account?<a routerLink="/register">Sign Up!</a></span>
+    <span class="helper-text"><a routerLink="/reset-password" class="forgot-password">Forgot Password?</a></span>
+  </div>
+  
 </div>
