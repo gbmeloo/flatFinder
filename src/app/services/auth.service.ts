@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Auth, signInWithEmailAndPassword, User } from '@angular/fire/auth';
+import { 
+  Auth, 
+  signInWithEmailAndPassword, 
+  User,
+  sendPasswordResetEmail } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 
@@ -78,4 +82,14 @@ export class AuthService {
       console.error('Error during logout:', error);
     }
   }
+
+  async resetPassword(email: string): Promise<void> {
+    sendPasswordResetEmail(this.auth, email)
+      .then(() => {
+        console.log('Password reset email sent successfully');
+      }) .catch((error) => {
+        console.error('Error sending password reset email:', error);
+      });
+  }
+
 }

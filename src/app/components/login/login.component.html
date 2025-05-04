@@ -29,6 +29,9 @@
         <mat-icon>{{ passwordVisible ? 'visibility_off' : 'visibility' }}</mat-icon>
       </button>
     </div>
+    <div class="forgot-password-container">
+      <span class="helper-text"><a routerLink="/reset-password" class="forgot-password">Forgot Password?</a></span>
+    </div>
 
     @if (loginError) {
       <div class="error">

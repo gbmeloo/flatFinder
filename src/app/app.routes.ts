@@ -6,6 +6,7 @@ import { LoginAuthGuard } from './guard/login-auth.guard';
 import { ProfileComponent } from './components/profile/profile.component';
 import { AuthGuard } from './guard/auth.guard';
 import { AddFlatComponent } from './components/add-flat/add-flat.component';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 
 export const routes: Routes = [
     {
@@ -37,5 +38,9 @@ export const routes: Routes = [
         path: 'profile',
         component: ProfileComponent,
         canActivate: [AuthGuard]
+    },
+    {
+        path: 'reset-password',
+        component: ResetPasswordComponent
     }
 ];
