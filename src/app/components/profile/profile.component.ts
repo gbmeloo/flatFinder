@@ -7,6 +7,7 @@ import {
   ValidatorFn,
   AbstractControl } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { jwtDecode } from 'jwt-decode';
@@ -20,6 +21,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
   imports: [
     ReactiveFormsModule,
     MatIconModule,
+    MatProgressSpinnerModule,
     CommonModule,
     FormsModule
   ],
@@ -56,6 +58,7 @@ export class ProfileComponent {
   showPasswordFields: boolean = false;
   updateError: string | null = null;
   updateSuccess: string | null = null;
+  loading: boolean = false;
 
   constructor(private fb: FormBuilder, private auth: Auth, private firestore: Firestore) {
     const _date = new Date();
@@ -177,38 +180,51 @@ export class ProfileComponent {
   }
 
   async onSubmit() {
-    if (this.profileForm.valid && this.userId) {
-      const { firstName, lastName, email, birth_date } = this.profileForm.value;
-      const updateData = {
-        firstName,
-        lastName,
-        email,
-        birth_date,
-        updatedAt: new Date().toISOString(),
-      };
-  
-      try {
-        await updateDoc(doc(this.firestore, 'users', this.userId), updateData);
-        this.updateSuccess = 'Profile updated successfully';
-        this.updateError = null; // Clear any previous error message
-        console.log('Profile updated');
-      } catch (error) {
-        this.updateError = "Error updating profile. Please try again.";
-        this.updateSuccess = null;
-      }
-    }
-  
-    if (this.passwordForm.valid && this.passwordForm.dirty) {
-      const { password } = this.passwordForm.value;
-      try {
-        if (this.auth.currentUser && password) {
-          await updatePassword(this.auth.currentUser, password);
-          console.log('Password updated');
-          this.passwordForm.reset(); // Clear password fields after update
+    this.loading = true;
+
+
+    try {
+      if (this.profileForm.valid && this.userId) {
+        const { firstName, lastName, email, birth_date } = this.profileForm.value;
+        const updateData = {
+          firstName,
+          lastName,
+          email,
+          birth_date,
+          updatedAt: new Date().toISOString(),
+        };
+    
+        try {
+          await updateDoc(doc(this.firestore, 'users', this.userId), updateData);
+          this.updateSuccess = 'Profile updated successfully';
+          this.updateError = null; // Clear any previous error message
+          console.log('Profile updated');
+        } catch (error) {
+          this.updateError = "Error updating profile. Please try again.";
+          this.updateSuccess = null;
         }
-      } catch (error) {
-        console.error('Error updating password:', error);
       }
+    
+      if (this.passwordForm.valid && this.passwordForm.dirty) {
+        const { password } = this.passwordForm.value;
+        try {
+          if (this.auth.currentUser && password) {
+            await updatePassword(this.auth.currentUser, password);
+            console.log('Password updated');
+            this.passwordForm.reset(); // Clear password fields after update
+          }
+        } catch (error) {
+          console.error('Error updating password:', error);
+        }
+      }
+    } finally {
+      this.loading = false;
+      this.showPasswordFields = false; // Hide password fields after submission
+      this.passwordForm.reset(); // Clear password fields after update
+      setTimeout(() => {
+        this.updateSuccess = null; // Clear success message after 3 seconds
+        this.updateError = null; // Clear error message after 3 seconds
+      }, 3000);
     }
   }
 }

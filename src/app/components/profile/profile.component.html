@@ -1,5 +1,4 @@
 <div class="profile-form-container">
-    
     <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="profile-form" >
         <h2 style="margin-bottom: 30px; text-align: center;" >Profile</h2>
         <div class="label-error">
@@ -82,6 +81,11 @@
       
       <button type="submit" class="submit-btn" [disabled]="profileForm.invalid">Update</button>
 
+        <div class="loading-spinner" [@formResize]="loading ? 'expanded' : 'collapsed'" [style.display]="loading ? 'flex' : 'none'">
+          @if (loading) {
+            <mat-spinner [diameter]="50"></mat-spinner>
+          }
+        </div>
       @if (updateError || updateSuccess) {
         <div class="notification" [ngClass]="{ 'error': updateError, 'success': updateSuccess }">
           {{ updateError || updateSuccess }}

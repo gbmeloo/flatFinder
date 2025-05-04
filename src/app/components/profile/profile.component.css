@@ -137,6 +137,14 @@
       gap: 10px;
       animation: slideInY 0.3s ease forwards;
     }
+
+    .loading-spinner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 20px;
+      width: 100%;
+    }
     
     .notification {
       position: relative;
