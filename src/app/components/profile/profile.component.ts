@@ -165,9 +165,6 @@ export class ProfileComponent {
     if (control?.hasError('required')) {
       return 'This field is required';
     }
-    if (control?.hasError('email')) {
-      return 'Please enter a valid email address';
-    }
     if (control?.hasError('minlength')) {
       const requiredLength = control.getError('minlength').requiredLength;
       return `Must be at least ${requiredLength} characters long`;
@@ -205,22 +202,31 @@ export class ProfileComponent {
 
     try {
       if (this.profileForm.valid && this.userId) {
-        const { firstName, lastName, email, birth_date } = this.profileForm.value;
+        const { firstName, lastName, birth_date } = this.profileForm.value;
         const updateData = {
           firstName,
           lastName,
-          email,
           birth_date,
           updatedAt: new Date().toISOString(),
         };
     
         try {
           await updateDoc(doc(this.firestore, 'users', this.userId), updateData);
-          this.updateSuccess = 'Profile updated successfully';
+          this.notificationService.showNotification(
+            'Profile updated successfully',
+            'Close',
+            5000,
+            ['error-snackbar'], // Custom class for error
+          );
           this.updateError = null; // Clear any previous error message
           console.log('Profile updated');
         } catch (error) {
-          this.updateError = "Error updating profile. Please try again.";
+          this.notificationService.showNotification(
+            'Error updating profile. Please try again.' + error,
+            'Close',
+            5000,
+            ['error-snackbar'], // Custom class for error
+          );
           this.updateSuccess = null;
         }
       }

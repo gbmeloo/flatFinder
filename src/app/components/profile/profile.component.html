@@ -27,6 +27,20 @@
             <input type="lastName" formControlName="lastName" required />
         </div>
 
+        <div class="label-error">
+          <label>Birth Date</label>
+          @if (profileForm.get('birth_date')?.touched && profileForm.get('birth_date')?.invalid) {
+              <div class="error">
+                  {{ getErrorMessage('birth_date') }}
+              </div>
+          }
+        </div>
+            <div class="input-container" >
+                <mat-icon>account_box</mat-icon>
+            <input type="date" formControlName="birth_date" required />
+        </div>
+
+
         <label class="label-error">Email</label>
         <div class="input-container">
           <mat-icon>email</mat-icon>
