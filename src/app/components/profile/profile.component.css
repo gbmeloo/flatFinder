@@ -174,12 +174,8 @@
     
     @media (max-width: 900px) {
 
-      :host {
-        min-height: 100%;
-      }
-  
       .profile-form-container {
-        margin: 0;
+        margin: 100px 0;
         width: 80%;
         padding: 50px 10px;
       }
