@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControlOptions, ValidatorFn, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -18,6 +18,7 @@ export class RegisterComponent {
   registerForm: FormGroup;
   passwordVisible: boolean = false; // Track password visibility
   passwordVisibleConfirm: boolean = false; // Track confirm password visibility
+  isMobile: boolean = false;
 
   constructor(
     private fb: FormBuilder, 
@@ -45,6 +46,17 @@ export class RegisterComponent {
       },
       formOptions
     );
+
+    this.checkScreenWidth();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.checkScreenWidth();
+  }
+
+  checkScreenWidth(): void {
+    this.isMobile = window.innerWidth <= 768; // You can adjust the breakpoint as needed
   }
 
   passwordMatchValidator: ValidatorFn = (control: AbstractControl) => {
@@ -95,8 +107,10 @@ export class RegisterComponent {
             this.notificationService.showNotification(
               'Verification email sent. Please check your inbox.',
               'Close',
-              200000,
-              ['success-snackbar'] // Custom class for success
+              5000,
+              ['success-snackbar'], // Custom class for success
+              this.isMobile ? 'bottom' : 'top', // Adjust position based on screen size
+              this.isMobile ? 'center' : 'right' // Adjust position based on screen size
             );
           });
           const uuid = userCredential.user.uid;

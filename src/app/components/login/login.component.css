@@ -17,7 +17,7 @@
     background-color: rgba(255, 255, 255, 0.6); /* Semi-transparent white */
     backdrop-filter: blur(10px); /* Apply blur effect */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 400px;
+    max-width: 400px;
     padding: 50px 20px;
   }
   
@@ -128,9 +128,48 @@
   }
 
   @media (max-width: 900px) {
-    .login-form-container {
-      width: 85%;
-      padding: 20px;
+    :host {
+      height: 100vh;
     }
+
+    .login-form-container {
+      margin: 0;
+      width: 80%;
+      padding: 50px 10px;
+    }
+
+    .input-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 10px 5px;
+      margin-bottom: 10px;
+      background-color: #ffffff;
+    }
+    
+    .input-container mat-icon {
+      display: flex;
+      align-items: center;
+      margin-right: 2px;
+      color: #888;
+      width: 20px;
+      font-size: 18px;
+    }
+    
+    .input-container input {
+      font-size: medium;
+      border: none;
+      outline: none;
+      flex: 1;
+      padding: 5px;
+      width: 50%;
+    }
+
+    .helper-text {
+      font-size: 13px;
+    }
+  
     
   }

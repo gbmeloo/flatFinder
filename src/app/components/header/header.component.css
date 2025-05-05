@@ -106,3 +106,72 @@ a {
     margin-bottom: -5px;
     margin-right: 3px;
 }
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 10px 10px;
+    }
+    
+    .navbar-container {
+        width: 100%;
+    }
+    
+
+    .before-img img{
+        width: 100px;
+    }
+
+    li {
+        font-size: 1rem;
+    }
+
+    .items-left img {
+        width: 100px;
+    }
+
+    .menu-button {
+        display: flex;          /* Use flexbox for centering */
+        justify-content: center;  /* Center horizontally */
+        align-items: center;      /* Center vertically */
+        width: 40px;             /* Adjust as needed */
+        height: 40px;            /* Adjust as needed */
+        border: none;            /* Remove default button border */
+        border-radius: 3px;
+        background: none;        /* Remove default button background */
+        padding: 0;              /* Remove default padding */
+        transition: box-shadow 0.2s ease-in-out;
+    }
+
+    .menu-button.menu-expanded {
+        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+        color: black;
+    }
+
+    .menu-button mat-icon{
+        margin: 0;
+    }
+
+    .menu-container {
+        padding: 1rem;
+    }
+
+    .menu-items {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .menu-items-routes {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .menu-logout {
+        display: flex;
+        align-items: center;
+        margin-right: -10px;
+    }
+    
+}

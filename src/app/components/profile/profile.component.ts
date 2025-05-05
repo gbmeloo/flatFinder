@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { 
   FormBuilder, 
   FormGroup, 
@@ -64,6 +64,7 @@ export class ProfileComponent {
   updateError: string | null = null;
   updateSuccess: string | null = null;
   loading: boolean = false;
+  isMobile: boolean = false; // Track if the screen is mobile size
 
   constructor(
     private fb: FormBuilder, 
@@ -90,6 +91,15 @@ export class ProfileComponent {
       ]],
       confirmPassword: ['', Validators.required],
     }, { validators: this.passwordMatchValidator });
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.checkScreenWidth();
+  }
+
+  checkScreenWidth(): void {
+    this.isMobile = window.innerWidth <= 768; // You can adjust the breakpoint as needed
   }
 
   ngOnInit() {
@@ -226,6 +236,8 @@ export class ProfileComponent {
             'Close',
             5000,
             ['error-snackbar'], // Custom class for error
+            this.isMobile ? 'bottom' : 'top', // Adjust position based on screen size
+            this.isMobile ? 'center' : 'right' // Adjust position based on screen size
           );
           this.updateSuccess = null;
         }

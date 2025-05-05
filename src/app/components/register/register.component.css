@@ -18,7 +18,7 @@
   padding: 50px 20px;
   margin-bottom: 100px;
   text-align: center;
-  width: 700px;
+  max-width: 700px;
 }
 
 .register-form {
@@ -142,14 +142,53 @@
     padding: 50px;
   }
 
-@media (max-width: 900px) {
-  .register-form-container {
-    margin-top: 100px;
-    width: 85%;
-    padding: 20px;
+@media (max-width: 768px) {
+
+  :host {
+    height: 60rem;
   }
+
+  .register-form-container {
+    margin: 0;
+    width: 80%;
+    padding: 50px 25px;
+  }
+
+  .input-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px 5px;
+    margin-bottom: 10px;
+    background-color: #ffffff;
+  }
+
   .form-items {
     flex-direction: column;
+  }
+  
+  .input-container mat-icon {
+    display: flex;
+    align-items: center;
+    margin-right: 2px;
+    color: #888;
+    width: 20px;
+    font-size: 18px;
+  }
+  
+  .input-container input {
+    font-size: medium;
+    border: none;
+    outline: none;
+    flex: 1;
+    padding: 5px;
+    width: 50%;
+  }
+
+  .helper-text {
+    font-size: 13px;
   }
   
 }

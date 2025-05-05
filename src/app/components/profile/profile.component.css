@@ -1,9 +1,9 @@
 
 :host {
     display: flex;
-    height: 100vh;
     background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('../../../../public/background.webp');
     background-size: cover;
+    min-height: 100%;
     background-position: center;
     background-repeat: no-repeat;
     align-items: center;
@@ -173,9 +173,48 @@
     }
     
     @media (max-width: 900px) {
-      .login-form-container {
-        width: 85%;
-        padding: 20px;
+
+      :host {
+        min-height: 100%;
+      }
+  
+      .profile-form-container {
+        margin: 0;
+        width: 80%;
+        padding: 50px 10px;
+      }
+  
+      .input-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 10px 5px;
+        margin-bottom: 10px;
+        background-color: #ffffff;
+      }
+      
+      .input-container mat-icon {
+        display: flex;
+        align-items: center;
+        margin-right: 2px;
+        color: #888;
+        width: 20px;
+        font-size: 18px;
+      }
+      
+      .input-container input {
+        font-size: medium;
+        border: none;
+        outline: none;
+        flex: 1;
+        padding: 5px;
+        width: 50%;
+      }
+  
+      .helper-text {
+        font-size: 13px;
       }
       
     }

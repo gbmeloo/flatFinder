@@ -1,34 +1,83 @@
 <div class="navbar">
     <nav class="navbar-container">
-        @if (isLoggedIn) {
-            <ul class="navbar-list-after">
-                <div class="items-left">
-                    <div class="img">
-                        <li><a routerLink="/"><img class="img-logo" src="logo_icon.jpg" /></a></li>
+        @if (isMobile) {
+            @if (isLoggedIn) {
+                <ul class="navbar-list-after">
+                    <div class="items-left">
+                        <div class="img">
+                            <li><a routerLink="/"><img class="img-logo" src="logo_icon.jpg" /></a></li>
+                        </div>
                     </div>
-                    <div class="inner-left-items">
-                        <li [ngClass]="{ 'active': pageName === '/flats' }"><a routerLink="/flats">Flats</a></li>
-                        <li [ngClass]="{ 'active': pageName === '/add-flat' }"><a routerLink="/add-flat">Add a Flat</a></li>
-                        <li [ngClass]="{ 'active': pageName === '/profile' }"><a routerLink="/profile">Profile</a></li>
-                        <li [ngClass]="{ 'active': pageName === '/favorites' }"><a routerLink="/favorites">Favorites</a></li>
+                    <div class="items-right">
+                        <button (click)="isExpanded = !isExpanded" class="menu-button" [ngClass]="{'menu-expanded': isExpanded}">
+                            <mat-icon>menu</mat-icon>
+                        </button>
                     </div>
-                </div>
-                <div class="items-right">
-                    <li><a (click)="logout()"><mat-icon aria-hidden="false">logout</mat-icon>Logout</a></li>
-                </div>
-            </ul>
+                </ul>
+                @if (isExpanded) {
+                    <div class="menu-container" @curtainAnimation>
+                        <div class="menu-content">
+                            <ul class="menu-items">
+                                <div class="menu-items-routes">
+                                    <li><a routerLink="/flats">Flats</a></li>
+                                    <li><a routerLink="/add-flat">Add a Flat</a></li>
+                                    <li><a routerLink="/profile">Profile</a></li>
+                                    <li><a routerLink="/favorites">Favorites</a></li>
+                                </div>  
+                                <div class="menu-logout">
+                                    <li>
+                                        <a (click)="logout()">
+                                            <mat-icon aria-hidden="false">logout</mat-icon></a>
+                                    </li>
+                                </div>
+                            </ul>
+                        </div>                
+                    </div>
+                }                
+            } @else {
+                <ul class="navbar-list-before">
+                    <div class="before-login-items">
+                        <div class="before-img">
+                            <li class="img-logo-before"><a routerLink="/"><img src="logo_icon.jpg" /></a></li>
+                        </div>
+                        <div class="before-text">
+                            <li><a routerLink="/login">Login</a></li>
+                            <li><a routerLink="/register">Sign Up</a></li>
+                        </div>
+                    </div>
+                </ul>
+            }
         } @else {
-            <ul class="navbar-list-before">
-                <div class="before-login-items">
-                    <div class="before-img">
-                        <li class="img-logo-before"><a routerLink="/"><img src="logo_icon.jpg" /></a></li>
+            @if (isLoggedIn) {
+                <ul class="navbar-list-after">
+                    <div class="items-left">
+                        <div class="img">
+                            <li><a routerLink="/"><img class="img-logo" src="logo_icon.jpg" /></a></li>
+                        </div>
+                        <div class="inner-left-items">
+                            <li [ngClass]="{ 'active': pageName === '/flats' }"><a routerLink="/flats">Flats</a></li>
+                            <li [ngClass]="{ 'active': pageName === '/add-flat' }"><a routerLink="/add-flat">Add a Flat</a></li>
+                            <li [ngClass]="{ 'active': pageName === '/profile' }"><a routerLink="/profile">Profile</a></li>
+                            <li [ngClass]="{ 'active': pageName === '/favorites' }"><a routerLink="/favorites">Favorites</a></li>
+                        </div>
                     </div>
-                    <div class="before-text">
-                        <li><a routerLink="/login">Login</a></li>
-                        <li><a routerLink="/register">Sign Up</a></li>
+                    <div class="items-right">
+                        <li><a (click)="logout()"><mat-icon aria-hidden="false">logout</mat-icon>Logout</a></li>
                     </div>
-                </div>
-            </ul>
+                </ul>
+            } @else {
+                <ul class="navbar-list-before">
+                    <div class="before-login-items">
+                        <div class="before-img">
+                            <li class="img-logo-before"><a routerLink="/"><img src="logo_icon.jpg" /></a></li>
+                        </div>
+                        <div class="before-text">
+                            <li><a routerLink="/login">Login</a></li>
+                            <li><a routerLink="/register">Sign Up</a></li>
+                        </div>
+                    </div>
+                </ul>
+            }
         }
     </nav>
 </div>
