@@ -5,6 +5,10 @@
     font-family: "Roboto Condensed", sans-serif;
 }
 
+input, button {
+  font-family: "Roboto Condensed", sans-serif;
+}
+
 html, body {
     margin: 0;
     padding: 0;
