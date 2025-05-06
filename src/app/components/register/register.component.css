@@ -17,7 +17,7 @@ content: '';
 position: absolute;
 inset: 0;
 background: url('../../../../public/granular.png'); /* Adjust to correct path */
-opacity: 0.02; /* Adjust grain strength */
+opacity: 0.03; /* Adjust grain strength */
 animation: staticNoise 0.2s steps(1) infinite;
 pointer-events: none;
 height: 100%;
@@ -41,7 +41,8 @@ z-index: 1;
   padding: 50px 20px;
   margin-bottom: 100px;
   text-align: center;
-  max-width: 700px;
+  max-width: 650px;
+  z-index: 2;
 }
 
 .register-form {
@@ -70,6 +71,16 @@ z-index: 1;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  height: 25px;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+  margin-top: -5px;
+  text-align: right;
+  height: 100%;
+  animation: slideInY 0.3s ease forwards;
 }
 
 .regiter-form label {
@@ -113,14 +124,6 @@ z-index: 1;
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-.error {
-  color: red;
-  font-size: 14px;
-  margin-top: -5px;
-  text-align: right;
-  animation: slideInY 0.3s ease forwards;
 }
 
 
@@ -213,6 +216,19 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     flex: 1;
     padding: 5px;
     width: 50%;
+  }
+
+  .error {
+    color: red;
+    font-size: 14px;
+    margin-top: 0;
+    text-align: right;
+    animation: slideInY 0.3s ease forwards;
+  }
+
+  .password-error {
+    margin-top: 5px;
+    margin-bottom: 30px;
   }
 
   .helper-text {

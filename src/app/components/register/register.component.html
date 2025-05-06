@@ -58,8 +58,8 @@
         <div class="label-error">
           <label>Password</label>
           @if (registerForm.get('password')?.touched && registerForm.get('password')?.invalid) {
-            <div class="error">
-              {{ getErrorMessage('password') }}
+            <div class="error password-error">
+              <span>{{ getErrorMessage('password') }}</span>
             </div>
           }
         </div>
@@ -75,7 +75,7 @@
           <label>Confirm Password</label>
           @if (registerForm.get('confirmPassword')?.touched && registerForm.hasError('mismatch')) {
             <div class="error">
-              {{ getErrorMessage('confirmPassword') }}
+              <span>{{ getErrorMessage('confirmPassword') }}</span>
             </div>
           }
         </div>

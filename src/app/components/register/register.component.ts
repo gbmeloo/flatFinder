@@ -39,7 +39,9 @@ export class RegisterComponent {
           [
             Validators.required,
             Validators.minLength(8),
-            Validators.pattern(/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/),
+            Validators.pattern(
+              /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"`~\\|,.<>\/?])[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"`~\\|,.<>\/?]{8,}$/
+            ),
           ],
         ],
         confirmPassword: ['', [Validators.required]],
