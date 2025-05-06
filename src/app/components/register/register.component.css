@@ -236,3 +236,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   }
   
 }
+
+@media (max-height: 700px) {
+  .register-form-container {
+    margin-top: 30px;
+  }
+}
