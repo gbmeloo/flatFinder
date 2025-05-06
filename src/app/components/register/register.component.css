@@ -1,12 +1,35 @@
+
 :host {
   display: flex;
-  height: 100vh;
-  background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('../../../../public/background.webp');
-  background-size: cover;
+  background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('../../../../public/background.png');
+  background-size:cover;
+  min-height: 100%;
   background-position: center;
   background-repeat: no-repeat;
   align-items: center;
   justify-content: center;
+  position: relative;
+}
+
+/* Grain Effect */
+:host::before {
+content: '';
+position: absolute;
+inset: 0;
+background: url('../../../../public/granular.png'); /* Adjust to correct path */
+opacity: 0.02; /* Adjust grain strength */
+animation: staticNoise 0.2s steps(1) infinite;
+pointer-events: none;
+height: 100%;
+z-index: 1;
+}
+
+@keyframes staticNoise {
+0%   { background-position: 0 0; }
+25%  { background-position: 10% 5%; }
+50%  { background-position: -5% 15%; }
+75%  { background-position: 8% -10%; }
+100% { background-position: 0 0; }
 }
 
 .register-form-container {
@@ -121,6 +144,11 @@
   border: none;
   outline: none;
   flex: 1;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  cursor: pointer;
 }
 
 .show-password-btn {

@@ -9,6 +9,7 @@
     align-items: center;
     justify-content: center;
   }
+
     
     .profile-form-container {
       display: flex;
@@ -175,9 +176,9 @@
     @media (max-width: 768px) {
 
       .profile-form-container {
-        margin: 100px 0;
+        margin: 100px 0 !important;
+        padding: 50px 10px !important;
         width: 80%;
-        padding: 50px 10px;
       }
   
       .input-container {
