@@ -1,19 +1,86 @@
-<div>
-    <h1>
-        Available Flats
-    </h1>
+<div class="filter-bar">
+    <mat-icon aria-hidden="false" filter>filter_alt</mat-icon>
+    <div class="filter-item">
+        <button class="sort-btn" [ngClass]="{ soring: sortingClicked.includes('city') }" (click)="onSort('city')" title="Click to Sort">
+            City
+            <mat-icon aria-hidden="false">
+                {{  
+                    sortingClicked.includes('city') ?
+                       (isAce_City ? 'keyboard_double_arrow_down' : 'keyboard_double_arrow_up') :
+                       'unfold_more'
+                }}
+            </mat-icon>
+        </button>
+        <input type="text" placeholder="Filtering by City" [(ngModel)] = "filterCity" (ngModelChange)="onFilter()" />
+    </div>
+    <div class="filter-item">
+        <button class="sort-btn" [ngClass]="{ soring: sortingClicked.includes('rent_price') }" (click)="onSort('rent_price')" title="Click to Sort">
+            Price
+            <mat-icon aria-hidden="false">
+                {{  
+                    sortingClicked.includes('rent_price') ?
+                       (isAce_Price ? 'keyboard_double_arrow_down' : 'keyboard_double_arrow_up') :
+                       'unfold_more'
+                }}
+            </mat-icon>
+        </button>
+        <input type="number" min="0" step="1" placeholder="Lowest Price" [(ngModel)] = "minPrice" (ngModelChange)="onFilter()" />
+        <span>~</span>
+        <input type="number" min="0" step="1" placeholder="Highest Price" [(ngModel)] = "maxPrice" (ngModelChange)="onFilter()" />
+    </div>
+    <div class="filter-item">
+        <button class="sort-btn" [ngClass]="{ soring: sortingClicked.includes('area_size') }" (click)="onSort('area_size')" title="Click to Sort">
+            Area Size
+            
+            <mat-icon aria-hidden="false">
+                {{  
+                    sortingClicked.includes('area_size') ?
+                       (isAce_Area ? 'keyboard_double_arrow_down' : 'keyboard_double_arrow_up') :
+                       'unfold_more'
+                }}
+            </mat-icon>
+        </button>
+        <input type="number" min="0" step="1" placeholder="Lowest Area Size" [(ngModel)] = "minArea" (ngModelChange)="onFilter()" />
+        <span>~</span>
+        <input type="number" min="0" step="1" placeholder="Highest Area Size" [(ngModel)] = "maxArea" (ngModelChange)="onFilter()" />
+    </div>
 </div>
-<div id="flats-container">
-    <div *ngFor="let item of flats" class="flat-card">
-        <h3>{{item.landlord_id}}</h3>
-        <h2>{{ item.city }}, {{ item.street_name}}, {{item.street_number}}</h2>
-        <img [src]="item.imageUrl" alt="Test" class="flat-image" />
-        <p>Price: {{ item.rent_price}}$</p>
-        <p>Size: {{ item.area_size}} m²</p>
-        <p>AC: @if (item.has_ac) {Yes} @else {No}</p>
-        <p>Built In: {{item.year_built}}</p>
-        <p>Available At: {{item.date_available}}</p>
-
-        <button (click)="addToFavorites()">Add to Favorites</button>
+  
+<div class="flats-content">
+    <div *ngFor="let item of filteredFlats" class="flat-card">
+        <div class="upper">
+            <div class="left">
+                <h3 city>{{ item.city }}</h3>
+                <label>{{ item.street_number }} {{ item.street_name }}</label>
+                <h3 rent_price>{{ item.rent_price }}</h3>
+                <label landlord_name>
+                    <mat-icon  *ngIf="item.landlord_name !== ''" aria-hidden="false">person_pin</mat-icon> 
+                    {{ item.landlord_name }}
+                </label>
+                <label landlord_email>
+                    <mat-icon  *ngIf="item.landlord_email !== ''" aria-hidden="false">email</mat-icon> 
+                    {{ item.landlord_email }}
+                </label>
+            </div>
+            <div class="right">
+                <img [src]="item.imageUrl" alt="Flat image" class="flat-image" />
+                <label date_available>{{ item.date_available_display }}</label>
+            </div>
+        </div>
+        <div class="lower">
+            <div class="bottom" year_built>
+                <label>{{ item.year_built }}</label>
+            </div>
+            <div class="bottom" area_size>
+                <label>{{ item.area_size }}</label>
+            </div>
+            <div class="bottom" [ngClass]="{ hasAC: item.has_ac }" has_ac>
+                <mat-icon aria-hidden="false">{{ item.has_ac ? 'check_circle' : 'cancel' }}</mat-icon>
+            </div>
+        </div>
+        <div class="actions">
+            <button (click)="messageFlat(item.id)" message><mat-icon aria-hidden="false">message</mat-icon></button>
+            <button (click)="favoriteFlat(item.id)" favorite><mat-icon aria-hidden="false">favorite_border</mat-icon></button>
+        </div>
     </div>
 </div>
