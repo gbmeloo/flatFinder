@@ -25,7 +25,7 @@ export interface Flat {
   has_ac: boolean;
   year_built: number;
   date_available: Timestamp;
-  images: string[];
+  images: string;
   landlord_id: string;
   createdAt: string;
 }
@@ -63,6 +63,10 @@ export interface Flat {
   styleUrl: './add-flat.component.css'
 })
 export class AddFlatComponent {
+
+  imageURL: string = '';
+
+
   user: User | null = null;
   addFlatForm: FormGroup;
   selectedFiles: FileList | null = null;
@@ -126,10 +130,14 @@ export class AddFlatComponent {
     return '';
   }
 
-  onFileSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.selectedFiles = input.files;
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imageURL = reader.result as string;
+      };
+      reader.readAsDataURL(file);
     }
   }
 
@@ -156,7 +164,7 @@ export class AddFlatComponent {
           has_ac: insert.has_ac,
           year_built: insert.year_built,
           date_available: Timestamp.fromDate(new Date(insert.date_available.toString())),
-          images: images,
+          images: this.imageURL,
           landlord_id: this.user?.uid,
           createdAt: new Date().toISOString()
         };
