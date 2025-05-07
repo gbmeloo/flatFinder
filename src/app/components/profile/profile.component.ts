@@ -10,12 +10,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { jwtDecode } from 'jwt-decode';
-import { Auth, updatePassword, updateEmail, sendEmailVerification } from '@angular/fire/auth';
+import { updatePassword, updateProfile, User } from '@angular/fire/auth';
 import { Firestore, doc, getDoc, updateDoc } from '@angular/fire/firestore';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { EmailVerificationService } from '../../services/email-verification.service';
 import { NotificationService } from '../../services/notification.service';
+import { AuthService } from '../../services/auth.service';
+
 
 
 @Component({
@@ -58,7 +59,7 @@ export class ProfileComponent {
   max_date: string = "";
   passwordVisible: boolean = false;
   confirmPasswordVisible: boolean = false;
-  userId: string | null = null;
+  user: User | null = null;
   showPasswordFields: boolean = false;
   showEmailFields: boolean = false;
   updateError: string | null = null;
@@ -68,7 +69,7 @@ export class ProfileComponent {
 
   constructor(
     private fb: FormBuilder, 
-    private auth: Auth, 
+    private auth: AuthService, 
     private firestore: Firestore,
     private emailVerificationService: EmailVerificationService,
     private notificationService: NotificationService) {
@@ -104,24 +105,21 @@ export class ProfileComponent {
     this.isMobile = window.innerWidth <= 768; // You can adjust the breakpoint as needed
   }
 
+  ngOnChanges() {
+    
+  }
+
   ngOnInit() {
-    const token = localStorage.getItem('idToken');
-    if (token) {
-      try {
-        const decodedToken: any = jwtDecode(token);
-        this.userId = decodedToken.user_id;
-  
-        if (this.userId) {
-          this.getUserInfo();
-        } else {
-          console.error('User ID is null or undefined.');
-        }
-      } catch (error) {
-        console.error('Error decoding token:', error);
+    this.auth.getCurrentUser().then(user => {
+      if (user) {
+        this.user = user;
+        this.getUserInfo();
+      } else {
+        console.log('No user is logged in.');
       }
-    } else {
-      console.error('No token found in sessionStorage.');
-    }
+    }).catch(error => {
+      console.error('Error fetching user:', error);
+    });
   }
 
 
@@ -142,13 +140,13 @@ export class ProfileComponent {
 
   
   async getUserInfo() {
-    if (!this.userId) {
+    if (!this.user?.uid) {
       console.error('User ID is null or undefined. Cannot fetch user data.');
       return;
     }
   
     try {
-      const userDoc = await getDoc(doc(this.firestore, 'users', this.userId));
+      const userDoc = await getDoc(doc(this.firestore, 'users', this.user?.uid));
       if (userDoc.exists()) {
         const userData = userDoc.data();
         this.profileForm.patchValue({
@@ -213,7 +211,7 @@ export class ProfileComponent {
     this.loading = true;
 
     try {
-      if (this.profileForm.valid && this.userId) {
+      if (this.profileForm.valid && this.user?.uid) {
         const { firstName, lastName, birth_date } = this.profileForm.value;
         const updateData = {
           firstName,
@@ -223,7 +221,10 @@ export class ProfileComponent {
         };
     
         try {
-          await updateDoc(doc(this.firestore, 'users', this.userId), updateData);
+          await updateDoc(doc(this.firestore, 'users', this.user?.uid), updateData);
+          await updateProfile(this.user, {
+            displayName: `${updateData.firstName} ${updateData.lastName}`
+          });
           this.notificationService.showNotification(
             'Profile updated successfully',
             'Close',
@@ -247,8 +248,8 @@ export class ProfileComponent {
       if (this.passwordForm.valid && this.passwordForm.dirty) {
         const { password } = this.passwordForm.value;
         try {
-          if (this.auth.currentUser && password) {
-            await updatePassword(this.auth.currentUser, password);
+          if (this.user && password) {
+            await updatePassword(this.user, password);
             console.log('Password updated');
             this.passwordForm.reset(); // Clear password fields after update
           }

@@ -13,6 +13,8 @@ import { Firestore, addDoc, collection, Timestamp } from '@angular/fire/firestor
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { NotificationService } from '../../services/notification.service';
+import { AuthService } from '../../services/auth.service';
+import { User } from 'firebase/auth';
 
 export interface Flat {
   city: string;
@@ -61,9 +63,9 @@ export interface Flat {
   styleUrl: './add-flat.component.css'
 })
 export class AddFlatComponent {
+  user: User | null = null;
   addFlatForm: FormGroup;
   selectedFiles: FileList | null = null;
-  userId: string | null = null;
   insertError: string | null = null;
   insertSuccess: string | null = null;
   loading: boolean = false;
@@ -72,7 +74,9 @@ export class AddFlatComponent {
   constructor(
     private fb: FormBuilder, 
     private firestore: Firestore,
-    private notificationService: NotificationService) {
+    private notificationService: NotificationService,
+    private auth: AuthService,
+  ){
     
     this.addFlatForm = this.fb.group(
       {
@@ -99,17 +103,13 @@ export class AddFlatComponent {
   }
 
   ngOnInit() {
-    const token = localStorage.getItem('idToken');
-    if (token) {
-      try {
-        const decodedToken: any = jwtDecode(token);
-        this.userId = decodedToken.user_id;
-      } catch (error) {
-        console.error('Error decoding token:', error);
+    this.auth.getCurrentUser().then(user => {
+      if (user) {
+        this.user = user;
+      } else {
+        console.log("User not logged in.")
       }
-    } else {
-      console.error('No token found in sessionStorage.');
-    }
+    })
   }
 
   getErrorMessage(controlName: string): string {
@@ -138,7 +138,7 @@ export class AddFlatComponent {
     this.insertSuccess = null; // Clear any previous success message
     this.loading = true;
 
-    if (!this.userId) {
+    if (!this.user) {
       console.error('User ID is null or undefined. Cannot fetch user data.');
       return;
     }
@@ -157,7 +157,7 @@ export class AddFlatComponent {
           year_built: insert.year_built,
           date_available: Timestamp.fromDate(new Date(insert.date_available.toString())),
           images: images,
-          landlord_id: this.userId,
+          landlord_id: this.user?.uid,
           createdAt: new Date().toISOString()
         };
         await addDoc(collection(this.firestore, 'flats'), newFlat);
