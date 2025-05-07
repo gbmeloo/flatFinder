@@ -9,6 +9,7 @@ import { AddFlatComponent } from './components/add-flat/add-flat.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { EmailVerifiedGuard } from './guard/email-verified.guard';
 import { MyFlatsComponent } from './components/my-flats/my-flats.component';
+import { FlatDetailsComponent } from './components/flat-details/flat-details.component';
 
 export const routes: Routes = [
     {
@@ -49,5 +50,9 @@ export const routes: Routes = [
         path: 'my-flats',
         component: MyFlatsComponent,
         canActivate: [AuthGuard]
+    },
+    {
+        path: 'flat-details/:id',
+        component: FlatDetailsComponent
     }
 ];

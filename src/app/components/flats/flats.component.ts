@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { jwtDecode } from 'jwt-decode';
 import { Firestore, collection, query, where, orderBy, getDocs, Timestamp  } from '@angular/fire/firestore';
+import { RouterOutlet, Router } from '@angular/router';
 
 export interface Flat {
   id: string;
@@ -27,8 +28,10 @@ export interface Flat {
   imports: [
     MatIconModule,
     CommonModule,
-    FormsModule
+    FormsModule,
+    RouterOutlet,
   ],
+  standalone: true,
   templateUrl: './flats.component.html',
   styleUrl: './flats.component.css'
 })
@@ -47,7 +50,11 @@ export class FlatsComponent {
   minArea: number = Infinity;
   maxArea: number = Infinity;
 
-  constructor(private firestore: Firestore,) { }
+  constructor(private firestore: Firestore, private router: Router) { }
+
+  onFlatClick(id: string) {
+    this.router.navigate(['/flat-details', id]);
+  }
 
   ngOnInit() {
     const token = localStorage.getItem('idToken');

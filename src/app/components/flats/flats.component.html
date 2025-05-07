@@ -63,7 +63,7 @@
                 </label>
             </div>
             <div class="right">
-                <img [src]="item.imageUrl" alt="Flat image" class="flat-image" />
+                <img (click)="onFlatClick(item.id)" [src]="item.imageUrl" alt="Flat image" class="flat-image" />
                 <label date_available>{{ item.date_available_display }}</label>
             </div>
         </div>
@@ -84,3 +84,4 @@
         </div>
     </div>
 </div>
+<router-outlet></router-outlet>
