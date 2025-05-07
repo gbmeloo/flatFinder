@@ -1,55 +1,132 @@
-<div>
-    <h1>
-        Add a Flat
-    </h1>
-</div>
-<div id="form-container">
-    <h2>Fill in the details of the flat</h2>
-    <form id="form" #form="ngForm" action="submit" (ngSubmit)="addFlat()">
-        <div class="form-group">
-            <label for="location">City:</label>
-            <br>
-            <input type="text" id="city" name="city" [(ngModel)]="city" required>
+<div class="add-flat-form-container">
+    <form [formGroup]="addFlatForm" (ngSubmit)="onSubmit()" class="add-flat-form">
+        <h2 style="margin-bottom: 30px; text-align: center;" >Add a Flat</h2>
+        <div class="form-items">
+            <div class="form-items-section">
+                <div class="label-error">
+                    <label>City</label>
+                    @if (addFlatForm.get('city')?.touched && addFlatForm.get('city')?.invalid) {
+                        <div class="error">
+                            {{ getErrorMessage('city') }}
+                        </div>
+                    }
+                </div>
+                <div class="input-container" >
+                    <mat-icon>location_city</mat-icon>
+                    <input type="text" formControlName="city" required />
+                </div>
+                <div class="label-error">
+                    <label>Street Number</label>
+                    @if (addFlatForm.get('street_number')?.touched && addFlatForm.get('street_number')?.invalid) {
+                        <div class="error">
+                            {{ getErrorMessage('street_number') }}
+                        </div>
+                    }
+                </div>
+                <div class="input-container">
+                    <mat-icon>other_houses</mat-icon>
+                    <input type="number" formControlName="street_number" required />
+                </div>
+                <div class="label-error">
+                    <label>Street Name</label>
+                    @if (addFlatForm.get('street_name')?.touched && addFlatForm.get('street_name')?.invalid) {
+                        <div class="error">
+                            {{ getErrorMessage('street_name') }}
+                        </div>
+                    }
+                </div>
+                <div class="input-container">
+                    <mat-icon>add_road</mat-icon>
+                    <input type="text" formControlName="street_name" required />
+                </div>
+                <div class="label-error">
+                    <label>Rent Price</label>
+                    @if (addFlatForm.get('rent_price')?.touched && addFlatForm.get('rent_price')?.invalid) {
+                        <div class="error">
+                            {{ getErrorMessage('rent_price') }}
+                        </div>
+                    }
+                </div>
+                <div class="input-container">
+                    <mat-icon>monetization_on</mat-icon>
+                    <input type="number" formControlName="rent_price" required />
+                </div>  
+            </div>
+            
+            <div class="form-items-section">      
+                <div class="label-error">
+                    <label>Area Size(m²)</label>
+                    @if (addFlatForm.get('area_size')?.touched && addFlatForm.get('area_size')?.invalid) {
+                        <div class="error">
+                            {{ getErrorMessage('area_size') }}
+                        </div>
+                    }
+                </div>
+                <div class="input-container date-available">
+                    <mat-icon>photo_size_select_small</mat-icon>
+                    <input type="number" formControlName="area_size" required />
+                </div>            
+                <div class="label-error">
+                    <label>Date Available</label>
+                    @if (addFlatForm.get('date_available')?.touched && addFlatForm.get('date_available')?.invalid) {
+                        <div class="error">
+                            {{ getErrorMessage('date_available') }}
+                        </div>
+                    }
+                </div>
+                <div class="input-container">
+                    <mat-icon>schedule</mat-icon>
+                    <input type="date" formControlName="date_available" required />
+                </div>
+                <div class="label-error">
+                    <label>Year Built</label>
+                    @if (addFlatForm.get('year_built')?.touched && addFlatForm.get('year_built')?.invalid) {
+                        <div class="error">
+                            {{ getErrorMessage('year_built') }}
+                        </div>
+                    }
+                </div>
+                <div class="input-container">
+                    <mat-icon>warehouse</mat-icon>
+                    <input type="number" formControlName="year_built" required />
+                </div>
+                <div class="label-error">
+                    <label>Has air conditioning?</label>
+                    @if (addFlatForm.get('has_ac')?.touched && addFlatForm.get('has_ac')?.invalid) {
+                        <div class="error">
+                            {{ getErrorMessage('has_ac') }}
+                        </div>
+                    }
+                </div>
+                <div class="input-container checkbox">
+                    <mat-icon>air</mat-icon>
+                    <input type="checkbox" formControlName="has_ac" id="chk_hasAC">
+                    <label for="chk_hasAC">Yes</label>
+                </div>  
+            </div>
         </div>
-        <div class="form-group">
-            <label for="location">Street name and number</label>
-            <br>
-            <input type="text" id="st_name" name="street_name" [(ngModel)]="street_name" required>
-            <br>
-            <input type="number" id="street_number" name="street_number" [(ngModel)]="street_number" required>
+
+        <div class="form-items images">
+            <div class="label-error">
+                <label>Images</label>
+                @if (addFlatForm.get('images')?.touched && addFlatForm.get('images')?.invalid) {
+                    <div class="error">
+                        {{ getErrorMessage('images') }}
+                    </div>
+                }
+            </div>
+            <div class="input-container">
+                <mat-icon>photo_size_select_actual</mat-icon>
+                <input type="file" (change)="onFileSelected($event)" multiple />
+            </div>      
         </div>
-        <div class="form-group">
-            <label for="price">Price:</label>
-            <br>
-            <input type="number" id="price" name="price" [(ngModel)]="rent_price" required>
-        </div>
-        <div class="form-group">
-            <label for="size">Size (m²):</label>
-            <br>
-            <input type="number" id="size" name="size" [(ngModel)]="area_size" required>
-        </div>
-        <div class="form-group">
-            <label for="date">Date:</label>
-            <br>
-            <input type="date" name="date" [(ngModel)]="date_available" required>
-        </div>
-        <div class="form-group">
-            <label for="date">Year Built:</label>
-            <br>
-            <input type="number" name="year_built" [(ngModel)]="year_built" required>
-        </div>
-        <div>    
-            <label for="size">Image:</label>
-            <br>
-            <input type="file" (change)="onFileSelected($event)" id="image" name="image" >
-        </div>
-        <div class="form-group">
-            <label for="description">Has AC:</label>
-            <br>
-            <input type="checkbox" id="description" name="description"  [(ngModel)]="has_ac" required>
-        </div>
-        <div id="form-button">
-            <button type="submit"  id="submit-button">Submit</button>
+        
+        <button type="submit" class="submit-btn" [disabled]="addFlatForm.invalid">Add</button>
+
+        <div class="loading-spinner" [@formResize]="loading ? 'expanded' : 'collapsed'" [style.display]="loading ? 'flex' : 'none'">
+          @if (loading) {
+            <mat-spinner [diameter]="50"></mat-spinner>
+          }
         </div>
     </form>
 </div>
