@@ -53,10 +53,12 @@ export const routes: Routes = [
     },
     {
         path: 'chat',
-        component: ChatComponent
+        component: ChatComponent,
+        canActivate: [AuthGuard]
     },
     { 
         path: 'chat/:chatId', 
-        component: ChatComponent 
+        component: ChatComponent,
+        canActivate: [AuthGuard]
     },
 ];
