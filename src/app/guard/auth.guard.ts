@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
-import { jwtDecode } from 'jwt-decode';
+import { AuthService } from '../services/auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private auth: AuthService
+  ) {}
 
   async canActivate(
     route: ActivatedRouteSnapshot,
@@ -16,29 +19,12 @@ export class AuthGuard implements CanActivate {
       return true;
     }
 
-    const token = localStorage.getItem('idToken');
-
-    if (!token) {
-      await this.router.navigate(['/login']);
-      return false;
-    }
-
-    try {
-      const decoded: any = jwtDecode(token);
-      const isExpired = decoded.exp * 1000 <= Date.now();
-
-      if (isExpired) {
-        localStorage.removeItem('idToken');
-        await this.router.navigate(['/login']);
-        return false;
-      }
-
+    const user = await this.auth.getCurrentUser();
+    if (user) {
       return true;
-    } catch (e) {
-      console.error('Invalid token:', e);
-      localStorage.removeItem('idToken');
-      await this.router.navigate(['/login']);
-      return false;
+    } else {
+      return false
     }
+
   }
 }

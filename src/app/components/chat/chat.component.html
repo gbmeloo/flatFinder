@@ -1,0 +1,89 @@
+@if (!isMobile) {
+    <div class="body">
+        <div class="chat-container">
+            <div class="side-menu">
+              <h3>Your Chats</h3>
+              <ul>
+                    @for (chat of userChats; track chat.id) {
+                        <li (click)="switchChat(chat.id)">
+                            <p><strong>{{ chat.title }}</strong></p>
+                            <p><strong>{{ chat.lastMessage }}</strong></p>
+                        </li>
+                    }   
+                </ul>
+            </div>
+            <div class="chat-messages">
+                <div class="messages">
+                    @for (message of messages; track message.id) {
+                        <div class="message" [ngClass]="{'my-message': message.sentByMe, 'other-message': !message.sentByMe}">
+                            <p><strong>{{ message.name }}</strong>: {{ message.message }}</p>
+                        </div>      
+                    }
+                </div>
+                
+                <!-- <p><strong>{{ lastSender }}</strong>: {{ lastMessage }}</p> -->
+        
+                <form [formGroup]="messageForm" (ngSubmit)="onSubmit()">
+                    <div class="input-container">
+                        <input type="text" formControlName="message" required />
+                        <button type="submit" mat-mini-fab class="send-button" [disabled]="!chatActive">
+                            <mat-icon>send</mat-icon>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+
+
+@if (isMobile) {
+    <div class="body">
+        <div class="chat-container">
+            @if (showChatsMenu) {
+                <div class="side-menu">
+                    <h3>Your Chats</h3>
+                    <ul>
+                          @for (chat of userChats; track chat.id) {
+                              <li (click)="switchChat(chat.id)">
+                                  <p><strong>{{ chat.title }}</strong></p>
+                                  <p><strong>{{ chat.lastMessage }}</strong></p>
+                              </li>
+                          }   
+                      </ul>
+                </div>
+            }
+            @if (!showChatsMenu) {
+                <div class="chat-messages">
+                    <div class="message-header">
+                        <button class="back-button" (click)="goBackToChatsMenu()">
+                            <mat-icon>arrow_back_ios</mat-icon>
+                        </button>
+                    </div>
+                    
+                    <div class="messages">
+                        @for (message of messages; track message.id) {
+                            <div class="message" [ngClass]="{'my-message': message.sentByMe, 'other-message': !message.sentByMe}">
+                                <p><strong>{{ message.name }}</strong>: {{ message.message }}</p>
+                            </div>      
+                        }
+                    </div>
+                    
+                    <!-- <p><strong>{{ lastSender }}</strong>: {{ lastMessage }}</p> -->
+            
+                    <form [formGroup]="messageForm" (ngSubmit)="onSubmit()">
+                        <div class="input-container">
+                            <input type="text" formControlName="message" required />
+                            <button type="submit" mat-mini-fab class="send-button" [disabled]="!chatActive">
+                                <mat-icon>send</mat-icon>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+
+

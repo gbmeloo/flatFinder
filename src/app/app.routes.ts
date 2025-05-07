@@ -10,6 +10,8 @@ import { ResetPasswordComponent } from './components/reset-password/reset-passwo
 import { EmailVerifiedGuard } from './guard/email-verified.guard';
 import { MyFlatsComponent } from './components/my-flats/my-flats.component';
 import { FavoritesComponent } from './components/favorites/favorites.component';
+import { ChatComponent } from './components/chat/chat.component';
+
 
 export const routes: Routes = [
     {
@@ -51,9 +53,18 @@ export const routes: Routes = [
         component: MyFlatsComponent,
         canActivate: [AuthGuard]
     },
-    {
+
         path: 'favorites',
         component: FavoritesComponent,
         canActivate: [AuthGuard]
     }
+        path: 'chat',
+        component: ChatComponent,
+        canActivate: [AuthGuard]
+    },
+    { 
+        path: 'chat/:chatId', 
+        component: ChatComponent,
+        canActivate: [AuthGuard]
+    },
 ];
