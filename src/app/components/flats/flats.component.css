@@ -62,18 +62,11 @@
 
   /* flats */
   .flats-content {
-    padding: 10px;
-    display: flex;
-  }
-
-  .flats-content .flat-card {
-    width: fit-content;
-    height: 100%;
-    background: #FFFFFF;
-    border: 3px solid #bbbbbb;
-    margin: 0 0 15px 15px;
-    position: relative;
-    border-radius: 10px;
+    padding-top: 10px;
+    display: flex;    
+    flex-wrap: wrap;
+    height:79%;
+    overflow-y: auto;
   }
 
   .flats-content .flat-card label {
@@ -81,17 +74,26 @@
         opacity: 0.85;
     }
 
+  .flats-content .flat-card {
+    width: 36rem;
+    background: #FFFFFF;
+    border: 3px solid #bbbbbb;
+    margin: 0 0 15px 15px;
+    position: relative;
+    border-radius: 10px;
+  }
+
   .flats-content .flat-card .upper {
     display: flex;
     gap: 15px;
     font-size: 1.3rem;
     padding: 10px 15px 0 15px;
-    height: 100%;
   }
 
   .flats-content .flat-card .upper .left {
         display: flex;
         flex-direction: column;
+        width: 40%;
     }
 
     .flats-content .flat-card .upper .left * {
@@ -218,14 +220,35 @@
     }
 
     .flats-content .flat-card .actions button {
+        width: 32%;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 15px 0;        
+        padding: 15px 0;         
+    }
+
+    .flats-content .flat-card .actions button[view] {
+        color: #62B040;
+        font-size: 1rem;
+        border: 1px solid #62B040;
+        background-color: #FFFFFF;
+        border-radius: 5px;
+        gap: 5px;
+        cursor: pointer;
+    }
+
+    .flats-content .flat-card .actions button[view]:hover {
+        color: #FFFFFF;
+        border: none;
+        background-color: #62B040;
+    }
+
+    .flats-content .flat-card .actions button[view]:hover::after {
+        content: 'Detail';
+        color: #FFFFFF;
     }
 
     .flats-content .flat-card .actions button[message] {
-        width: 87%;
         color: #007bff;
         font-size: 1rem;
         border: 1px solid #007bff;
@@ -247,16 +270,22 @@
     }
 
     .flats-content .flat-card .actions button[favorite] {
-      width: 56px;
-      color: #888888;
-      font-size: 2rem; 
-      border: 1px solid #888888;
-      background-color: #FFFFFF;
-      border-radius: 5px;
-      cursor: pointer;
+        color: #888888;
+        font-size: 1rem;
+        border: 1px solid #888888;
+        background-color: #FFFFFF;
+        border-radius: 5px;
+        gap: 5px;
+        cursor: pointer;
     }
   
-      .flats-content .flat-card .actions button[favorite]:hover {
-          color: #ff0000;
-          border: 1px solid #ff0000;;
-      }
+    .flats-content .flat-card .actions button[favorite]:hover {
+        color: #FFFFFF;
+        border: 1px solid #ff0000;          
+        background-color: #ff0000;
+    }
+      
+    .flats-content .flat-card .actions button[favorite]:hover::after {
+        content: 'Favorite';
+        color: #FFFFFF;
+    }
