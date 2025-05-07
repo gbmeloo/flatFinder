@@ -1,10 +1,31 @@
-@for (message of messages; track message) {
-    <p><strong>{{ message.name }}</strong>: {{ message.message }}</p>
-}
+<div class="chats-container">
+<div class="chat-container">
+        <div class="side-menu">
+          <h3>Your Chats</h3>
+          <ul>
+            @for (chat of userChats; track chat.id) {
+                <li (click)="switchChat(chat.id)">
+                    <p><strong>{{ chat.title }}</strong></p>
+                    <p>Last message: <strong>{{ chat.lastMessage }}</strong></p>
+                </li>
+            }   
+        </ul>
+    </div>
+    <div id="chat-messages" style="overflow-y: auto; max-height: 400px;">
+        @for (message of messages; track message.id) {
+            <p><strong>{{ message.name }}</strong>: {{ message.message }}</p>
+        }
+    
+        <!-- <p><strong>{{ lastSender }}</strong>: {{ lastMessage }}</p> -->
+    
+        <form [formGroup]="messageForm" (ngSubmit)="onSubmit()">
+                <div class="input-container">
+                    <mat-icon>person</mat-icon>
+                    <input type="text" formControlName="message" required />
+                </div>
+            <button type="submit" [disabled]="!chatActive">Send</button>
+        </form>
+    </div>
+</div>
 
-<p><strong>{{ lastSender }}</strong>: {{ lastMessage }}</p>
 
-<form [formGroup]="messageForm" (ngSubmit)="onSubmit()">
-    <input type="text" formControlName="message" placeholder="Type your message">
-    <button type="submit">Send</button>
-</form>

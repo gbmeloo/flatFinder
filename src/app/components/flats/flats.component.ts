@@ -2,10 +2,12 @@ import { Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { jwtDecode } from 'jwt-decode';
 import { Firestore, collection, query, where, orderBy, getDocs, Timestamp  } from '@angular/fire/firestore';
 import { AuthService } from '../../services/auth.service';
 import { User } from 'firebase/auth';
+import { ChatService } from '../../services/chat.service';
+import { Router } from '@angular/router';
+import { NotificationService } from '../../services/notification.service';
 
 export interface Flat {
   id: string;
@@ -51,7 +53,10 @@ export class FlatsComponent {
 
   constructor(
     private firestore: Firestore,
-    private auth: AuthService
+    private auth: AuthService,
+    private chatService: ChatService,
+    private router: Router,
+    private notification: NotificationService
   ) { }
 
   ngOnInit() {
@@ -62,6 +67,8 @@ export class FlatsComponent {
         console.log("User not logged in.")
       }
     })
+
+    this.getAllFlats();
   }
 
   async getAllFlats() {  
@@ -169,8 +176,22 @@ export class FlatsComponent {
     }
   }
 
-  async messageFlat(id: string) {
-    
+  async messageFlat(flatId: string, landlordId: string, street: string, userId: string) {
+    if (userId === landlordId) {
+      this.notification.showNotification(
+        "Cannot start a conversation with yourself",
+        "Dimiss",
+        10000
+      )
+      return;
+    }
+    const chatId = await this.chatService.startNewChat(flatId, landlordId, street, userId);
+    if (chatId) {
+      // Redirect to the chat component with the chat ID
+      this.router.navigate(['/chat', chatId]);
+    } else {
+      console.error('Failed to start or retrieve chat.');
+    }
   }
 
   async favoriteFlat(id: string) {
