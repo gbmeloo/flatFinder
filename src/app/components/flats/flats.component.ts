@@ -102,7 +102,6 @@ export class FlatsComponent {
           flat.landlord_email = "";
         }
 
-        console.log(flat);
         this.allflats.push(flat);
         this.filteredFlats.push(flat);
       });
@@ -176,6 +175,10 @@ export class FlatsComponent {
     } catch (error) {
       console.error('Error filtering data:', error);
     }
+  }
+
+  async viewFlat(event: any) {
+
   }
 
   async messageFlat(id: string) {
