@@ -65,7 +65,7 @@
     padding-top: 10px;
     display: flex;    
     flex-wrap: wrap;
-    height:79%;
+    height: fit-content;
     overflow-y: auto;
   }
 

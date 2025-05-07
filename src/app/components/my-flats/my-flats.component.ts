@@ -1,9 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { jwtDecode } from 'jwt-decode';
-import { Firestore, collection, query, where, orderBy, getDocs, Timestamp  } from '@angular/fire/firestore';
+import { Firestore, collection, query, where, orderBy, getDocs, Timestamp, deleteDoc, doc  } from '@angular/fire/firestore';
+import { trigger, state, style, transition, animate } from '@angular/animations';
+import { NotificationService } from '../../services/notification.service';
 
 export interface Flat {
   id: string;
@@ -23,17 +26,42 @@ export interface Flat {
 @Component({
   selector: 'app-my-flats',
   imports: [
+    MatProgressSpinnerModule,
     MatIconModule,
     CommonModule,
     FormsModule
+  ],
+  animations: [
+    trigger('formResize', [
+      state('collapsed', style({
+        height: '0px',
+        opacity: 0,
+        overflow: 'hidden',
+        padding: '0px'
+      })),
+      state('expanded', style({
+        height: '*',
+        opacity: 1,
+        overflow: 'hidden',
+        padding: '*'
+      })),
+      transition('collapsed <=> expanded', [
+        style({ overflow: 'hidden' }),
+        animate('300ms ease')
+      ])
+    ])
   ],
   templateUrl: './my-flats.component.html',
   styleUrl: './my-flats.component.css'
 })
 export class MyFlatsComponent {
   userId: string | null = null;
-  myflats: Flat[] =[];
+  deleteError: string | null = null;
+  deleteSuccess: string | null = null;
+  loading: boolean = false;
+  isMobile: boolean = false; // Track if the screen is mobile size
 
+  myflats: Flat[] =[];
   filteredFlats: Flat[] = [];
   sortingClicked: string[] = [];
   isAce_City = true;
@@ -45,7 +73,16 @@ export class MyFlatsComponent {
   minArea: number = Infinity;
   maxArea: number = Infinity;
 
-  constructor(private firestore: Firestore,) { }
+  constructor(private firestore: Firestore, private notificationService: NotificationService) { }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.checkScreenWidth();
+  }
+
+  checkScreenWidth(): void {
+    this.isMobile = window.innerWidth <= 768; // You can adjust the breakpoint as needed
+  }
 
   ngOnInit() {
     const token = localStorage.getItem('idToken');
@@ -169,7 +206,39 @@ export class MyFlatsComponent {
   }
 
   async deleteFlat(id: string) {
-    
+    const confirmed = confirm('Are you sure you want to delete this flat?');
+    if (!confirmed) return;
+
+    try {
+      const del = doc(this.firestore, 'flats', id);
+      await deleteDoc(del);
+      this.filteredFlats = this.filteredFlats.filter(flat => flat.id !== id);
+      this.myflats = this.myflats.filter(flat => flat.id !== id);
+      this.notificationService.showNotification(
+        'Flat deleted successfully',
+        'Close',
+        5000,
+        ['error-snackbar'], // Custom class for error
+      );
+      this.deleteError = null; // Clear any previous error message
+      console.log('Flat is deleted');
+    } catch (error) {
+      this.notificationService.showNotification(
+        'Error insering new flat. Please try again.' + error,
+        'Close',
+        5000,
+        ['error-snackbar'], // Custom class for error
+        this.isMobile ? 'bottom' : 'top', // Adjust position based on screen size
+        this.isMobile ? 'center' : 'right' // Adjust position based on screen size
+      );
+      this.deleteSuccess = null;
+    } finally {
+      this.loading = false;
+      setTimeout(() => {
+        this.deleteSuccess = null; // Clear success message after 3 seconds
+        this.deleteError = null; // Clear error message after 3 seconds
+      }, 3000);
+    }
   }
 
   async messageFlat(id: string) {
