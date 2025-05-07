@@ -1,20 +1,24 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoginAuthGuard implements CanActivate {
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private auth: AuthService
+  ) {}
 
-  canActivate(): boolean {
-    const token = localStorage.getItem('idToken');
-    if (token) {
-      // If the user is logged in, redirect to the flats page
-      this.router.navigate(['/flats']);
-      return false;
-    }
-    // Allow access to the login page if no token is found
-    return true;
+  canActivate(): Promise<boolean> {
+    return this.auth.getCurrentUser().then(user => {
+      if (user) {
+        this.router.navigate(['/']); // Redirect if user is logged in
+        return false;
+      } else {
+        return true;
+      }
+    });
   }
 }

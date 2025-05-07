@@ -4,49 +4,52 @@ import {
   Auth, 
   signInWithEmailAndPassword, 
   User,
-  sendPasswordResetEmail } from '@angular/fire/auth';
+  sendPasswordResetEmail,
+  onAuthStateChanged
+ } 
+ from '@angular/fire/auth';
 import { Router } from '@angular/router';
-import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  loggedIn = new BehaviorSubject<boolean>(this.isLoggedIn());
-  private currentUserPromise: Promise<User | null> | null = null;
+  loggedIn = new BehaviorSubject<boolean>(false);
 
-  constructor(private auth: Auth, private router: Router) { }
+  constructor(private auth: Auth, private router: Router) { 
+    this.listenToAuthStateChangesr();
+  }
 
   // Check if the token is valid
-  isLoggedIn(): boolean {
-    const token = localStorage.getItem('idToken');
-    if (!token) return false;
-
-    try {
-      const decoded: any = jwtDecode(token);
-      const exp = decoded.exp;
-      if (exp * 1000 <= Date.now()) {
-        localStorage.removeItem('idToken');
-        this.router.navigate(['/login']);
-        return false;
+  // Listen for authentication state changes
+  private listenToAuthStateChangesr(): void {
+    onAuthStateChanged(this.auth, (user) => {
+      if (user) {
+        // User is signed in
+        this.loggedIn.next(true);
       } else {
-        return true;
+        // User is signed out
+        this.loggedIn.next(false);
+        console.log('User signed out');
+        this.router.navigate(['/login']); // Redirect to login page
       }
-    } catch {
-      return false;
-    }
+    });
   }
 
   getCurrentUser(): Promise<User | null> {
-    if (!this.currentUserPromise) {
-      this.currentUserPromise = this.loadUserFromStorage();
-    }
-    return this.currentUserPromise;
-  }
-  
-  private async loadUserFromStorage(): Promise<User | null> {
-    const user = this.auth.currentUser;
-    return user ? user : null;
+    return new Promise((resolve, reject) => {
+      const unsubscribe = onAuthStateChanged(
+        this.auth,
+        (user) => {
+          unsubscribe();
+          resolve(user ? (user as User) : null);
+        },
+        (error) => {
+          unsubscribe();
+          reject(error);
+        }
+      )
+    })
   }
 
   async login(email: string, password: string): Promise<void> {

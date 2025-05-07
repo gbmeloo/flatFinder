@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { jwtDecode } from 'jwt-decode';
 import { Firestore, collection, query, where, orderBy, getDocs, Timestamp  } from '@angular/fire/firestore';
+import { AuthService } from '../../services/auth.service';
+import { User } from 'firebase/auth';
 
 export interface Flat {
   id: string;
@@ -33,7 +35,7 @@ export interface Flat {
   styleUrl: './flats.component.css'
 })
 export class FlatsComponent {
-  userId: string | null = null;
+  user: User | null = null;
   allflats: Flat[] =[];
 
   filteredFlats: Flat[] = [];
@@ -47,26 +49,19 @@ export class FlatsComponent {
   minArea: number = Infinity;
   maxArea: number = Infinity;
 
-  constructor(private firestore: Firestore,) { }
+  constructor(
+    private firestore: Firestore,
+    private auth: AuthService
+  ) { }
 
   ngOnInit() {
-    const token = localStorage.getItem('idToken');
-    if (token) {
-      try {
-        const decodedToken: any = jwtDecode(token);
-        this.userId = decodedToken.user_id;
-  
-        if (this.userId) {
-          this.getAllFlats();
-        } else {
-          console.error('User ID is null or undefined.');
-        }
-      } catch (error) {
-        console.error('Error decoding token:', error);
+    this.auth.getCurrentUser().then(user => {
+      if (user) {
+        this.user = user;
+      } else {
+        console.log("User not logged in.")
       }
-    } else {
-      console.error('No token found in sessionStorage.');
-    }
+    })
   }
 
   async getAllFlats() {  
@@ -96,10 +91,6 @@ export class FlatsComponent {
         if(landlord != null) {
           flat.landlord_name =`${String(landlord["firstName"] ?? '')} ${String(landlord["lastName"] ?? '')}`;
           flat.landlord_email = String(landlord["email"] ?? '');
-        }
-        else {
-          flat.landlord_name = "";
-          flat.landlord_email = "";
         }
 
         console.log(flat);

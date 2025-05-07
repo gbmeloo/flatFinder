@@ -1,0 +1,6 @@
+<p><strong>{{ lastSender }}</strong>: {{ lastMessage }}</p>
+
+<form [formGroup]="messageForm" (ngSubmit)="onSubmit()">
+    <input type="text" formControlName="message" placeholder="Type your message">
+    <button type="submit">Send</button>
+</form>
