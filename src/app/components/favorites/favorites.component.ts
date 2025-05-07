@@ -3,7 +3,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { jwtDecode } from 'jwt-decode';
-import { Firestore, collection, query, where, orderBy, getDocs, Timestamp, doc, getDoc, updateDoc } from '@angular/fire/firestore';
+import { Firestore, collection, query, where, orderBy, getDocs, Timestamp, doc, getDoc, updateDoc  } from '@angular/fire/firestore';
 
 export interface Flat {
   id: string;
@@ -29,10 +29,11 @@ export interface Flat {
     CommonModule,
     FormsModule
   ],
-  templateUrl: './flats.component.html',
-  styleUrl: './flats.component.css'
+  templateUrl: './favorites.component.html',
+  styleUrl: './favorites.component.css'
 })
-export class FlatsComponent {
+export class FavoritesComponent {
+  favoritesFlats: string[] = [];
   userId: string | null = null;
   allflats: Flat[] =[];
 
@@ -69,8 +70,24 @@ export class FlatsComponent {
     }
   }
 
-  async getAllFlats() {  
+  async getAllFlats(): Promise<Flat[]> {  
     try {
+      if (!this.userId) {
+        throw new Error('User ID is null or undefined.');
+      }
+      const userDocRef = doc(this.firestore, 'users', this.userId);
+      const userDoc = await getDoc(userDocRef);
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        const favorites: string[] = userData['favorites'] || [];
+        this.favoritesFlats.push(...favorites);
+        this.favoritesFlats = favorites
+        alert(this.favoritesFlats)
+      } else {
+        alert('User document does not exist.');
+        return [];
+      }
+
       const users = collection(this.firestore, 'users');
       const u = query(users);
       const queryUsers = await getDocs(u);
@@ -96,19 +113,32 @@ export class FlatsComponent {
         if(landlord != null) {
           flat.landlord_name =`${String(landlord["firstName"] ?? '')} ${String(landlord["lastName"] ?? '')}`;
           flat.landlord_email = String(landlord["email"] ?? '');
+          
         }
         else {
           flat.landlord_name = "";
           flat.landlord_email = "";
         }
 
-        console.log(flat);
-        this.allflats.push(flat);
-        this.filteredFlats.push(flat);
+        this.favoritesFlats.forEach(flat => {
+
+        })
+        
+        for (let i: number = 0; i < this.favoritesFlats.length; i++) {
+          if (this.favoritesFlats[i] == flat.id) {
+            alert(flat.id + " is in favorites")
+            console.log(flat);
+            this.allflats.push(flat);
+            this.filteredFlats.push(flat);
+          }
+      }
+        
       });
     } catch (error) {
       console.error('Error fetching my flats data:', error);
+      return [];
     }
+    return this.allflats;
   }
 
   async onSort(field: string) {
@@ -211,8 +241,9 @@ export class FlatsComponent {
       } else {
         console.error('User document does not exist.');
       }
-    } catch (error) {
-      console.error('Error adding flat to favorites:', error);
-    }
   }
+ catch (error: any) {
+  console.error('Error adding flat to favorites:', error);
+}
+}
 }
