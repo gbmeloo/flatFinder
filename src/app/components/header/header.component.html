@@ -9,6 +9,12 @@
                         </div>
                     </div>
                     <div class="items-right">
+                        <li>
+                            <button class="messages-button" routerLink="/chat" mat-mini-fab >
+                                <mat-icon> message</mat-icon>
+                            </button>
+                        </li>
+                        
                         <button (click)="isExpanded = !isExpanded" class="menu-button" [ngClass]="{'menu-expanded': isExpanded}">
                             <mat-icon>menu</mat-icon>
                         </button>
@@ -24,7 +30,6 @@
                                     <li><a routerLink="/profile">Profile</a></li>
                                     <li><a routerLink="/favorites">Favorites</a></li>
                                     <li><a routerLink="/my-flats">My Flats</a></li>
-                                    <li><a routerLink="/chat">Chat</a></li>
                                 </div>  
                                 <div class="menu-logout">
                                     <li>

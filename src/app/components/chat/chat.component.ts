@@ -6,17 +6,26 @@ import { User } from 'firebase/auth';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { ScreenSizeService } from '../../services/screen-size.service';
 
 export interface Message {
   id: string,
   message: string,
   name: string,
-  timestamp: number
+  timestamp: number,
+  sentByMe?: boolean; // Add this property
 }
 
 @Component({
   selector: 'app-chat',
-  imports: [ReactiveFormsModule, MatIconModule],
+  imports: [
+    ReactiveFormsModule, 
+    MatIconModule,
+    MatButtonModule,
+    CommonModule
+  ],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css'
 })
@@ -30,13 +39,17 @@ export class ChatComponent implements OnInit {
   lastMessage: string = '';
   lastSender: string = '';
   chatActive: boolean = false;
+  isMobile: boolean = false;
+  showChatsMenu: boolean = true;
   private messageSub?: Subscription;
+  private screenSizeSub?: Subscription;
 
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
     private chatService: ChatService,
     private route: ActivatedRoute,
+    private screenSizeService: ScreenSizeService
   ) {
     this.messageForm = this.fb.group({
       message: ['', Validators.required]
@@ -44,15 +57,23 @@ export class ChatComponent implements OnInit {
   }
 
   ngOnInit() {
+     // Subscribe to screen size changes
+     this.screenSizeSub = this.screenSizeService.isMobile$.subscribe(isMobile => {
+      this.isMobile = isMobile;
+      if (!isMobile) {
+        this.showChatsMenu = true; // Always show chats menu on larger screens
+      }
+    });
+
     this.auth.getCurrentUser().then(user => {
       if (user) {
         this.user = user;
         this.chatService.getUserChats(user.uid).then(chats => {
           this.userChats = chats;
-          this.chatService.listenToAllUserChats(user.uid); // 👈 Start global listener
+          this.chatService.listenToAllUserChats(user.uid);
         });
   
-        // 👇 Global message listener for updating chat list
+       
         this.chatService.globalMessage$.subscribe(update => {
           if (update) {
             const chat = this.userChats.find(c => c.id === update.chatId);
@@ -64,31 +85,41 @@ export class ChatComponent implements OnInit {
         });
       }
     });
-    const chatId = this.route.snapshot.params['chatId']; // Access chatId once
+      // Ensure chatId is set and load the chat
+    this.route.params.subscribe(params => {
+      const chatId = params['chatId'];
       if (chatId) {
+        this.chatId = chatId; // Set chatId
         this.loadChat(chatId); // Load the chat by chatId
-      }   
+      }
+    });
   }
 
   loadChat(chatId: string) {
     this.messages = []; // Clear previous messages
-
+  
     // Unsubscribe from previous listener if any
     if (this.messageSub) {
       this.messageSub.unsubscribe();
     }
-
+  
     this.chatService.getLastTenMessages(chatId).then(lastTenMessages => {
-      this.messages = lastTenMessages;
+      this.messages = lastTenMessages.map(message => ({
+        ...message,
+        sentByMe: message.name === this.user?.displayName // Compare sender name with current user
+      }));
     });
-
+  
     // Start listening to new messages
     this.chatService.listenForMessages(chatId);
-
+  
     this.messageSub = this.chatService.lastMessage$.subscribe(newMessage => {
       if (newMessage && !this.messages.find(m => m.id === newMessage.id)) {
-        this.messages.push(newMessage);
-
+        this.messages.push({
+          ...newMessage,
+          sentByMe: newMessage.name === this.user?.displayName // Compare sender name with current user
+        });
+  
         const chat = this.userChats.find(chat => chat.id === chatId);
         if (chat) {
           chat.lastMessage = `${newMessage.name}: ${newMessage.message}`;
@@ -96,13 +127,20 @@ export class ChatComponent implements OnInit {
         }
       }
     });
-
+  
     this.chatActive = true;
   }
 
   switchChat(chatId: string) {
     this.chatId = chatId;
-    this.loadChat(chatId); // Load the selected chat
+    this.loadChat(chatId);
+    if (this.isMobile) {
+      this.showChatsMenu = false; // Switch to chat view on mobile
+    }
+  }
+
+  goBackToChatsMenu() {
+    this.showChatsMenu = true; // Go back to chats menu on mobile
   }
 
   async onSubmit() {
@@ -113,6 +151,16 @@ export class ChatComponent implements OnInit {
       await this.chatService.sendMessage(this.chatId, this.user.displayName || 'Unknown', message);
       
       this.messageForm.reset();
+    }
+  }
+
+  ngOnDestroy() {
+    // Unsubscribe from observables to prevent memory leaks
+    if (this.screenSizeSub) {
+      this.screenSizeSub.unsubscribe();
+    }
+    if (this.messageSub) {
+      this.messageSub.unsubscribe();
     }
   }
 

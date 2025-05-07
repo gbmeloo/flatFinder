@@ -12,10 +12,16 @@ import {
   animate,
   transition,
 } from '@angular/animations';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterModule, MatIconModule, CommonModule],
+  imports: [
+    RouterModule, 
+    MatIconModule, 
+    CommonModule,
+    MatButtonModule
+  ],
   animations: [
     trigger('curtainAnimation', [
       state('void', style({ height: '*', opacity: 0 })),
