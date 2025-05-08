@@ -88,6 +88,12 @@ export class FlatDetailsComponent implements OnInit {
         dateAvailable: this.flat.dateAvailable,
         contactNumber: this.flat.contactNumber
       });
+
+      if (this.flat.date_available && this.flat.date_available.toDate) {
+        this.flat.dateAvailable = this.flat.date_available.toDate().toLocaleDateString();
+      } else {
+        this.flat.dateAvailable = this.flat.date_available;
+      }
     }).catch(error => {
       console.error('Error fetching flat details:', error);
     });
