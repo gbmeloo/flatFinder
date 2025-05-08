@@ -1,0 +1,132 @@
+<div class="update-flat-form-container">
+    <form [formGroup]="updateFlatForm" (ngSubmit)="onSubmit()" class="update-flat-form">
+        <h2 style="margin-bottom: 30px; text-align: center;" >Update Flat</h2>
+        <div class="form-items">
+            <div class="form-items-section">
+                <div class="label-error">
+                    <label>City</label>
+                    @if (updateFlatForm.get('city')?.touched && updateFlatForm.get('city')?.invalid) {
+                        <div class="error">
+                            {{ getErrorMessage('city') }}
+                        </div>
+                    }
+                </div>
+                <div class="input-container" >
+                    <mat-icon>location_city</mat-icon>
+                    <input type="text" formControlName="city" required />
+                </div>
+                <div class="label-error">
+                    <label>Street Number</label>
+                    @if (updateFlatForm.get('street_number')?.touched && updateFlatForm.get('street_number')?.invalid) {
+                        <div class="error">
+                            {{ getErrorMessage('street_number') }}
+                        </div>
+                    }
+                </div>
+                <div class="input-container">
+                    <mat-icon>other_houses</mat-icon>
+                    <input type="number" formControlName="street_number" required />
+                </div>
+                <div class="label-error">
+                    <label>Street Name</label>
+                    @if (updateFlatForm.get('street_name')?.touched && updateFlatForm.get('street_name')?.invalid) {
+                        <div class="error">
+                            {{ getErrorMessage('street_name') }}
+                        </div>
+                    }
+                </div>
+                <div class="input-container">
+                    <mat-icon>add_road</mat-icon>
+                    <input type="text" formControlName="street_name" required />
+                </div>
+                <div class="label-error">
+                    <label>Rent Price</label>
+                    @if (updateFlatForm.get('rent_price')?.touched && updateFlatForm.get('rent_price')?.invalid) {
+                        <div class="error">
+                            {{ getErrorMessage('rent_price') }}
+                        </div>
+                    }
+                </div>
+                <div class="input-container">
+                    <mat-icon>monetization_on</mat-icon>
+                    <input type="number" formControlName="rent_price" required />
+                </div>  
+            </div>
+            
+            <div class="form-items-section">      
+                <div class="label-error">
+                    <label>Area Size(m²)</label>
+                    @if (updateFlatForm.get('area_size')?.touched && updateFlatForm.get('area_size')?.invalid) {
+                        <div class="error">
+                            {{ getErrorMessage('area_size') }}
+                        </div>
+                    }
+                </div>
+                <div class="input-container date-available">
+                    <mat-icon>photo_size_select_small</mat-icon>
+                    <input type="number" formControlName="area_size" required />
+                </div>            
+                <div class="label-error">
+                    <label>Date Available</label>
+                    @if (updateFlatForm.get('date_available')?.touched && updateFlatForm.get('date_available')?.invalid) {
+                        <div class="error">
+                            {{ getErrorMessage('date_available') }}
+                        </div>
+                    }
+                </div>
+                <div class="input-container">
+                    <mat-icon>schedule</mat-icon>
+                    <input type="date" formControlName="date_available" required />
+                </div>
+                <div class="label-error">
+                    <label>Year Built</label>
+                    @if (updateFlatForm.get('year_built')?.touched && updateFlatForm.get('year_built')?.invalid) {
+                        <div class="error">
+                            {{ getErrorMessage('year_built') }}
+                        </div>
+                    }
+                </div>
+                <div class="input-container">
+                    <mat-icon>warehouse</mat-icon>
+                    <input type="number" formControlName="year_built" required />
+                </div>
+                <div class="label-error">
+                    <label>Has air conditioning?</label>
+                    @if (updateFlatForm.get('has_ac')?.touched && updateFlatForm.get('has_ac')?.invalid) {
+                        <div class="error">
+                            {{ getErrorMessage('has_ac') }}
+                        </div>
+                    }
+                </div>
+                <div class="input-container checkbox">
+                    <mat-icon>air</mat-icon>
+                    <input type="checkbox" formControlName="has_ac" id="chk_hasAC">
+                    <label for="chk_hasAC">Yes</label>
+                </div>  
+            </div>
+        </div>
+
+        <div class="form-items images">
+            <div class="label-error">
+                <label>Images</label>
+                @if (updateFlatForm.get('images')?.touched && updateFlatForm.get('images')?.invalid) {
+                    <div class="error">
+                        {{ getErrorMessage('images') }}
+                    </div>
+                }
+            </div>
+            <div class="input-container">
+                <mat-icon>photo_size_select_actual</mat-icon>
+                <input type="file" (change)="onFileSelected($event)" multiple />
+            </div>      
+        </div>
+        
+        <button type="submit" class="submit-btn" [disabled]="updateFlatForm.invalid">Update</button>
+
+        <div class="loading-spinner" [@formResize]="loading ? 'expanded' : 'collapsed'" [style.display]="loading ? 'flex' : 'none'">
+          @if (loading) {
+            <mat-spinner [diameter]="50"></mat-spinner>
+          }
+        </div>
+    </form>
+</div>

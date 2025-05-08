@@ -362,8 +362,8 @@ export class MyFlatsComponent {
     }
   }
 
-  async editFlat(event: any) {
-
+  async editFlat(id: string) {
+    this.router.navigate(['/update-flat', id]);
   }
 
   async deleteFlat(id: string) {
