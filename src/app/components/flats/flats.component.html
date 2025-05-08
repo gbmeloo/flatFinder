@@ -74,7 +74,6 @@
                 </div>
               </div>
         </div>
-
         <div class="flats-form-right">
             <div *ngIf="filteredFlats.length > 0; else noResults">
                 <div class="flats-content">
@@ -113,8 +112,9 @@
                             <button (click)="viewFlat(item.id)" view>
                                 <mat-icon aria-hidden="false">info_outline</mat-icon>
                             </button>
-                            
-                            
+                            <button (click)="this.user ? messageFlat(item.id, item.landlord_id, `${item.street_name}, ${item.street_number}`, this.user.uid) : null" message>
+                                <mat-icon aria-hidden="false">message</mat-icon>
+                            </button>
                             <button (click)="favoriteFlat(item.id)" favorite>
                                 <mat-icon aria-hidden="false">favorite_border</mat-icon>
                             </button>
@@ -125,10 +125,10 @@
 
             <ng-template #noResults>
                 <div class="no-results">
-                    <mat-icon aria-hidden="false">domain_disabled</mat-icon>
-                    <h1>No results found based on your filters.</h1>
+                  <mat-icon aria-hidden="false">domain_disabled</mat-icon>
+                  <h1>No results found based on your filters.</h1>
                 </div>
-            </ng-template>
+              </ng-template>
         </div>
     </div>
 </div>
