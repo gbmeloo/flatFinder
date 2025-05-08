@@ -1,0 +1,11 @@
+TECH-FED104-6 Team Hebe
+
+gitHub Url: https://github.com/gbmeloo/flatFinder
+
+user test: use1@test.com/password
+
+Members of the team:
+Chih-Yun Hsu(Hebe)
+Gabriel Melo Galvao
+Gabriel Enrique Morales Fernandez
+Caua Braga Calheiros

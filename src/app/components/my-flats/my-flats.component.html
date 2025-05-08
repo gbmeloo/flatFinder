@@ -1,7 +1,9 @@
-
-<div class="filter-bar">
-    <mat-icon aria-hidden="false" filter>filter_alt</mat-icon>
-    <div class="filter-item">
+<div class="flats-form-container">
+    <div class="sort-bar">
+        <button class="sort-btn toggle-btn" *ngIf="isMobile" (click)="toggleFilter()">
+            <mat-icon>{{ showFilter ? 'close' : 'filter_list' }}</mat-icon>
+        </button>
+        <label *ngIf="!isMobile">Sort by:</label>
         <button class="sort-btn" [ngClass]="{ soring: sortingClicked.includes('city') }" (click)="onSort('city')" title="Click to Sort">
             City
             <mat-icon aria-hidden="false">
@@ -12,9 +14,6 @@
                 }}
             </mat-icon>
         </button>
-        <input type="text" placeholder="Filtering by City" [(ngModel)] = "filterCity" (ngModelChange)="onFilter()" />
-    </div>
-    <div class="filter-item">
         <button class="sort-btn" [ngClass]="{ soring: sortingClicked.includes('rent_price') }" (click)="onSort('rent_price')" title="Click to Sort">
             Price
             <mat-icon aria-hidden="false">
@@ -25,14 +24,8 @@
                 }}
             </mat-icon>
         </button>
-        <input type="number" min="0" step="1" placeholder="Lowest Price" [(ngModel)] = "minPrice" (ngModelChange)="onFilter()" />
-        <span>~</span>
-        <input type="number" min="0" step="1" placeholder="Highest Price" [(ngModel)] = "maxPrice" (ngModelChange)="onFilter()" />
-    </div>
-    <div class="filter-item">
         <button class="sort-btn" [ngClass]="{ soring: sortingClicked.includes('area_size') }" (click)="onSort('area_size')" title="Click to Sort">
-            Area Size
-            
+            Area Size            
             <mat-icon aria-hidden="false">
                 {{  
                     sortingClicked.includes('area_size') ?
@@ -41,48 +34,103 @@
                 }}
             </mat-icon>
         </button>
-        <input type="number" min="0" step="1" placeholder="Lowest Area Size" [(ngModel)] = "minArea" (ngModelChange)="onFilter()" />
-        <span>~</span>
-        <input type="number" min="0" step="1" placeholder="Highest Area Size" [(ngModel)] = "maxArea" (ngModelChange)="onFilter()" />
+    </div>
+
+    <div class="flats-form-bottom">
+        <div class="filter-panel" [class.collapsed]="isMobile && !showFilter">
+            <div class="filters">
+                <h3>Filters</h3>
+                <div class="filter-item checkboxs">
+                    <h4>City</h4>
+                    <div *ngFor="let item of filterCityList; let i = index" class="checkbox-list">
+                        <input type="checkbox" [id]="'chk_' + item.value" [value]="item.value" [checked]="item.checked" (change)="onFilterCityChecked(i, $event)">
+                        <label [for]="'chk_' + item.value">{{ item.value }}</label>
+                    </div>
+                    <input type="text" placeholder="Else city" [(ngModel)] = "filterCity" (ngModelChange)="onFilter()" />
+                </div>
+                <div class="filter-item filter-slider">
+                    <h4>Rent price range</h4>
+                    <div class="slider-container">
+                        <input type="range" [min]="minPriceLimit" [max]="maxPriceLimit" [(ngModel)]="minPrice" (input)="onPriceRangeChange()" class="slider slider-min">
+                        <input type="range" [min]="minPriceLimit" [max]="maxPriceLimit" [(ngModel)]="maxPrice" (input)="onPriceRangeChange()" class="slider slider-max">
+                        <div class="slider-track" [ngStyle]="{left: trackPriceLeft, width: trackPriceWidth}"></div>
+                        <div class="value-labels">
+                          <span>${{ minPrice }}</span>
+                          <span>${{ maxPrice }}</span>
+                        </div>
+                      </div>                      
+                </div>
+                <div class="filter-item filter-slider">
+                    <h4>Area size range</h4>
+                    <div class="slider-container">
+                        <input type="range" [min]="minAreaLimit" [max]="maxAreaLimit" [(ngModel)]="minArea" (input)="onAreaRangeChange()" class="slider slider-min">
+                        <input type="range" [min]="minAreaLimit" [max]="maxAreaLimit" [(ngModel)]="maxArea" (input)="onAreaRangeChange()" class="slider slider-max">
+                        <div class="slider-track" [ngStyle]="{left: trackAreaLeft, width: trackAreaWidth}"></div>
+                        <div class="value-labels">
+                          <span>{{ minArea }}m²</span>
+                          <span>{{ maxArea }}m²</span>
+                        </div>
+                      </div>                      
+                </div>
+              </div>
+        </div>
+
+        <div class="flats-form-right">
+            <div *ngIf="filteredFlats.length > 0; else noResults">
+                <div class="flats-content">
+                    <div *ngFor="let item of filteredFlats" class="flat-card">
+                        <div class="upper">
+                            <div class="left">
+                                <h3 city>{{ item.city }}</h3>
+                                <label>{{ item.street_number }} {{ item.street_name }}</label>
+                                <h3 rent_price>{{ item.rent_price }}</h3>
+                                <label landlord_name>
+                                    <mat-icon  *ngIf="item.landlord_name !== ''" aria-hidden="false">person_pin</mat-icon> 
+                                    {{ item.landlord_name }}
+                                </label>
+                                <label landlord_email>
+                                    <mat-icon  *ngIf="item.landlord_email !== ''" aria-hidden="false">email</mat-icon> 
+                                    {{ item.landlord_email }}
+                                </label>
+                            </div>
+                            <div class="right">
+                                <img [src]="item.imageUrl" alt="Flat image" class="flat-image" />
+                                <label date_available>{{ item.date_available_display }}</label>
+                            </div>
+                        </div>
+                        <div class="lower">
+                            <div class="bottom" year_built>
+                                <label>{{ item.year_built }}</label>
+                            </div>
+                            <div class="bottom" area_size>
+                                <label>{{ item.area_size }}</label>
+                            </div>
+                            <div class="bottom" [ngClass]="{ hasAC: item.has_ac }" has_ac>
+                                <mat-icon aria-hidden="false">{{ item.has_ac ? 'check_circle' : 'cancel' }}</mat-icon>
+                            </div>
+                        </div>
+                        <div class="actions">
+                            <button (click)="deleteFlat(item.id)" delete>
+                                <mat-icon aria-hidden="false">delete</mat-icon>
+                            </button>
+                            <button (click)="this.user ? messageFlat(item.id, item.landlord_id, `${item.street_name}, ${item.street_number}`, this.user.uid) : null" message>
+                                <mat-icon aria-hidden="false">message</mat-icon>
+                            </button>
+                            <button (click)="editFlat(item)" edit>
+                                <mat-icon aria-hidden="false">mode</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <ng-template #noResults>
+                <div class="no-results">
+                    <mat-icon aria-hidden="false">domain_disabled</mat-icon>
+                    <h1>No results found based on your filters.</h1>
+                </div>
+            </ng-template>
+        </div>
     </div>
 </div>
   
-<div class="flats-content">
-    <div *ngFor="let item of filteredFlats" class="flat-card">
-        <div class="upper">
-            <div class="left">
-                <h3 city>{{ item.city }}</h3>
-                <label>{{ item.street_number }} {{ item.street_name }}</label>
-                <h3 rent_price>{{ item.rent_price }}</h3>
-                <label landlord_name>
-                    <mat-icon  *ngIf="item.landlord_name !== ''" aria-hidden="false">person_pin</mat-icon> 
-                    {{ item.landlord_name }}
-                </label>
-                <label landlord_email>
-                    <mat-icon  *ngIf="item.landlord_email !== ''" aria-hidden="false">email</mat-icon> 
-                    {{ item.landlord_email }}
-                </label>
-            </div>
-            <div class="right">
-                <img [src]="item.imageUrl" alt="Flat image" class="flat-image" />
-                <label date_available>{{ item.date_available_display }}</label>
-            </div>
-        </div>
-        <div class="lower">
-            <div class="bottom" year_built>
-                <label>{{ item.year_built }}</label>
-            </div>
-            <div class="bottom" area_size>
-                <label>{{ item.area_size }}</label>
-            </div>
-            <div class="bottom" [ngClass]="{ hasAC: item.has_ac }" has_ac>
-                <mat-icon aria-hidden="false">{{ item.has_ac ? 'check_circle' : 'cancel' }}</mat-icon>
-            </div>
-        </div>
-        <div class="actions">
-            <button (click)="deleteFlat(item.id)" delete><mat-icon aria-hidden="false">delete</mat-icon></button>
-            <button (click)="messageFlat(item.id)" message><mat-icon aria-hidden="false">message</mat-icon></button>
-            <button (click)="editFlat(item)" edit><mat-icon aria-hidden="false">mode</mat-icon></button>
-        </div>
-    </div>
-</div>
