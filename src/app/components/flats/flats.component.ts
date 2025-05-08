@@ -22,7 +22,8 @@ export interface Flat {
   date_available: Timestamp;
   date_available_display: string;
   imageUrl: string;
-  images: string; 
+  images: string;
+  favorite: boolean;
   landlord_id: string;
   landlord_name: string;
   landlord_email: string;
@@ -81,6 +82,8 @@ export class FlatsComponent {
   trackAreaLeft = '0%';
   trackAreaWidth = '100%';
 
+  favoriteFilter: boolean = false;
+
   constructor(
     private firestore: Firestore,
     private auth: AuthService,
@@ -104,22 +107,30 @@ export class FlatsComponent {
   }
 
   ngOnInit() {
+    this.checkScreenWidth();
     this.auth.getCurrentUser().then(user => {
       if (user) {
         this.user = user;
+        this.getAllFlats(this.user?.uid);
       } else {
         console.log("User not logged in.")
       }
     })
-
-    this.getAllFlats();
   }
 
-  async getAllFlats() {  
+  async getAllFlats(uid: string) {  
     try {
       const users = collection(this.firestore, 'users');
       const u = query(users);
       const queryUsers = await getDocs(u);
+
+      let favorites: string[] = [];
+      if(uid) {
+        const currentUserDoc = queryUsers.docs.find(doc => doc.id === uid);
+        const urrentUser = currentUserDoc ? currentUserDoc.data() : null;
+        if(urrentUser != null) 
+          favorites = urrentUser["favorites"];
+      }
 
       const flats = collection(this.firestore, 'flats');
       const q = query(
@@ -152,6 +163,7 @@ export class FlatsComponent {
         const jsDate = firestoreDate.toDate();
         flat.date_available_display = jsDate.toLocaleDateString('en-CA');
         flat.imageUrl = flat.images
+        flat.favorite = favorites.includes(flat.id)? true: false;
         
         const landlordDoc = queryUsers.docs.find(doc => doc.id === flat.landlord_id);
         const landlord = landlordDoc ? landlordDoc.data() : null;
@@ -204,6 +216,11 @@ export class FlatsComponent {
     this.onFilter();
   }
 
+  onFilterFavorite() {
+    this.favoriteFilter = !this.favoriteFilter;
+    this.onFilter();
+  }
+
   async onSort(field: string) {
     try {
       if (!this.sortingClicked.includes(field)) {
@@ -212,13 +229,37 @@ export class FlatsComponent {
 
       switch (field) {
         case 'city':
-          this.isAce_City = this.isAce_City == 1 ? -1 : 1;
+          if(!this.isMobile) 
+            this.isAce_City = this.isAce_City == 1 ? -1 : 1;
+          else {
+            this.isAce_City = this.isAce_City === 0 ? 1 : (this.isAce_City === 1 ? -1 : 0);
+
+            if(this.isMobile && this.isAce_City === 0) {
+              this.sortingClicked = this.sortingClicked.filter(item => item !== field);
+            }      
+          }
           break;    
         case 'rent_price':
-          this.isAce_Price = this.isAce_Price == 1 ? -1 : 1;
+          if(!this.isMobile)
+            this.isAce_Price = this.isAce_Price == 1 ? -1 : 1;
+          else {
+            this.isAce_Price = this.isAce_Price === 0 ? 1 : (this.isAce_Price === 1 ? -1 : 0);
+
+            if(this.isMobile && this.isAce_Price === 0) {
+              this.sortingClicked = this.sortingClicked.filter(item => item !== field);
+            }      
+          }
           break;    
         case 'area_size':
-          this.isAce_Area = this.isAce_Area == 1 ? -1 : 1;
+          if(!this.isMobile)
+            this.isAce_Area = this.isAce_Area == 1 ? -1 : 1;
+          else {
+            this.isAce_Area = this.isAce_Area === 0 ? 1 : (this.isAce_Area === 1 ? -1 : 0);
+
+            if(this.isMobile && this.isAce_Area === 0) {
+              this.sortingClicked = this.sortingClicked.filter(item => item !== field);
+            }      
+          }
           break;
       }
 
@@ -228,42 +269,54 @@ export class FlatsComponent {
     }
   }
 
+  async onClearSort() {
+    try {
+      this.sortingClicked = [];
+      this.isAce_City = 0;
+      this.isAce_Price = 0;
+      this.isAce_Area = 0;
+      await this.onFilter();
+    } catch (error) {
+      console.error('Error clearing sort value:', error);
+    }
+  }
+
   async onFilter() {
     try {
-      let haveFilter = false;
       this.filteredFlats = this.allflats;
 
       this.filterCityList.forEach(ck => {
         if(ck.checked) {
-          haveFilter = true;
           let city = ck.value.toLocaleLowerCase();
           this.filteredFlats = this.filteredFlats.filter(flat => flat.city?.toLowerCase().includes(city));
         }
       });
 
       if(this.filterCity.length > 0) {
-        haveFilter = true;
         this.filteredFlats = this.filteredFlats.filter(flat => flat.city?.toLowerCase().includes(this.filterCity.toLocaleLowerCase()));
       }
 
       if(this.minPrice != Infinity && this.minPrice != null) {
-        haveFilter = true;
         this.filteredFlats = this.filteredFlats.filter(flat => flat.rent_price >= this.minPrice);
       }
       
       if(this.maxPrice != Infinity && this.maxPrice != null) {
-        haveFilter = true;
         this.filteredFlats = this.filteredFlats.filter(flat => flat.rent_price <= this.maxPrice);
       }
       
       if(this.minArea != Infinity && this.minArea != null) {
-        haveFilter = true;
         this.filteredFlats = this.filteredFlats.filter(flat => flat.area_size >= this.minArea);
       }
       
       if(this.maxArea != Infinity && this.maxArea != null) {
-        haveFilter = true;
         this.filteredFlats = this.filteredFlats.filter(flat => flat.area_size <= this.maxArea);
+      }
+
+      if(this.favoriteFilter) {
+        this.filteredFlats = this.filteredFlats.filter(flat => flat.favorite == true);
+      }
+      else {
+        this.filteredFlats = this.filteredFlats.filter(flat => flat.favorite == true || flat.favorite == false);
       }
 
       this.filteredFlats.sort((a, b) => {
@@ -287,6 +340,26 @@ export class FlatsComponent {
       });
     } catch (error) {
       console.error('Error filtering data:', error);
+    }
+  }
+
+  async onClearFilter() {
+    try {
+      this.filterCityList.forEach(item => item.checked = false);
+      this.filterCity = '';
+      this.favoriteFilter = false;
+
+      this.minPrice = this.minPriceLimit;
+      this.maxPrice = this.maxPriceLimit;
+      this.onPriceRangeChange();
+
+      this.minArea = this.minAreaLimit;
+      this.maxArea = this.maxAreaLimit;
+      this.onAreaRangeChange();
+
+      await this.onFilter();
+    } catch (error) {
+      console.error('Error clearing sort value:', error);
     }
   }
 
