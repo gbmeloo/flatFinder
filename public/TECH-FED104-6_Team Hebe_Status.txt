@@ -1,0 +1,11 @@
+TECH-FED104-6 Team Hebe
+
+1). Login => Completed (Modify by GM/back-end logic, GG/front-end style)
+2). Register => Completed (Modify by GM/back-end logic, GG/front-end style)
+3). Flats => Completed (Modify by GG/back-end logic, Hebe/back-end logic & front-end style)
+4). Add a Flat => Completed (Modify by Caua/front-end style, Hebe/back-end logic)
+5). Profile => Completed (Modify by GG/front-end style, Hebe/back-end logic)
+6). Favorites => Completed (Modify by Caua/back-end logic & front-end style)
+7). My Flats => Completed (Modify by Hebe/back-end logic & front-end style)
+8). Chat => Completed (Modify by GG/back-end logic & front-end style)
+9). Flats Detil => Completed (Modify by GM/back-end logic & front-end style)
