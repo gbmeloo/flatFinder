@@ -20,7 +20,10 @@ export interface Flat {
   date_available: Timestamp;
   date_available_display: string;
   imageUrl: string;
+  images: string;
   landlord_id: string;
+  landlord_name: string;
+  landlord_email: string;
 }
 
 @Component({
@@ -124,7 +127,7 @@ export class MyFlatsComponent {
         const firestoreDate: Timestamp = flat.date_available;
         const jsDate = firestoreDate.toDate();
         flat.date_available_display = jsDate.toLocaleDateString('en-CA');
-        flat.imageUrl = "https://cdngeneral.point2homes.com/dmslivecafe/3/1652463/20230203_231230669_iOS(20250312114430897).jpg?width=360&quality=80";
+        flat.imageUrl = flat.images;
         this.myflats.push(flat);
         this.filteredFlats.push(flat);
       });

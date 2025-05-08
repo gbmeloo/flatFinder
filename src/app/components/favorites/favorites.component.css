@@ -260,3 +260,8 @@
           color: #ff0000;
           border: 1px solid #ff0000;;
       }
+      
+      .flat-image {
+        height: 270px;
+        width: 360px;
+    }

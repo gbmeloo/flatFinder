@@ -4,6 +4,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { jwtDecode } from 'jwt-decode';
 import { Firestore, collection, query, where, orderBy, getDocs, Timestamp, doc, getDoc, updateDoc  } from '@angular/fire/firestore';
+import { AuthService } from '../../services/auth.service';
+import { User } from 'firebase/auth';
+import { ChatService } from '../../services/chat.service';
+import { Router } from '@angular/router';
+import { NotificationService } from '../../services/notification.service';
 
 export interface Flat {
   id: string;
@@ -17,6 +22,7 @@ export interface Flat {
   date_available: Timestamp;
   date_available_display: string;
   imageUrl: string;
+  images: string;
   landlord_id: string;
   landlord_name: string;
   landlord_email: string;
@@ -33,6 +39,7 @@ export interface Flat {
   styleUrl: './favorites.component.css'
 })
 export class FavoritesComponent {
+  user: User | null = null;
   favoritesFlats: string[] = [];
   userId: string | null = null;
   allflats: Flat[] =[];
@@ -48,9 +55,26 @@ export class FavoritesComponent {
   minArea: number = Infinity;
   maxArea: number = Infinity;
 
-  constructor(private firestore: Firestore,) { }
+  constructor(
+    private firestore: Firestore,
+    private auth: AuthService,
+    private chatService: ChatService,
+    private router: Router,
+    private notification: NotificationService
+  ) { }
 
   ngOnInit() {
+
+    this.auth.getCurrentUser().then(user => {
+      if (user) {
+        this.user = user;
+      } else {
+        console.log("User not logged in.")
+      }
+    })
+
+
+
     const token = localStorage.getItem('idToken');
     if (token) {
       try {
@@ -105,7 +129,7 @@ export class FavoritesComponent {
         const firestoreDate: Timestamp = flat.date_available;
         const jsDate = firestoreDate.toDate();
         flat.date_available_display = jsDate.toLocaleDateString('en-CA');
-        flat.imageUrl = "https://cdngeneral.point2homes.com/dmslivecafe/3/1652463/20230203_231230669_iOS(20250312114430897).jpg?width=360&quality=80";
+        flat.imageUrl = flat.images;
         
         const landlordDoc = queryUsers.docs.find(doc => doc.id === flat.landlord_id);
         const landlord = landlordDoc ? landlordDoc.data() : null;
@@ -206,8 +230,22 @@ export class FavoritesComponent {
     }
   }
 
-  async messageFlat(id: string) {
-    
+  async messageFlat(flatId: string, landlordId: string, street: string, userId: string) {
+    if (userId === landlordId) {
+      this.notification.showNotification(
+        "Cannot start a conversation with yourself",
+        "Dimiss",
+        10000
+      )
+      return;
+    }
+    const chatId = await this.chatService.startNewChat(flatId, landlordId, street, userId);
+    if (chatId) {
+      // Redirect to the chat component with the chat ID
+      this.router.navigate(['/chat', chatId]);
+    } else {
+      console.error('Failed to start or retrieve chat.');
+    }
   }
 
   async favoriteFlat(id: string) {
