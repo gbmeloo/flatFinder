@@ -201,13 +201,13 @@ export class FlatsComponent {
 
   async favoriteFlat(id: string) {
     try {
-      if (!this.userId) {
+      if (!this.user) {
         console.error('User is not logged in.');
         return;
       }
   
       const userDocRef = collection(this.firestore, 'users');
-      const userRef = doc(userDocRef, this.userId);
+      const userRef = doc(userDocRef, this.user?.uid);
   
       // Fetch the user's current data
       const userDoc = await getDoc(userRef);

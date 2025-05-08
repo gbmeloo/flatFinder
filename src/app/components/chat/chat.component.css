@@ -9,10 +9,12 @@
 .chat-container {
   display:flex;
   justify-content: center;
-  
+  margin-top: 40px;
   gap: 30px;
-  height: 500px;
-  width: 100%
+  height: 800px;
+  width: 60%;
+  padding: 20px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5)
 }
   
   .side-menu {
@@ -61,8 +63,10 @@
   }
 
   .messages {
-    flex-grow: 1; /* Take up available space */
-    overflow-y: auto; /* Enable scrolling */
+    display: flex;
+    flex-direction: column-reverse; /* Reverse message order */
+    flex-grow: 1;
+    overflow-y: auto;
     padding: 10px;
   }
 
@@ -128,9 +132,12 @@
     .body{
       display:contents;
     }
+
     .chat-container {
       margin-top: 0;
       flex-direction: column;
+      padding: 0;
+      width: 100%;
       height: 95%;
     }
   
