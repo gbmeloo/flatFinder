@@ -198,6 +198,7 @@ export class ProfileComponent {
   async onSubmit() {
     this.updateError = null; // Clear any previous error message
     this.updateSuccess = null; // Clear any previous success message
+    // Removed email verification check
     // const isVerified = await this.emailVerificationService.isEmailVerified();
     // if (!isVerified) {
     //   this.notificationService.showNotification(

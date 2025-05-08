@@ -21,6 +21,8 @@
     width: 20%;
     border-right: 1px solid #ccc;
     padding: 10px;
+    overflow: hidden;
+    overflow-y: auto;
   }
   
   .side-menu ul {
@@ -44,6 +46,24 @@
     width: 80%; /* Ensure it takes up enough space */
     height: 100%; /* Match the height of the parent container */
     overflow: hidden; /* Prevent content overflow */
+    overflow-y: auto;
+  }
+
+  .messages-wrapper {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden; /* prevents scroll here */
+    overflow-y: auto;
+    height: 100%; /* or a fixed height */
+  }
+
+  .messages {
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
   }
 
   .back-button {
@@ -62,16 +82,21 @@
     color: black;
   }
 
-  .messages {
-    display: flex;
-    flex-direction: column-reverse; /* Reverse message order */
-    flex-grow: 1;
-    overflow-y: auto;
-    padding: 10px;
+  .message {       /* or whatever width works for your layout */
+    word-wrap: break-word; /* break long words */
+    overflow-wrap: break-word;
+    white-space: pre-wrap; 
+    max-width: 75%;
+  }
+
+  .message .time {
+    font-size: small;
+    color: #888;
   }
 
   .my-message {
-    background-color: #d1ffd6;
+    align-self: flex-end;
+    background: #d1ffd1;
     text-align: right;
     padding: 10px;
     border-radius: 10px;
@@ -84,6 +109,7 @@
     padding: 10px;
     border-radius: 10px;
     margin: 5px 0;
+    justify-self: flex-start;
   }
 
   .input-container {

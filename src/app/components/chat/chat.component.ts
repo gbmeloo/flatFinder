@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { ChatService } from '../../services/chat.service';
@@ -29,7 +29,10 @@ export interface Message {
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css'
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent {
+  @ViewChild('messagesWrapper') private messagesWrapper!: ElementRef;
+
+  private shouldScrollToBottom: boolean = false;
   messages: Message[] = [];
   userChats: { id: string; title: string; lastMessage: string }[] = [];
   messageForm: FormGroup;
@@ -95,6 +98,14 @@ export class ChatComponent implements OnInit {
     });
   }
 
+  ngAfterViewChecked() {
+    // Automatically scroll to the bottom if needed
+    if (this.shouldScrollToBottom) {
+      this.scrollToBottom();
+      this.shouldScrollToBottom = false;
+    }
+  }
+
   loadChat(chatId: string) {
     this.messages = []; // Clear previous messages
   
@@ -108,6 +119,10 @@ export class ChatComponent implements OnInit {
         ...message,
         sentByMe: message.name === this.user?.displayName // Compare sender name with current user
       }));
+
+      setTimeout(() => {
+        this.scrollToBottom();
+      }, 0);
     });
   
     // Start listening to new messages
@@ -125,6 +140,10 @@ export class ChatComponent implements OnInit {
           chat.lastMessage = `${newMessage.name}: ${newMessage.message}`;
           this.userChats = [...this.userChats];
         }
+
+        setTimeout(() => {
+          this.scrollToBottom();
+        }, 0);
       }
     });
   
@@ -143,6 +162,18 @@ export class ChatComponent implements OnInit {
     this.showChatsMenu = true; // Go back to chats menu on mobile
   }
 
+  formatTimestamp(timestamp: number): string {
+    return new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  private scrollToBottom(): void {
+    try {
+      this.messagesWrapper.nativeElement.scrollTop = this.messagesWrapper.nativeElement.scrollHeight;
+    } catch (err) {
+      console.error('Failed to scroll to bottom:', err);
+    }
+  }
+
   async onSubmit() {
     if (this.messageForm.valid && this.user) {
       const { message } = this.messageForm.value;
@@ -151,6 +182,7 @@ export class ChatComponent implements OnInit {
       await this.chatService.sendMessage(this.chatId, this.user.displayName || 'Unknown', message);
       
       this.messageForm.reset();
+      this.scrollToBottom();
     }
   }
 

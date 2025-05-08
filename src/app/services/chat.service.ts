@@ -83,7 +83,7 @@ export class ChatService {
 
   async getLastTenMessages(chatId: string): Promise<any[]> {
     const messagesRef = ref(this.db, `messages/${chatId}`);
-    const messagesQuery = query(messagesRef, orderByKey(), limitToLast(10));
+    const messagesQuery = query(messagesRef, orderByKey(), limitToLast(20));
   
     const snapshot = await get(messagesQuery);
     const messages = snapshot.val();
