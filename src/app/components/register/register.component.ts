@@ -2,7 +2,7 @@ import { Component, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControlOptions, ValidatorFn, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Auth, createUserWithEmailAndPassword } from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword, updateProfile } from '@angular/fire/auth';
 import { Firestore, doc, setDoc } from '@angular/fire/firestore';
 import { MatIconModule } from '@angular/material/icon';
 import { NotificationService } from '../../services/notification.service';
@@ -104,6 +104,10 @@ export class RegisterComponent {
       const { email, password, firstName, lastName, birth_date } = this.registerForm.value;
       try {
         await createUserWithEmailAndPassword(this.auth, email, password).then(async (userCredential) => {
+          const user = userCredential.user;
+          await updateProfile(user, {
+            displayName: `${firstName} ${lastName}`
+          })
           // Registration successful
           await sendEmailVerification(userCredential.user).then(() => {
             this.notificationService.showNotification(

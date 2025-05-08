@@ -3,8 +3,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { jwtDecode } from 'jwt-decode';
-import { Firestore, collection, query, where, orderBy, getDocs, Timestamp  } from '@angular/fire/firestore';
-import { RouterOutlet, Router } from '@angular/router';
+import { Firestore, collection, query, where, orderBy, getDocs, Timestamp, doc, getDoc, updateDoc } from '@angular/fire/firestore';
+import { AuthService } from '../../services/auth.service';
+import { User } from 'firebase/auth';
+import { ChatService } from '../../services/chat.service';
+import { Router, RouterOutlet } from '@angular/router';
+import { NotificationService } from '../../services/notification.service';
 
 export interface Flat {
   id: string;
@@ -18,6 +22,7 @@ export interface Flat {
   date_available: Timestamp;
   date_available_display: string;
   imageUrl: string;
+  images: string; 
   landlord_id: string;
   landlord_name: string;
   landlord_email: string;
@@ -36,7 +41,7 @@ export interface Flat {
   styleUrl: './flats.component.css'
 })
 export class FlatsComponent {
-  userId: string | null = null;
+  user: User | null = null;
   allflats: Flat[] =[];
 
   filteredFlats: Flat[] = [];
@@ -50,30 +55,30 @@ export class FlatsComponent {
   minArea: number = Infinity;
   maxArea: number = Infinity;
 
-  constructor(private firestore: Firestore, private router: Router) { }
+
 
   onFlatClick(id: string) {
     this.router.navigate(['/flat-details', id]);
   }
+  
+  constructor(
+    private firestore: Firestore,
+    private auth: AuthService,
+    private chatService: ChatService,
+    private router: Router,
+    private notification: NotificationService
+  ) { }
 
   ngOnInit() {
-    const token = localStorage.getItem('idToken');
-    if (token) {
-      try {
-        const decodedToken: any = jwtDecode(token);
-        this.userId = decodedToken.user_id;
-  
-        if (this.userId) {
-          this.getAllFlats();
-        } else {
-          console.error('User ID is null or undefined.');
-        }
-      } catch (error) {
-        console.error('Error decoding token:', error);
+    this.auth.getCurrentUser().then(user => {
+      if (user) {
+        this.user = user;
+      } else {
+        console.log("User not logged in.")
       }
-    } else {
-      console.error('No token found in sessionStorage.');
-    }
+    })
+
+    this.getAllFlats();
   }
 
   async getAllFlats() {  
@@ -96,7 +101,7 @@ export class FlatsComponent {
         const firestoreDate: Timestamp = flat.date_available;
         const jsDate = firestoreDate.toDate();
         flat.date_available_display = jsDate.toLocaleDateString('en-CA');
-        flat.imageUrl = "https://cdngeneral.point2homes.com/dmslivecafe/3/1652463/20230203_231230669_iOS(20250312114430897).jpg?width=360&quality=80";
+        flat.imageUrl = flat.images
         
         const landlordDoc = queryUsers.docs.find(doc => doc.id === flat.landlord_id);
         const landlord = landlordDoc ? landlordDoc.data() : null;
@@ -104,12 +109,7 @@ export class FlatsComponent {
           flat.landlord_name =`${String(landlord["firstName"] ?? '')} ${String(landlord["lastName"] ?? '')}`;
           flat.landlord_email = String(landlord["email"] ?? '');
         }
-        else {
-          flat.landlord_name = "";
-          flat.landlord_email = "";
-        }
 
-        console.log(flat);
         this.allflats.push(flat);
         this.filteredFlats.push(flat);
       });
@@ -185,11 +185,59 @@ export class FlatsComponent {
     }
   }
 
-  async messageFlat(id: string) {
-    
+  async viewFlat(event: any) {
+
+  }
+
+  async messageFlat(flatId: string, landlordId: string, street: string, userId: string) {
+    if (userId === landlordId) {
+      this.notification.showNotification(
+        "Cannot start a conversation with yourself",
+        "Dimiss",
+        10000
+      )
+      return;
+    }
+    const chatId = await this.chatService.startNewChat(flatId, landlordId, street, userId);
+    if (chatId) {
+      // Redirect to the chat component with the chat ID
+      this.router.navigate(['/chat', chatId]);
+    } else {
+      console.error('Failed to start or retrieve chat.');
+    }
   }
 
   async favoriteFlat(id: string) {
-    
+    try {
+      if (!this.user) {
+        console.error('User is not logged in.');
+        return;
+      }
+  
+      const userDocRef = collection(this.firestore, 'users');
+      const userRef = doc(userDocRef, this.user?.uid);
+  
+      // Fetch the user's current data
+      const userDoc = await getDoc(userRef);
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        const favorites = userData['favorites'] || [];
+  
+        // Check if the flat is already in the favorites
+        if (!favorites.includes(id)) {
+          favorites.push(id);
+  
+          // Update the user's document with the new favorites array
+          await updateDoc(userRef, { favorites });
+          console.log(`Flat with ID ${id} added to favorites.`);
+        } else {
+          console.log(`Flat with ID ${id} is already in favorites.`);
+        }
+      } else {
+        console.error('User document does not exist.');
+      }
+    } catch (error) {
+      console.error('Error adding flat to favorites:', error);
+    }
   }
 }

@@ -11,23 +11,22 @@ export class EmailVerifiedGuard implements CanActivate {
 
 
   async canActivate(): Promise<boolean> {
-    try {
-      const user = await this.auth.getCurrentUser();
-      if (user) {
-        console.log(user.emailVerified);
-        if (!user.emailVerified) {
-          this.notification.showNotification('Logging out due to lack of email verification. Please verify your email address.', 'Dismiss', 5000, ['error']);
-          setTimeout(() => {
-            this.auth.logout();
-          }, 1000);
-          return false;
-        }
+    const user = await this.auth.getCurrentUser();
+    if (user) {
+      if (!user.emailVerified) {
+        this.notification.showNotification(
+          'Logging out due to lack of email verification. Please verify your email address.',
+          'Dismiss',
+          5000,
+          ['error']
+        );
+        setTimeout(() => {
+          this.auth.logout();
+        }, 1000);
+        return false; // Block navigation
       }
-      return true;
-    } catch (error) {
-      console.error('Error checking user:', error);
-      return false;
     }
+    return true; // Allow navigation
   }
 
 }

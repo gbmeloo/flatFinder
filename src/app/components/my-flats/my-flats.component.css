@@ -62,13 +62,15 @@
 
   /* flats */
   .flats-content {
-    padding: 10px;
-    display: flex;
+    padding-top: 10px;
+    display: flex;    
+    flex-wrap: wrap;
+    height: fit-content;
+    overflow-y: auto;
   }
 
   .flats-content .flat-card {
-    width: fit-content;
-    height: 100%;
+    width: 36rem;
     background: #FFFFFF;
     border: 3px solid #bbbbbb;
     margin: 0 0 15px 15px;
@@ -86,12 +88,12 @@
     gap: 15px;
     font-size: 1.3rem;
     padding: 10px 15px 0 15px;
-    height: 100%;
   }
 
   .flats-content .flat-card .upper .left {
         display: flex;
         flex-direction: column;
+        width: 40%;
     }
 
     .flats-content .flat-card .upper .left * {

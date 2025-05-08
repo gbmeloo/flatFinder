@@ -9,6 +9,12 @@
                         </div>
                     </div>
                     <div class="items-right">
+                        <li>
+                            <button class="messages-button" routerLink="/chat" mat-mini-fab >
+                                <mat-icon> message</mat-icon>
+                            </button>
+                        </li>
+                        
                         <button (click)="isExpanded = !isExpanded" class="menu-button" [ngClass]="{'menu-expanded': isExpanded}">
                             <mat-icon>menu</mat-icon>
                         </button>
@@ -61,6 +67,7 @@
                             <li [ngClass]="{ 'active': pageName === '/profile' }"><a routerLink="/profile">Profile</a></li>
                             <li [ngClass]="{ 'active': pageName === '/favorites' }"><a routerLink="/favorites">Favorites</a></li>
                             <li [ngClass]="{ 'active': pageName === '/my-flats' }"><a routerLink="/my-flats">My Flats</a></li>
+                            <li [ngClass]="{ 'active': pageName === '/chat' }"><a routerLink="/chat">Chat</a></li>
                         </div>
                     </div>
                     <div class="items-right">

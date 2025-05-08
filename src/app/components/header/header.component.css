@@ -107,6 +107,16 @@ a {
     margin-right: 3px;
 }
 
+.messages-button {
+    background-color: rgb(255, 255, 255);
+    box-shadow: none;
+    border-radius: 5px;
+}
+
+.messages-button mat-icon {
+    color: rgb(76, 157, 255);
+}
+
 @media (max-width: 768px) {
     .navbar {
         padding: 10px 10px;
@@ -123,6 +133,13 @@ a {
 
     li {
         font-size: 1rem;
+    }
+
+    .items-right {
+        display: flex;
+        margin-right: 10px;
+        align-items: center;
+        gap: 7px;
     }
 
     .items-left img {

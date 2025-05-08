@@ -1,12 +1,9 @@
-import { Component, HostListener } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { jwtDecode } from 'jwt-decode';
-import { Firestore, collection, query, where, orderBy, getDocs, Timestamp, deleteDoc, doc  } from '@angular/fire/firestore';
-import { trigger, state, style, transition, animate } from '@angular/animations';
-import { NotificationService } from '../../services/notification.service';
+import { Firestore, collection, query, where, orderBy, getDocs, Timestamp, doc, getDoc, updateDoc  } from '@angular/fire/firestore';
 
 export interface Flat {
   id: string;
@@ -21,47 +18,25 @@ export interface Flat {
   date_available_display: string;
   imageUrl: string;
   landlord_id: string;
+  landlord_name: string;
+  landlord_email: string;
 }
 
 @Component({
-  selector: 'app-my-flats',
+  selector: 'app-flats',
   imports: [
-    MatProgressSpinnerModule,
     MatIconModule,
     CommonModule,
     FormsModule
   ],
-  animations: [
-    trigger('formResize', [
-      state('collapsed', style({
-        height: '0px',
-        opacity: 0,
-        overflow: 'hidden',
-        padding: '0px'
-      })),
-      state('expanded', style({
-        height: '*',
-        opacity: 1,
-        overflow: 'hidden',
-        padding: '*'
-      })),
-      transition('collapsed <=> expanded', [
-        style({ overflow: 'hidden' }),
-        animate('300ms ease')
-      ])
-    ])
-  ],
-  templateUrl: './my-flats.component.html',
-  styleUrl: './my-flats.component.css'
+  templateUrl: './favorites.component.html',
+  styleUrl: './favorites.component.css'
 })
-export class MyFlatsComponent {
+export class FavoritesComponent {
+  favoritesFlats: string[] = [];
   userId: string | null = null;
-  deleteError: string | null = null;
-  deleteSuccess: string | null = null;
-  loading: boolean = false;
-  isMobile: boolean = false; // Track if the screen is mobile size
+  allflats: Flat[] =[];
 
-  myflats: Flat[] =[];
   filteredFlats: Flat[] = [];
   sortingClicked: string[] = [];
   isAce_City = true;
@@ -73,16 +48,7 @@ export class MyFlatsComponent {
   minArea: number = Infinity;
   maxArea: number = Infinity;
 
-  constructor(private firestore: Firestore, private notificationService: NotificationService) { }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
-    this.checkScreenWidth();
-  }
-
-  checkScreenWidth(): void {
-    this.isMobile = window.innerWidth <= 768; // You can adjust the breakpoint as needed
-  }
+  constructor(private firestore: Firestore,) { }
 
   ngOnInit() {
     const token = localStorage.getItem('idToken');
@@ -92,7 +58,7 @@ export class MyFlatsComponent {
         this.userId = decodedToken.user_id;
   
         if (this.userId) {
-          this.getMyFlats();
+          this.getAllFlats();
         } else {
           console.error('User ID is null or undefined.');
         }
@@ -104,34 +70,73 @@ export class MyFlatsComponent {
     }
   }
 
-  async getMyFlats() {
-    if (!this.userId) {
-      console.error('User ID is null or undefined. Cannot fetch my flats data.');
-      return;
-    }
-  
+  async getAllFlats(): Promise<Flat[]> {  
     try {
+      if (!this.userId) {
+        throw new Error('User ID is null or undefined.');
+      }
+      const userDocRef = doc(this.firestore, 'users', this.userId);
+      const userDoc = await getDoc(userDocRef);
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        const favorites: string[] = userData['favorites'] || [];
+        this.favoritesFlats.push(...favorites);
+        this.favoritesFlats = favorites
+      } else {
+        alert('User document does not exist.');
+        return [];
+      }
+
+      const users = collection(this.firestore, 'users');
+      const u = query(users);
+      const queryUsers = await getDocs(u);
+
       const flats = collection(this.firestore, 'flats');
-      const q = query(flats, 
-        where('landlord_id', '==', this.userId),
+      const q = query(
+        flats,
         orderBy('city', 'asc'),
         orderBy('rent_price', 'asc'),
         orderBy('area_size', 'asc')
       );
-      const queryByUid = await getDocs(q);
-      queryByUid.forEach((f) => {
+      const queryAll = await getDocs(q);
+      queryAll.forEach((f) => {
         let flat: Flat = f.data() as Flat;
         flat.id = f.id;
         const firestoreDate: Timestamp = flat.date_available;
         const jsDate = firestoreDate.toDate();
         flat.date_available_display = jsDate.toLocaleDateString('en-CA');
         flat.imageUrl = "https://cdngeneral.point2homes.com/dmslivecafe/3/1652463/20230203_231230669_iOS(20250312114430897).jpg?width=360&quality=80";
-        this.myflats.push(flat);
-        this.filteredFlats.push(flat);
+        
+        const landlordDoc = queryUsers.docs.find(doc => doc.id === flat.landlord_id);
+        const landlord = landlordDoc ? landlordDoc.data() : null;
+        if(landlord != null) {
+          flat.landlord_name =`${String(landlord["firstName"] ?? '')} ${String(landlord["lastName"] ?? '')}`;
+          flat.landlord_email = String(landlord["email"] ?? '');
+          
+        }
+        else {
+          flat.landlord_name = "";
+          flat.landlord_email = "";
+        }
+
+        this.favoritesFlats.forEach(flat => {
+
+        })
+        
+        for (let i: number = 0; i < this.favoritesFlats.length; i++) {
+          if (this.favoritesFlats[i] == flat.id) {
+            console.log(flat);
+            this.allflats.push(flat);
+            this.filteredFlats.push(flat);
+          }
+      }
+        
       });
     } catch (error) {
       console.error('Error fetching my flats data:', error);
+      return [];
     }
+    return this.allflats;
   }
 
   async onSort(field: string) {
@@ -161,7 +166,7 @@ export class MyFlatsComponent {
   async onFilter() {
     try {
       let haveFilter = false;
-      this.filteredFlats = this.myflats;
+      this.filteredFlats = this.allflats;
 
       if(this.filterCity.length > 0) {
         haveFilter = true;
@@ -201,47 +206,42 @@ export class MyFlatsComponent {
     }
   }
 
-  async editFlat(event: any) {
-
-  }
-
-  async deleteFlat(id: string) {
-    const confirmed = confirm('Are you sure you want to delete this flat?');
-    if (!confirmed) return;
-
-    try {
-      const del = doc(this.firestore, 'flats', id);
-      await deleteDoc(del);
-      this.filteredFlats = this.filteredFlats.filter(flat => flat.id !== id);
-      this.myflats = this.myflats.filter(flat => flat.id !== id);
-      this.notificationService.showNotification(
-        'Flat deleted successfully',
-        'Close',
-        5000,
-        ['error-snackbar'], // Custom class for error
-      );
-      this.deleteError = null; // Clear any previous error message
-      console.log('Flat is deleted');
-    } catch (error) {
-      this.notificationService.showNotification(
-        'Error insering new flat. Please try again.' + error,
-        'Close',
-        5000,
-        ['error-snackbar'], // Custom class for error
-        this.isMobile ? 'bottom' : 'top', // Adjust position based on screen size
-        this.isMobile ? 'center' : 'right' // Adjust position based on screen size
-      );
-      this.deleteSuccess = null;
-    } finally {
-      this.loading = false;
-      setTimeout(() => {
-        this.deleteSuccess = null; // Clear success message after 3 seconds
-        this.deleteError = null; // Clear error message after 3 seconds
-      }, 3000);
-    }
-  }
-
   async messageFlat(id: string) {
     
   }
+
+  async favoriteFlat(id: string) {
+    try {
+      if (!this.userId) {
+        console.error('User is not logged in.');
+        return;
+      }
+  
+      const userDocRef = collection(this.firestore, 'users');
+      const userRef = doc(userDocRef, this.userId);
+  
+      // Fetch the user's current data
+      const userDoc = await getDoc(userRef);
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        const favorites = userData['favorites'] || [];
+  
+        // Check if the flat is already in the favorites
+        if (!favorites.includes(id)) {
+          favorites.push(id);
+  
+          // Update the user's document with the new favorites array
+          await updateDoc(userRef, { favorites });
+          console.log(`Flat with ID ${id} added to favorites.`);
+        } else {
+          console.log(`Flat with ID ${id} is already in favorites.`);
+        }
+      } else {
+        console.error('User document does not exist.');
+      }
+  }
+ catch (error: any) {
+  console.error('Error adding flat to favorites:', error);
+}
+}
 }
