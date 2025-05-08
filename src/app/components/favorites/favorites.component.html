@@ -79,8 +79,12 @@
             </div>
         </div>
         <div class="actions">
-            <button (click)="messageFlat(item.id)" message><mat-icon aria-hidden="false">message</mat-icon></button>
-            <button (click)="favoriteFlat(item.id)" favorite><mat-icon aria-hidden="false">favorite_border</mat-icon></button>
+            <button (click)="this.user ? messageFlat(item.id, item.landlord_id, `${item.street_name}, ${item.street_number}`, this.user.uid) : null" message>
+                <mat-icon aria-hidden="false">message</mat-icon>
+            </button>
+            <button (click)="favoriteFlat(item.id)" favorite>
+                <mat-icon aria-hidden="false">favorite_border</mat-icon>
+            </button>
         </div>
     </div>
 </div>
