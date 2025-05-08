@@ -198,16 +198,16 @@ export class ProfileComponent {
   async onSubmit() {
     this.updateError = null; // Clear any previous error message
     this.updateSuccess = null; // Clear any previous success message
-    const isVerified = await this.emailVerificationService.isEmailVerified();
-    if (!isVerified) {
-      this.notificationService.showNotification(
-        'Please verify your email before updating your profile.',
-        'Close',
-        5000,
-        ['error-snackbar'], // Custom class for error
-      );
-      return;
-    }
+    // const isVerified = await this.emailVerificationService.isEmailVerified();
+    // if (!isVerified) {
+    //   this.notificationService.showNotification(
+    //     'Please verify your email before updating your profile.',
+    //     'Close',
+    //     5000,
+    //     ['error-snackbar'], // Custom class for error
+    //   );
+    //   return;
+    // }
     this.loading = true;
 
     try {
