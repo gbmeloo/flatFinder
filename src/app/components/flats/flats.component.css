@@ -506,8 +506,9 @@
         }
 
         .flat-image {
-            height: 280px;
+            height: 100%;
             width: 205px;
+            margin-bottom: 25px;
         }
 
         .flats-content .flat-card .lower .bottom[area_size] label::before {

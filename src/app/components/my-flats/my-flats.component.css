@@ -257,27 +257,6 @@
         margin-left: 3px;
     }
 
-    .flats-content .flat-card .upper .left [landlord_name],
-    .flats-content .flat-card .upper .left [landlord_email] {
-        display: flex;
-        align-items: flex-start;
-        gap: 4px;
-        max-width: 200px;
-        flex-wrap: nowrap;
-    }
-
-    .flats-content .flat-card .upper .left [landlord_name] span,
-    .flats-content .flat-card .upper .left [landlord_email] span {
-        word-break: break-word;
-        white-space: normal;
-        overflow-wrap: break-word;
-        flex: 1;
-    }
-
-    .flats-content .flat-card .upper .left [landlord_name] {
-        margin-top: 20px;
-    }
-
     .flats-content .flat-card .upper .right {
         display: flex;
         flex-direction: column;
@@ -372,8 +351,7 @@
         justify-content: center;
         padding: 15px 0;         
     }
-
-    .flats-content .flat-card .actions button[view] {
+    .flats-content .flat-card .actions button[edit] {
         color: #62B040;
         font-size: 1rem;
         border: 1px solid #62B040;
@@ -383,14 +361,35 @@
         cursor: pointer;
     }
 
-    .flats-content .flat-card .actions button[view]:hover {
+    .flats-content .flat-card .actions button[edit]:hover {
         color: #FFFFFF;
         border: none;
         background-color: #62B040;
     }
 
-    .flats-content .flat-card .actions button[view]:hover::after {
-        content: 'Detail';
+    .flats-content .flat-card .actions button[edit]:hover::after {
+        content: 'Edit';
+        color: #FFFFFF;
+    }
+
+    .flats-content .flat-card .actions button[delete] {
+        color: #888888;
+        font-size: 1rem;
+        border: 1px solid #888888;
+        background-color: #FFFFFF;
+        border-radius: 5px;
+        gap: 5px;
+        cursor: pointer;
+    }
+
+    .flats-content .flat-card .actions button[delete]:hover {
+        color: #FFFFFF;
+        border: none;
+        background-color: #888888;
+    }
+
+    .flats-content .flat-card .actions button[delete]:hover::after {
+        content: 'Delete';
         color: #FFFFFF;
     }
 
@@ -414,33 +413,6 @@
         content: 'Message';
         color: #FFFFFF;
     }
-
-    .flats-content .flat-card .actions button[favorite] {
-        color: #888888;
-        font-size: 1rem;
-        border: 1px solid #888888;
-        background-color: #FFFFFF;
-        border-radius: 5px;
-        gap: 5px;
-        cursor: pointer;
-    }
-  
-    .flats-content .flat-card .actions button[favorite]:hover {
-        color: #FFFFFF;
-        border: 1px solid #ff0000;          
-        background-color: #ff0000;
-    }
-      
-    .flats-content .flat-card .actions button[favorite]:hover::after {
-        content: 'Favorite';
-        color: #FFFFFF;
-    }
-    
-    .flat-image {
-        height: 270px;
-        width: 360px;
-    }
-    
     .flat-image {
         height: 280px;
         width: 315px;
@@ -511,8 +483,9 @@
         }
 
         .flat-image {
-            height: 280px;
+            height: 100%;
             width: 205px;
+            margin-bottom: 25px;
         }
 
         .flats-content .flat-card .lower .bottom[area_size] label::before {

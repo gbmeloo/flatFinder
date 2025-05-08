@@ -9,7 +9,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { AuthService } from '../../services/auth.service';
 import { User } from 'firebase/auth';
 import { ChatService } from '../../services/chat.service';
-import { Router  } from '@angular/router';
+import { Router } from '@angular/router';
 import { NotificationService } from '../../services/notification.service';
 
 export interface Flat {
@@ -41,7 +41,7 @@ export interface chk {
     MatProgressSpinnerModule,
     MatIconModule,
     CommonModule,
-    FormsModule
+    FormsModule,
   ],
   animations: [
     trigger('formResize', [
@@ -131,17 +131,15 @@ export class MyFlatsComponent {
     this.auth.getCurrentUser().then(user => {
       if (user) {
         this.user = user;
+        this.getMyFlats(this.user?.uid);
       } else {
         console.log("User not logged in.")
       }
     })
-
-    this.getMyFlats();
   }
 
-  async getMyFlats() {
-    console.log(this.user);
-    if (!this.user) {
+  async getMyFlats(uid: string) {
+    if (!uid) {
       console.error('User ID is null or undefined. Cannot fetch user data.');
       return;
     }
@@ -149,7 +147,7 @@ export class MyFlatsComponent {
     try {
       const flats = collection(this.firestore, 'flats');
       const q = query(flats, 
-        where('landlord_id', '==', this.user?.uid),
+        where('landlord_id', '==', uid),
         orderBy('city', 'asc'),
         orderBy('rent_price', 'asc'),
         orderBy('area_size', 'asc')
@@ -160,15 +158,15 @@ export class MyFlatsComponent {
       const prices = flatsmap.map(flat => flat["rent_price"]);
       this.minPriceLimit = Math.min(...prices);
       this.maxPriceLimit = Math.max(...prices);
-      this.minPrice = this.minPriceLimit;
-      this.maxPrice = this.maxPriceLimit;
+      this.minPrice = this.minPriceLimit == Infinity ? 0 : this.minPriceLimit;
+      this.maxPrice = this.maxPriceLimit == -Infinity ? 5000 : this.maxPriceLimit;
       this.onPriceRangeChange();
       
       const areas = flatsmap.map(flat => flat["area_size"]);
       this.minAreaLimit = Math.min(...areas);
       this.maxAreaLimit = Math.max(...areas);
-      this.minArea = this.minAreaLimit;
-      this.maxArea = this.maxAreaLimit;
+      this.minArea = this.minAreaLimit == Infinity ? 0 : this.minAreaLimit;
+      this.maxArea = this.maxAreaLimit == -Infinity ? 1000 : this.maxAreaLimit;
       this.onAreaRangeChange();
 
       queryByUid.forEach((f) => {
@@ -349,14 +347,6 @@ export class MyFlatsComponent {
   }
 
   async messageFlat(flatId: string, landlordId: string, street: string, userId: string) {
-    if (userId === landlordId) {
-      this.notificationService.showNotification(
-        "Cannot start a conversation with yourself",
-        "Dimiss",
-        10000
-      )
-      return;
-    }
     const chatId = await this.chatService.startNewChat(flatId, landlordId, street, userId);
     if (chatId) {
       // Redirect to the chat component with the chat ID

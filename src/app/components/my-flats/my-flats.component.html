@@ -84,14 +84,6 @@
                                 <h3 city>{{ item.city }}</h3>
                                 <label>{{ item.street_number }} {{ item.street_name }}</label>
                                 <h3 rent_price>{{ item.rent_price }}</h3>
-                                <label landlord_name>
-                                    <mat-icon  *ngIf="item.landlord_name !== ''" aria-hidden="false">person_pin</mat-icon> 
-                                    {{ item.landlord_name }}
-                                </label>
-                                <label landlord_email>
-                                    <mat-icon  *ngIf="item.landlord_email !== ''" aria-hidden="false">email</mat-icon> 
-                                    {{ item.landlord_email }}
-                                </label>
                             </div>
                             <div class="right">
                                 <img [src]="item.imageUrl" alt="Flat image" class="flat-image" />
