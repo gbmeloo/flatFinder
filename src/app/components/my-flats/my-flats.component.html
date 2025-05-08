@@ -110,7 +110,7 @@
                             <button (click)="this.user ? messageFlat(item.id, item.landlord_id, `${item.street_name}, ${item.street_number}`, this.user.uid) : null" message>
                                 <mat-icon aria-hidden="false">message</mat-icon>
                             </button>
-                            <button (click)="editFlat(item)" edit>
+                            <button (click)="editFlat(item.id)" edit>
                                 <mat-icon aria-hidden="false">mode</mat-icon>
                             </button>
                         </div>
