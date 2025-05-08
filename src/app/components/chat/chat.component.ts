@@ -114,40 +114,6 @@ export class ChatComponent {
       this.messageSub.unsubscribe();
     }
   
-    this.chatService.getLastTenMessages(chatId).then(lastTenMessages => {
-      this.messages = lastTenMessages.map(message => ({
-        ...message,
-        sentByMe: message.name === this.user?.displayName // Compare sender name with current user
-      }));
-
-      setTimeout(() => {
-        this.scrollToBottom();
-      }, 0);
-    });
-  
-    // Start listening to new messages
-    this.chatService.listenForMessages(chatId);
-  
-    this.messageSub = this.chatService.lastMessage$.subscribe(newMessage => {
-      if (newMessage && !this.messages.find(m => m.id === newMessage.id)) {
-        this.messages.push({
-          ...newMessage,
-          sentByMe: newMessage.name === this.user?.displayName // Compare sender name with current user
-        });
-  
-        const chat = this.userChats.find(chat => chat.id === chatId);
-        if (chat) {
-          chat.lastMessage = `${newMessage.name}: ${newMessage.message}`;
-          this.userChats = [...this.userChats];
-        }
-
-        setTimeout(() => {
-          this.scrollToBottom();
-        }, 0);
-      }
-    });
-  
-    this.chatActive = true;
   }
 
   switchChat(chatId: string) {
