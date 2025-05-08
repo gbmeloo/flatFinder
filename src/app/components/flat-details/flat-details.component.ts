@@ -65,6 +65,7 @@ export class FlatDetailsComponent implements OnInit {
     const flatRef = doc(this.firestore, 'flats', flatId);
     await getDoc(flatRef).then(data => {
       this.flat = data.data();
+      this.flat.imageUrl = this.flat.images;
       const landlordDoc = queryUsers.docs.find(doc => doc.id === this.flat.landlord_id);
       const landlord = landlordDoc ? landlordDoc.data() : null;
       if(landlord != null) {
