@@ -70,6 +70,13 @@
     color: #FFFFFF;
 }
 
+.sort-bar .clear-sort {
+    color: #999999;
+    margin-left: -5px;
+    font-size: 1.3rem;
+    cursor: pointer;
+}
+
 .sort-bar .toggle-btn {
     display: none;
     padding: 1px 10px;
@@ -107,6 +114,16 @@
     transform: translateX(-100%);
     position: absolute;
     z-index: 10;
+}
+
+.filter-panel .clear-filter {
+    color: #999999;
+    margin-top: 5px;
+    padding-right: 15px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
 }
 
 .filters {

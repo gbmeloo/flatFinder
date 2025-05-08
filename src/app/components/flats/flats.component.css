@@ -70,6 +70,13 @@
     color: #FFFFFF;
 }
 
+.sort-bar .clear-sort {
+    color: #999999;
+    margin-left: -5px;
+    font-size: 1.3rem;
+    cursor: pointer;
+}
+
 .sort-bar .toggle-btn {
     display: none;
     padding: 1px 10px;
@@ -107,6 +114,16 @@
     transform: translateX(-100%);
     position: absolute;
     z-index: 10;
+}
+
+.filter-panel .clear-filter {
+    color: #999999;
+    margin-top: 5px;
+    padding-right: 15px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
 }
 
 .filters {
@@ -151,6 +168,36 @@
     border: 1px solid #888888;
     background-color: #FFFFFF;
     padding: 6px 5px;
+}
+
+.filter-item button[favorite] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ff0000;
+    border: 1px solid #ff0000;
+    background-color: #FFFFFF;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    margin-top: 7px;
+    width: 100%;
+    height: 3rem;
+}
+
+.filter-item button[favorite].favorite-filter {
+    color: white;
+    background-color: #ff0000;
+    box-shadow: 0 0 4px rgba(25, 118, 210, 0.5);
+}
+
+.filter-item button[favorite].favorite-filter mat-icon {
+    margin-right: 5px;
+}
+
+.filter-item button[favorite]:hover {
+    cursor: pointer;
+    color: white;
+    background-color: #ff0000;
 }
 
 /* slider */
@@ -207,6 +254,13 @@
     border-radius: 10px;
   }
 
+  .flats-content .flat-card.my-flat {
+    position: relative;
+    background-color: #eff6fd;
+    border: 2px solid #9EAAC5;
+    box-shadow: 0 0 4px rgba(25, 118, 210, 0.3);
+  }
+  
   .flats-content .flat-card label {
         color: #242424;
         opacity: 0.85;
@@ -257,8 +311,7 @@
         margin-left: 3px;
     }
 
-    .flats-content .flat-card .upper .left [landlord_name],
-    .flats-content .flat-card .upper .left [landlord_email] {
+    .flats-content .flat-card .upper .left .landlord {
         display: flex;
         align-items: flex-start;
         gap: 4px;
@@ -266,8 +319,7 @@
         flex-wrap: nowrap;
     }
 
-    .flats-content .flat-card .upper .left [landlord_name] span,
-    .flats-content .flat-card .upper .left [landlord_email] span {
+    .flats-content .flat-card .upper .left .landlord span {
         word-break: break-word;
         white-space: normal;
         overflow-wrap: break-word;
@@ -276,6 +328,21 @@
 
     .flats-content .flat-card .upper .left [landlord_name] {
         margin-top: 20px;
+    }
+
+    .flats-content .flat-card .upper .left [owner] {
+        margin-top: 50px;
+        font-size: 1.7rem;
+        opacity: 0.5;
+        position: absolute;
+        bottom: 6.7rem;
+    }
+
+    .flats-content .flat-card .upper .left [owner] mat-icon {
+        font-size: 1.7rem;
+        height: 27px;
+        width: 27px;
+        margin-top: 3px;
     }
 
     .flats-content .flat-card .upper .right {
@@ -373,6 +440,10 @@
         padding: 15px 0;         
     }
 
+    .flats-content .flat-card .actions button:disabled:hover {
+        cursor: not-allowed;
+    }
+      
     .flats-content .flat-card .actions button[view] {
         color: #62B040;
         font-size: 1rem;
@@ -383,13 +454,13 @@
         cursor: pointer;
     }
 
-    .flats-content .flat-card .actions button[view]:hover {
+    .flats-content .flat-card .actions button[view]:not(:disabled):hover {
         color: #FFFFFF;
         border: none;
         background-color: #62B040;
     }
 
-    .flats-content .flat-card .actions button[view]:hover::after {
+    .flats-content .flat-card .actions button[view]:not(:disabled):hover::after {
         content: 'Detail';
         color: #FFFFFF;
     }
@@ -404,13 +475,13 @@
         cursor: pointer;
     }
 
-    .flats-content .flat-card .actions button[message]:hover {
+    .flats-content .flat-card .actions button[message]:not(:disabled):hover {
         color: #FFFFFF;
         border: none;
         background-color: #007bff;
     }
 
-    .flats-content .flat-card .actions button[message]:hover::after {
+    .flats-content .flat-card .actions button[message]:not(:disabled):hover::after {
         content: 'Message';
         color: #FFFFFF;
     }
@@ -425,13 +496,18 @@
         cursor: pointer;
     }
   
-    .flats-content .flat-card .actions button[favorite]:hover {
+    .flats-content .flat-card .actions button[favorite].favorite {
+        color: #ff0000;
+        border: 1px solid #ff0000;
+    }
+
+    .flats-content .flat-card .actions button[favorite]:not(:disabled):hover {
         color: #FFFFFF;
-        border: 1px solid #ff0000;          
+        border: 1px solid #ff0000;
         background-color: #ff0000;
     }
       
-    .flats-content .flat-card .actions button[favorite]:hover::after {
+    .flats-content .flat-card .actions button[favorite]:not(:disabled):hover::after {
         content: 'Favorite';
         color: #FFFFFF;
     }
@@ -511,6 +587,10 @@
             margin-bottom: 25px;
         }
 
+        .flats-content .flat-card .upper .left [owner] {
+            bottom: 5.2rem;
+        }
+    
         .flats-content .flat-card .lower .bottom[area_size] label::before {
             content: 'Size:';
             margin-right: 3px;

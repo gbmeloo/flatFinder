@@ -128,6 +128,7 @@ export class MyFlatsComponent {
   }
 
   ngOnInit() {
+    this.checkScreenWidth();
     this.auth.getCurrentUser().then(user => {
       if (user) {
         this.user = user;
@@ -228,19 +229,55 @@ export class MyFlatsComponent {
 
       switch (field) {
         case 'city':
-          this.isAce_City = this.isAce_City == 1 ? -1 : 1;
+          if(!this.isMobile) 
+            this.isAce_City = this.isAce_City == 1 ? -1 : 1;
+          else {
+            this.isAce_City = this.isAce_City === 0 ? 1 : (this.isAce_City === 1 ? -1 : 0);
+
+            if(this.isMobile && this.isAce_City === 0) {
+              this.sortingClicked = this.sortingClicked.filter(item => item !== field);
+            }      
+          }
           break;    
         case 'rent_price':
-          this.isAce_Price = this.isAce_Price == 1 ? -1 : 1;
+          if(!this.isMobile)
+            this.isAce_Price = this.isAce_Price == 1 ? -1 : 1;
+          else {
+            this.isAce_Price = this.isAce_Price === 0 ? 1 : (this.isAce_Price === 1 ? -1 : 0);
+
+            if(this.isMobile && this.isAce_Price === 0) {
+              this.sortingClicked = this.sortingClicked.filter(item => item !== field);
+            }      
+          }
           break;    
         case 'area_size':
-          this.isAce_Area = this.isAce_Area == 1 ? -1 : 1;
+          if(!this.isMobile)
+            this.isAce_Area = this.isAce_Area == 1 ? -1 : 1;
+          else {
+            this.isAce_Area = this.isAce_Area === 0 ? 1 : (this.isAce_Area === 1 ? -1 : 0);
+
+            if(this.isMobile && this.isAce_Area === 0) {
+              this.sortingClicked = this.sortingClicked.filter(item => item !== field);
+            }      
+          }
           break;
       }
 
       await this.onFilter();
     } catch (error) {
       console.error('Error sorting flats data:', error);
+    }
+  }
+
+  async onClearSort() {
+    try {
+      this.sortingClicked = [];
+      this.isAce_City = 0;
+      this.isAce_Price = 0;
+      this.isAce_Area = 0;
+      await this.onFilter();
+    } catch (error) {
+      console.error('Error clearing sort value:', error);
     }
   }
 
@@ -303,6 +340,25 @@ export class MyFlatsComponent {
       });
     } catch (error) {
       console.error('Error filtering data:', error);
+    }
+  }
+
+  async onClearFilter() {
+    try {
+      this.filterCityList.forEach(item => item.checked = false);
+      this.filterCity = '';
+
+      this.minPrice = this.minPriceLimit;
+      this.maxPrice = this.maxPriceLimit;
+      this.onPriceRangeChange();
+
+      this.minArea = this.minAreaLimit;
+      this.maxArea = this.maxAreaLimit;
+      this.onAreaRangeChange();
+
+      await this.onFilter();
+    } catch (error) {
+      console.error('Error clearing sort value:', error);
     }
   }
 

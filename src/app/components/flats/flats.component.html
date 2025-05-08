@@ -9,7 +9,7 @@
             <mat-icon aria-hidden="false">
                 {{  
                     sortingClicked.includes('city') ?
-                       (isAce_City ? 'keyboard_double_arrow_down' : 'keyboard_double_arrow_up') :
+                       (isAce_City === 1 ? 'keyboard_double_arrow_down' : 'keyboard_double_arrow_up') :
                        'unfold_more'
                 }}
             </mat-icon>
@@ -19,7 +19,7 @@
             <mat-icon aria-hidden="false">
                 {{  
                     sortingClicked.includes('rent_price') ?
-                       (isAce_Price ? 'keyboard_double_arrow_down' : 'keyboard_double_arrow_up') :
+                       (isAce_Price === 1 ? 'keyboard_double_arrow_down' : 'keyboard_double_arrow_up') :
                        'unfold_more'
                 }}
             </mat-icon>
@@ -29,11 +29,12 @@
             <mat-icon aria-hidden="false">
                 {{  
                     sortingClicked.includes('area_size') ?
-                       (isAce_Area ? 'keyboard_double_arrow_down' : 'keyboard_double_arrow_up') :
+                       (isAce_Area === 1 ? 'keyboard_double_arrow_down' : 'keyboard_double_arrow_up') :
                        'unfold_more'
                 }}
             </mat-icon>
         </button>
+        <label class="clear-sort" (click)="onClearSort()" *ngIf="!isMobile">Clear</label>
     </div>
 
     <div class="flats-form-bottom">
@@ -72,24 +73,37 @@
                         </div>
                       </div>                      
                 </div>
+                <div class="filter-item">
+                    <h4>Other options</h4>
+                    <div>
+                        <button favorite (click)="onFilterFavorite()" [ngClass]="{ 'favorite-filter': favoriteFilter }">
+                            <mat-icon aria-hidden="false" *ngIf="favoriteFilter">favorite</mat-icon>Favorite
+                        </button>
+                    </div>                      
+                </div>
               </div>
+              <label class="clear-filter" (click)="onClearFilter()" *ngIf="!isMobile">Clear</label>
         </div>
         <div class="flats-form-right">
             <div *ngIf="filteredFlats.length > 0; else noResults">
                 <div class="flats-content">
-                    <div *ngFor="let item of filteredFlats" class="flat-card">
+                    <div *ngFor="let item of filteredFlats" class="flat-card" [ngClass]="{ 'my-flat': item.landlord_id === user?.uid }">
                         <div class="upper">
                             <div class="left">
                                 <h3 city>{{ item.city }}</h3>
                                 <label>{{ item.street_number }} {{ item.street_name }}</label>
                                 <h3 rent_price>{{ item.rent_price }}</h3>
-                                <label landlord_name>
+                                <label landlord_name class="landlord" *ngIf="item.landlord_id !== user?.uid">
                                     <mat-icon  *ngIf="item.landlord_name !== ''" aria-hidden="false">person_pin</mat-icon> 
                                     <span>{{ item.landlord_name }}</span>
                                 </label>
-                                <label landlord_email>
+                                <label landlord_email class="landlord" *ngIf="item.landlord_id !== user?.uid">
                                     <mat-icon  *ngIf="item.landlord_email !== ''" aria-hidden="false">email</mat-icon> 
                                     <span>{{ item.landlord_email }}</span>
+                                </label>
+                                <label owner class="landlord" *ngIf="item.landlord_id === user?.uid">
+                                    <mat-icon aria-hidden="false">broadcast_on_personal</mat-icon> 
+                                    <span>Owner</span>
                                 </label>
                             </div>
                             <div class="right">
@@ -112,11 +126,11 @@
                             <button (click)="viewFlat(item.id)" view>
                                 <mat-icon aria-hidden="false">info_outline</mat-icon>
                             </button>
-                            <button (click)="this.user ? messageFlat(item.id, item.landlord_id, `${item.street_name}, ${item.street_number}`, this.user.uid) : null" message>
+                            <button (click)="this.user ? messageFlat(item.id, item.landlord_id, `${item.street_name}, ${item.street_number}`, this.user.uid) : null" message [disabled]="item.landlord_id === user?.uid">
                                 <mat-icon aria-hidden="false">message</mat-icon>
                             </button>
-                            <button (click)="favoriteFlat(item.id)" favorite>
-                                <mat-icon aria-hidden="false">favorite_border</mat-icon>
+                            <button (click)="favoriteFlat(item.id)" favorite [ngClass]="{ favorite: item.favorite }" [disabled]="item.landlord_id === user?.uid">
+                                <mat-icon aria-hidden="false">{{ item.favorite ? 'favorite' : 'favorite_border' }}</mat-icon>
                             </button>
                         </div>
                     </div>

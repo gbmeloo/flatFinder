@@ -9,7 +9,7 @@
             <mat-icon aria-hidden="false">
                 {{  
                     sortingClicked.includes('city') ?
-                       (isAce_City ? 'keyboard_double_arrow_down' : 'keyboard_double_arrow_up') :
+                       (isAce_City === 1 ? 'keyboard_double_arrow_down' : 'keyboard_double_arrow_up') :
                        'unfold_more'
                 }}
             </mat-icon>
@@ -19,7 +19,7 @@
             <mat-icon aria-hidden="false">
                 {{  
                     sortingClicked.includes('rent_price') ?
-                       (isAce_Price ? 'keyboard_double_arrow_down' : 'keyboard_double_arrow_up') :
+                       (isAce_Price === 1 ? 'keyboard_double_arrow_down' : 'keyboard_double_arrow_up') :
                        'unfold_more'
                 }}
             </mat-icon>
@@ -29,11 +29,12 @@
             <mat-icon aria-hidden="false">
                 {{  
                     sortingClicked.includes('area_size') ?
-                       (isAce_Area ? 'keyboard_double_arrow_down' : 'keyboard_double_arrow_up') :
+                       (isAce_Area === 1 ? 'keyboard_double_arrow_down' : 'keyboard_double_arrow_up') :
                        'unfold_more'
                 }}
             </mat-icon>
         </button>
+        <label class="clear-sort" (click)="onClearSort()" *ngIf="!isMobile">Clear</label>
     </div>
 
     <div class="flats-form-bottom">
@@ -73,6 +74,7 @@
                       </div>                      
                 </div>
               </div>
+              <label class="clear-filter" (click)="onClearFilter()" *ngIf="!isMobile">Clear</label>
         </div>
 
         <div class="flats-form-right">
