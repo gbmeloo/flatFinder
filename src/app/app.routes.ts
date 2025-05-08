@@ -9,6 +9,7 @@ import { AddFlatComponent } from './components/add-flat/add-flat.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { EmailVerifiedGuard } from './guard/email-verified.guard';
 import { MyFlatsComponent } from './components/my-flats/my-flats.component';
+import { FlatDetailsComponent } from './components/flat-details/flat-details.component';
 import { FavoritesComponent } from './components/favorites/favorites.component';
 import { ChatComponent } from './components/chat/chat.component';
 
@@ -55,6 +56,10 @@ export const routes: Routes = [
     },
     {
 
+        path: 'flat-details/:id',
+        component: FlatDetailsComponent
+    }, 
+  {
         path: 'favorites',
         component: FavoritesComponent,
         canActivate: [AuthGuard]

@@ -7,7 +7,7 @@ import { Firestore, collection, query, where, orderBy, getDocs, Timestamp, doc, 
 import { AuthService } from '../../services/auth.service';
 import { User } from 'firebase/auth';
 import { ChatService } from '../../services/chat.service';
-import { Router } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { NotificationService } from '../../services/notification.service';
 
 export interface Flat {
@@ -33,8 +33,10 @@ export interface Flat {
   imports: [
     MatIconModule,
     CommonModule,
-    FormsModule
+    FormsModule,
+    RouterOutlet,
   ],
+  standalone: true,
   templateUrl: './flats.component.html',
   styleUrl: './flats.component.css'
 })
@@ -53,6 +55,12 @@ export class FlatsComponent {
   minArea: number = Infinity;
   maxArea: number = Infinity;
 
+
+
+  onFlatClick(id: string) {
+    this.router.navigate(['/flat-details', id]);
+  }
+  
   constructor(
     private firestore: Firestore,
     private auth: AuthService,

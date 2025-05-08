@@ -279,6 +279,14 @@
         cursor: pointer;
     }
   
+      .flats-content .flat-card .actions button[favorite]:hover {
+          color: #ff0000;
+          border: 1px solid #ff0000;;
+      }
+
+img.flat-image {
+    border: 1px dashed #888888;
+}
     .flats-content .flat-card .actions button[favorite]:hover {
         color: #FFFFFF;
         border: 1px solid #ff0000;          
@@ -294,5 +302,3 @@
         height: 270px;
         width: 360px;
     }
-
-
