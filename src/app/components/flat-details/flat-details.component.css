@@ -1,20 +1,25 @@
 .flat-details-view {
-  max-width: 400px;
-  margin: 40px auto;
-  padding: 24px 32px;
-  background: #f0fbff;
+  background: #fff;
   border-radius: 12px;
-  box-shadow: 0 4px 24px rgba(30, 144, 255, 0.08);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 32px;
+  max-width: 500px;
+  margin: 40px auto;
   display: flex;
   flex-direction: column;
-  gap: 18px;
   align-items: center;
 }
 .flat-image {
-  width: 100%;
-  max-width: 320px;
-  border-radius: 8px;
-  margin-bottom: 16px;
+  width: 120px;
+  height: 120px;
+  border-radius: 12px;
+  object-fit: cover;
+  margin-bottom: 24px;
+}
+.flat-details-view > div {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 12px;
 }
 .edit-btn {
   margin-top: 16px;

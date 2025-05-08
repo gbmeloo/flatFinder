@@ -93,4 +93,8 @@ export class FlatDetailsComponent implements OnInit {
     });
   }
 
+  onImgError(event: Event) {
+    (event.target as HTMLImageElement).src = "https://cdngeneral.point2homes.com/dmslivecafe/3/1652463/20230203_231230669_iOS(20250312114430897).jpg?width=360&quality=80";
+  }
+
 }

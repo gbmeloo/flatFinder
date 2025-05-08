@@ -1,7 +1,8 @@
 <h2>Flat Details</h2>
 
 <div *ngIf="flat" class="flat-details-view">
-  <img [src]="flat.imageUrl" alt="Flat Image" class="flat-image" />
+  <img [src]="flat.imageUrl" alt="Flat Image" class="flat-image"
+     (error)="onImgError($event)" />
   <div><strong>Address:</strong> {{ flat.street_name }} {{flat.street_number}}</div>
   <div><strong>Price:</strong> {{ flat.rent_price }}</div>
   <div><strong>Measurements:</strong> {{ flat.area_size }} m²</div>
