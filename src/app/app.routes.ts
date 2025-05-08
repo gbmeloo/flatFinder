@@ -53,11 +53,13 @@ export const routes: Routes = [
         component: MyFlatsComponent,
         canActivate: [AuthGuard]
     },
+    {
 
         path: 'favorites',
         component: FavoritesComponent,
         canActivate: [AuthGuard]
-    }
+    },
+    {
         path: 'chat',
         component: ChatComponent,
         canActivate: [AuthGuard]
