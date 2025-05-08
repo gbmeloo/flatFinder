@@ -90,7 +90,6 @@ export class MyFlatsComponent {
       try {
         const decodedToken: any = jwtDecode(token);
         this.userId = decodedToken.user_id;
-  
         if (this.userId) {
           this.getMyFlats();
         } else {
