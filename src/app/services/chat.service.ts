@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Database, ref, onValue, set, get, push, query, orderByKey, limitToLast, update } from '@angular/fire/database';
+import { Database, ref, set, get, push, query, orderByKey, limitToLast, update } from '@angular/fire/database';
 import { onChildAdded } from 'firebase/database';
 import { BehaviorSubject } from 'rxjs';
 
