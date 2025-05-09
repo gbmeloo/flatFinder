@@ -1,6 +1,23 @@
 <div class="update-flat-form-container">
     <form [formGroup]="updateFlatForm" (ngSubmit)="onSubmit()" class="update-flat-form">
         <h2 style="margin-bottom: 30px; text-align: center;" >Update Flat</h2>
+        <div class="form-items images">
+            <div class="label-error">
+                @if (updateFlatForm.get('images')?.touched && updateFlatForm.get('images')?.invalid) {
+                    <div class="error">
+                        {{ getErrorMessage('images') }}
+                    </div>
+                }
+            </div>
+            <div class="flat-images">
+                <img [src]="imageURL" alt="Flat Image" class="flat-image" title="Click to change image" (click)="fileInput.click()" />
+            </div>
+            <div class="input-container" style="display: none;">
+                <mat-icon>photo_size_select_actual</mat-icon>
+                <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" multiple />
+            </div>      
+        </div>
+        
         <div class="form-items">
             <div class="form-items-section">
                 <div class="label-error">
@@ -106,21 +123,6 @@
             </div>
         </div>
 
-        <div class="form-items images">
-            <div class="label-error">
-                <label>Images</label>
-                @if (updateFlatForm.get('images')?.touched && updateFlatForm.get('images')?.invalid) {
-                    <div class="error">
-                        {{ getErrorMessage('images') }}
-                    </div>
-                }
-            </div>
-            <div class="input-container">
-                <mat-icon>photo_size_select_actual</mat-icon>
-                <input type="file" (change)="onFileSelected($event)" multiple />
-            </div>      
-        </div>
-        
         <button type="submit" class="submit-btn" [disabled]="updateFlatForm.invalid">Update</button>
 
         <div class="loading-spinner" [@formResize]="loading ? 'expanded' : 'collapsed'" [style.display]="loading ? 'flex' : 'none'">

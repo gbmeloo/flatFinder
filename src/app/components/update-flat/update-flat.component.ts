@@ -26,9 +26,6 @@ export interface Flat {
   has_ac: boolean;
   year_built: number;
   date_available: Timestamp;
-  images: string;
-  landlord_id: string;
-  updatedAt: string;
 }
 
 @Component({
@@ -66,14 +63,13 @@ export interface Flat {
 export class UpdateFlatComponent {
 
   flatId: string = '';
-  imageURL_Ori: string = '';
   imageURL: string = '';
 
   user: User | null = null;
   updateFlatForm: FormGroup;
   selectedFiles: FileList | null = null;
-  insertError: string | null = null;
-  insertSuccess: string | null = null;
+  updateError: string | null = null;
+  updateSuccess: string | null = null;
   loading: boolean = false;
   isMobile: boolean = false; // Track if the screen is mobile size
 
@@ -133,7 +129,7 @@ export class UpdateFlatComponent {
       const flatsDoc = await getDoc(doc(this.firestore, 'flats', flat_id));
       if (flatsDoc.exists()) {
         const flatData = flatsDoc.data();
-        this.imageURL_Ori = flatData['images'] || '';
+        this.imageURL = flatData['images'] || '';
         this.updateFlatForm.patchValue({
           city: flatData['city'] || '',
           street_number: flatData['street_number'] || '',
@@ -142,8 +138,7 @@ export class UpdateFlatComponent {
           area_size: flatData['area_size'] || '',
           date_available: flatData['date_available'].toDate().toLocaleDateString('en-CA') || '',
           year_built: flatData['year_built'] || '',
-          has_ac: flatData['has_ac'] || '',
-          images: this.imageURL_Ori
+          has_ac: flatData['has_ac'] || ''
         });
       } else {
         console.error('Flat document does not exist.');
@@ -167,20 +162,54 @@ export class UpdateFlatComponent {
     return '';
   }
 
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.imageURL = reader.result as string;
-      };
-      reader.readAsDataURL(file);
+  async onFileSelected(event: any) {
+    this.loading = true;
+    try {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();  
+        reader.onload = async () => {
+          const newImgUrl = reader.result as string;  
+          this.imageURL = newImgUrl;  
+          const uploadedUrl = await this.uploadImages(file);  
+          const updateData = {
+            images: newImgUrl
+          };
+          await updateDoc(doc(this.firestore, 'flats', this.flatId), updateData);
+  
+          this.notificationService.showNotification(
+            'Flat image updated successfully',
+            'Close',
+            5000,
+            ['success-snackbar']
+          );  
+          this.updateError = null;
+        };
+  
+        reader.readAsDataURL(file);
+      }
+    } catch (error) {
+      this.notificationService.showNotification(
+        'Error updating flat image. Please try again. ' + error,
+        'Close',
+        5000,
+        ['error-snackbar'],
+        this.isMobile ? 'bottom' : 'top',
+        this.isMobile ? 'center' : 'right'
+      );
+      this.updateSuccess = null;
+    } finally {
+      setTimeout(() => {
+        this.updateSuccess = null;
+        this.updateError = null;
+        this.loading = false;
+      }, 3000);
     }
   }
 
   async onSubmit() {
-    this.insertError = null; // Clear any previous error message
-    this.insertSuccess = null; // Clear any previous success message
+    this.updateError = null; // Clear any previous error message
+    this.updateSuccess = null; // Clear any previous success message
     this.loading = true;
 
     if (!this.user) {
@@ -190,29 +219,27 @@ export class UpdateFlatComponent {
 
     if (this.updateFlatForm.valid) {
       try {
-        const insert: Flat = this.updateFlatForm.value;
-        const images = this.selectedFiles ? await this.uploadImages(this.selectedFiles) : [];
+        const update: Flat = this.updateFlatForm.value;
         const updateData = {
-          city: insert.city,
-          street_name: insert.street_name,
-          street_number: insert.street_number,
-          rent_price: insert.rent_price,
-          area_size: insert.area_size,
-          has_ac: insert.has_ac,
-          year_built: insert.year_built,
-          date_available: Timestamp.fromDate(new Date(insert.date_available.toString())),
-          images: this.imageURL ? this.imageURL : this.imageURL_Ori,
+          city: update.city,
+          street_name: update.street_name,
+          street_number: update.street_number,
+          rent_price: update.rent_price,
+          area_size: update.area_size,
+          has_ac: update.has_ac,
+          year_built: update.year_built,
+          date_available: Timestamp.fromDate(new Date(update.date_available.toString())),
           landlord_id: this.user?.uid,
           updatedAt: new Date().toISOString()
         };
         await updateDoc(doc(this.firestore, 'flats', this.flatId), updateData);
         this.notificationService.showNotification(
-          'Profile updated successfully',
+          'Flat updated successfully',
           'Close',
           5000,
           ['error-snackbar'], // Custom class for error
         );
-        this.insertError = null; // Clear any previous error message
+        this.updateError = null; // Clear any previous error message
         console.log('Flat is updated');
       } catch (error) {
         this.notificationService.showNotification(
@@ -223,12 +250,12 @@ export class UpdateFlatComponent {
           this.isMobile ? 'bottom' : 'top', // Adjust position based on screen size
           this.isMobile ? 'center' : 'right' // Adjust position based on screen size
         );
-        this.insertSuccess = null;
+        this.updateSuccess = null;
       } finally {
         this.loading = false;
         setTimeout(() => {
-          this.insertSuccess = null; // Clear success message after 3 seconds
-          this.insertError = null; // Clear error message after 3 seconds
+          this.updateSuccess = null; // Clear success message after 3 seconds
+          this.updateError = null; // Clear error message after 3 seconds
         }, 3000);
       }
     }
