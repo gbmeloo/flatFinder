@@ -18,7 +18,6 @@
     backdrop-filter: blur(10px); /* Apply blur effect */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     padding: 50px 20px;
-    margin-bottom: 100px;
     text-align: center;
     max-width: 650px;
     z-index: 2;
@@ -41,8 +40,13 @@
   .form-items.images {
     display: flex;
     flex-direction: column;
-    gap: 10px;
     width: 100%;
+    margin-top: -30px;
+  }
+  
+  .form-items.images .flat-images .flat-image {
+    width: 22rem;
+    cursor: pointer;
   }
   
   .form-items-section {
