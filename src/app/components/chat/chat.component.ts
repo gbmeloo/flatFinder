@@ -32,6 +32,8 @@ export interface Message {
 export class ChatComponent {
   @ViewChild('messagesWrapper') private messagesWrapper!: ElementRef;
 
+  private firebaseUnsubscribe: (() => void) | null = null;
+
   private shouldScrollToBottom: boolean = false;
   messages: Message[] = [];
   userChats: { id: string; title: string; lastMessage: string }[] = [];
@@ -107,32 +109,35 @@ export class ChatComponent {
   }
 
   loadChat(chatId: string) {
-    this.messages = []; // Clear previous messages
+    this.messages = [];
   
-    // Unsubscribe from previous listener if any
+    // Unsubscribe from RxJS
     if (this.messageSub) {
       this.messageSub.unsubscribe();
+    }
+  
+    // Detach Firebase listener
+    if (this.firebaseUnsubscribe) {
+      this.firebaseUnsubscribe();
     }
   
     this.chatService.getLastTenMessages(chatId).then(lastTenMessages => {
       this.messages = lastTenMessages.map(message => ({
         ...message,
-        sentByMe: message.name === this.user?.displayName // Compare sender name with current user
+        sentByMe: message.name === this.user?.displayName
       }));
-
-      setTimeout(() => {
-        this.scrollToBottom();
-      }, 0);
+  
+      setTimeout(() => this.scrollToBottom(), 0);
     });
   
-    // Start listening to new messages
-    this.chatService.listenForMessages(chatId);
+    // 👇 Start Firebase listener and store the unsubscribe function
+    this.firebaseUnsubscribe = this.chatService.listenForMessages(chatId);
   
     this.messageSub = this.chatService.lastMessage$.subscribe(newMessage => {
       if (newMessage && !this.messages.find(m => m.id === newMessage.id)) {
         this.messages.push({
           ...newMessage,
-          sentByMe: newMessage.name === this.user?.displayName // Compare sender name with current user
+          sentByMe: newMessage.name === this.user?.displayName
         });
   
         const chat = this.userChats.find(chat => chat.id === chatId);
@@ -140,10 +145,8 @@ export class ChatComponent {
           chat.lastMessage = `${newMessage.name}: ${newMessage.message}`;
           this.userChats = [...this.userChats];
         }
-
-        setTimeout(() => {
-          this.scrollToBottom();
-        }, 0);
+  
+        setTimeout(() => this.scrollToBottom(), 0);
       }
     });
   
@@ -187,12 +190,14 @@ export class ChatComponent {
   }
 
   ngOnDestroy() {
-    // Unsubscribe from observables to prevent memory leaks
     if (this.screenSizeSub) {
       this.screenSizeSub.unsubscribe();
     }
     if (this.messageSub) {
       this.messageSub.unsubscribe();
+    }
+    if (this.firebaseUnsubscribe) {
+      this.firebaseUnsubscribe();
     }
   }
 

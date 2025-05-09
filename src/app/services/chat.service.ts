@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Database, ref, set, get, push, query, orderByKey, limitToLast, update } from '@angular/fire/database';
+import { Database, ref, set, get, push, query, orderByKey, limitToLast, update, off } from '@angular/fire/database';
 import { onChildAdded } from 'firebase/database';
 import { BehaviorSubject } from 'rxjs';
 
@@ -19,12 +19,14 @@ export class ChatService {
   private globalMessageSubject = new BehaviorSubject<{ chatId: string, message: Message } | null>(null);
   globalMessage$ = this.globalMessageSubject.asObservable();
 
+  private chatMessageCallbacks: { [chatId: string]: (snapshot: any) => void } = {};
+
   constructor(private db: Database) {}
 
 
   listenForMessages(chatId: string) {
     const messagesRef = ref(this.db, `messages/${chatId}`);
-    onChildAdded(messagesRef, (snapshot) => {
+    const callback = (snapshot: any) => {
       const message = snapshot.val();
       const id = snapshot.key;
       if (message && id) {
@@ -33,7 +35,15 @@ export class ChatService {
           ...message
         });
       }
-    });
+    };
+
+    this.chatMessageCallbacks[chatId] = callback; // Store the callback
+    onChildAdded(messagesRef, callback); // Start listening
+
+    return () => {
+      off(messagesRef, 'child_added', this.chatMessageCallbacks[chatId]); // 👈 Detach listener
+      delete this.chatMessageCallbacks[chatId]; // Clean up
+    };
   }
 
   listenToAllUserChats(userId: string) {
