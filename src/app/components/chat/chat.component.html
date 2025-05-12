@@ -3,14 +3,16 @@
         <div class="chat-container">
             <div class="side-menu">
               <h3>Your Chats</h3>
-              <ul>
+              <div class="chat-item-container">
+                <ul class="chat-item">
                     @for (chat of userChats; track chat.id) {
-                        <li (click)="switchChat(chat.id)">
+                        <li (click)="switchChat(chat.id)" [ngClass]="activeChat === chat.id ? 'active' : '' ">
                             <p><strong>{{ chat.title }}</strong></p>
-                            <p><strong>{{ chat.lastMessage }}</strong></p>
+                            <p><strong>{{ chat.lastMessage.slice(-100) }}</strong></p>
                         </li>
                     }   
                 </ul>
+              </div> 
             </div>
             <div class="chat-messages">
                 <div class="messages-wrapper" >
@@ -24,9 +26,7 @@
                         }
                     </div>
                 </div>
-                
-                <!-- <p><strong>{{ lastSender }}</strong>: {{ lastMessage }}</p> -->
-        
+                        
                 <form [formGroup]="messageForm" (ngSubmit)="onSubmit()">
                     <div class="input-container">
                         <input type="text" formControlName="message" required />
@@ -46,15 +46,16 @@
         <div class="chat-container">
             @if (showChatsMenu) {
                 <div class="side-menu">
-                    <h3>Your Chats</h3>
-                    <ul>
-                          @for (chat of userChats; track chat.id) {
-                              <li (click)="switchChat(chat.id)">
-                                  <p><strong>{{ chat.title }}</strong></p>
-                                  <p><strong>{{ chat.lastMessage }}</strong></p>
-                              </li>
-                          }   
-                      </ul>
+                    <div class="chat-item-container">
+                        <ul class="chat-item">
+                            @for (chat of userChats; track chat.id) {
+                                <li (click)="switchChat(chat.id)" [ngClass]="activeChat === chat.id ? 'active' : '' ">
+                                    <p><strong>{{ chat.title }}</strong></p>
+                                    <p><strong>{{ chat.lastMessage }}</strong></p>
+                                </li>
+                            }   
+                        </ul>
+                    </div> 
                 </div>
             }
             @if (!showChatsMenu) {

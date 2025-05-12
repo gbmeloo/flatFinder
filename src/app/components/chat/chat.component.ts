@@ -46,6 +46,7 @@ export class ChatComponent {
   chatActive: boolean = false;
   isMobile: boolean = false;
   showChatsMenu: boolean = true;
+  activeChat: string | null = null;
   private messageSub?: Subscription;
   private screenSizeSub?: Subscription;
 
@@ -126,7 +127,7 @@ export class ChatComponent {
         ...message,
         sentByMe: message.name === this.user?.displayName
       }));
-  
+      this.activeChat = chatId;
       setTimeout(() => this.scrollToBottom(), 0);
     });
   
