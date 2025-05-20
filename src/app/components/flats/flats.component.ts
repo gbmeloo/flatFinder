@@ -2,8 +2,7 @@ import { Component, HostListener } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { jwtDecode } from 'jwt-decode';
-import { Firestore, collection, query, where, orderBy, getDocs, Timestamp, doc, getDoc, updateDoc } from '@angular/fire/firestore';
+import { Firestore, collection, query, orderBy, getDocs, Timestamp, doc, getDoc, updateDoc } from '@angular/fire/firestore';
 import { AuthService } from '../../services/auth.service';
 import { User } from 'firebase/auth';
 import { ChatService } from '../../services/chat.service';
@@ -26,7 +25,6 @@ export interface Flat {
   favorite: boolean;
   landlord_id: string;
   landlord_name: string;
-  landlord_email: string;
 }
 
 export interface chk {
@@ -169,7 +167,6 @@ export class FlatsComponent {
         const landlord = landlordDoc ? landlordDoc.data() : null;
         if(landlord != null) {
           flat.landlord_name =`${String(landlord["firstName"] ?? '')} ${String(landlord["lastName"] ?? '')}`;
-          flat.landlord_email = String(landlord["email"] ?? '');
         }
 
         this.allflats.push(flat);

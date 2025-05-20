@@ -97,10 +97,6 @@
                                     <mat-icon  *ngIf="item.landlord_name !== ''" aria-hidden="false">person_pin</mat-icon> 
                                     <span>{{ item.landlord_name }}</span>
                                 </label>
-                                <label landlord_email class="landlord" *ngIf="item.landlord_id !== user?.uid">
-                                    <mat-icon  *ngIf="item.landlord_email !== ''" aria-hidden="false">email</mat-icon> 
-                                    <span>{{ item.landlord_email }}</span>
-                                </label>
                                 <label owner class="landlord" *ngIf="item.landlord_id === user?.uid">
                                     <mat-icon aria-hidden="false">broadcast_on_personal</mat-icon> 
                                     <span>Owner</span>
