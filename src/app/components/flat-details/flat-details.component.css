@@ -1,3 +1,24 @@
+body, .flat-edit-outer, .flat-details-outer {
+  background: #f4f6fa;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.flat-edit-outer, .flat-details-outer {
+  background: #f4f6fa;
+  min-height: 100vh;
+  padding: 40px 0;
+}
+
+.flat-edit-view, .flat-details-view {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  padding: 40px 32px;
+  max-width: 540px;
+  margin: 40px auto;
+}
+
 .flat-details-view {
   background: #fff;
   border-radius: 12px;
@@ -8,7 +29,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 18px;
 }
+
 .flat-image {
   width: 120px;
   height: 120px;
@@ -21,14 +44,14 @@
   color: #333;
   margin-bottom: 12px;
 }
-.edit-btn {
-  margin-top: 16px;
-  background: linear-gradient(90deg, #00e6ff 0%, #1e90ff 100%);
+
+button[type="submit"], .edit-btn {
+  background: #1976d2;
   color: #fff;
   border: none;
   border-radius: 6px;
   padding: 8px 18px;
-  font-weight: bold;
+  font-size: 16px;
   cursor: pointer;
   display: flex;
   align-items: center;

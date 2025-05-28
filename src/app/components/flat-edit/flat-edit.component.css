@@ -1,0 +1,96 @@
+body, .flat-edit-outer, .flat-details-outer {
+  background: #f4f6fa;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.flat-edit-outer, .flat-details-outer {
+  background: #f4f6fa;
+  min-height: 100vh;
+  padding: 40px 0;
+}
+
+.flat-edit-view, .flat-details-view {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  padding: 40px 32px;
+  max-width: 540px;
+  margin: 40px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.flat-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 16px;
+  object-fit: cover;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  background: #e9ecef;
+}
+
+.flat-detail-row, .flat-edit-row {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  padding: 16px 22px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  font-size: 17px;
+  color: #222;
+  margin-bottom: 8px;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.flat-edit-view > label,
+.flat-edit-view > .flat-edit-row {
+  width: 100%;
+}
+
+.flat-edit-view h2,
+.flat-details-view h2 {
+  margin-bottom: 10px;
+  color: #222;
+  font-weight: 700;
+  font-size: 2rem;
+  letter-spacing: 0.5px;
+}
+
+button[type="submit"], .edit-btn {
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 18px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.2s;
+  margin-top: 12px;
+}
+button[type="submit"]:hover, .edit-btn:hover {
+  background: #1565c0;
+}
+
+@media (max-width: 600px) {
+  .flat-edit-view, .flat-details-view {
+    padding: 18px 6px;
+    max-width: 98vw;
+  }
+  .flat-detail-row, .flat-edit-row {
+    padding: 12px 8px;
+    font-size: 15px;
+  }
+  .flat-image {
+    width: 90px;
+    height: 90px;
+  }
+}

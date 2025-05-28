@@ -1,0 +1,20 @@
+<h2>Edit Flat</h2>
+<form [formGroup]="flatForm" (ngSubmit)="onSubmit()">
+  <label>Street Name: <input formControlName="street_name" /></label><br>
+  <label>Street Number: <input formControlName="street_number" /></label><br>
+  <label>City: <input formControlName="city" /></label><br>
+  <label>Price: <input formControlName="rent_price" type="number" /></label><br>
+  <label>Measurements (m²): <input formControlName="area_size" type="number" /></label><br>
+  <label>Year Built: <input formControlName="year_built" type="number" /></label><br>
+  <label>Has AC: <input formControlName="has_ac" type="checkbox" /></label><br>
+  <label>Date Available: <input formControlName="date_available" type="date" /></label><br>
+  <label>Contact Name: 
+    <input formControlName="landlord_firstname" placeholder="First Name" />
+    <input formControlName="landlord_lastname" placeholder="Last Name" />
+  </label><br>
+  <label>Contact Email: <input formControlName="landlord_email" type="email" /></label><br>
+  <label>Image: <input type="file" (change)="onImageChange($event)" /></label><br>
+  <img *ngIf="imagePreview" [src]="imagePreview" alt="Flat Image" style="max-width:200px;"/><br>
+  <button type="submit" [disabled]="!flatForm.valid">Save</button>
+</form>
+

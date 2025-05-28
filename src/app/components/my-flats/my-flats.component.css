@@ -376,6 +376,12 @@
         border-radius: 5px;
         gap: 5px;
         cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 15px 0;
+        width: 32%;
+        margin: 10px 0;
     }
 
     .flats-content .flat-card .actions button[edit]:hover {

@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, inject } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { FlatService } from '../../services/flat.service';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { getDoc, doc, Firestore, collection, query, getDocs } from '@angular/fire/firestore';
+import { Auth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-flat-details',
@@ -17,12 +18,15 @@ export class FlatDetailsComponent implements OnInit {
   flatForm: FormGroup;
   flat: any;
   editMode = false;
+  currentUserId: string | null = null;
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private flatService: FlatService,
-    private firestore: Firestore
+    private firestore: Firestore,
+    private auth: Auth,
+    private router: Router,
   ) {
     this.flatForm = this.fb.group({
       address: ['', Validators.required],
@@ -42,6 +46,7 @@ export class FlatDetailsComponent implements OnInit {
     const flatId = this.route.snapshot.paramMap.get('id');
     if (flatId) {
       this.fetchFlatDetails(flatId);
+      this.currentUserId = this.auth.currentUser?.uid || null;
     }
   }
 
@@ -99,8 +104,11 @@ export class FlatDetailsComponent implements OnInit {
     });
   }
 
-  onImgError(event: Event) {
-    (event.target as HTMLImageElement).src = "https://cdngeneral.point2homes.com/dmslivecafe/3/1652463/20230203_231230669_iOS(20250312114430897).jpg?width=360&quality=80";
+  goToEditFlat(flatId: string) {
+    this.router.navigate(['/flat-edit', flatId]);
   }
 
+  onImgError(event: Event) {
+    (event.target as HTMLImageElement).src = 'assets/default-image.png'; // or your fallback image path
+  }
 }

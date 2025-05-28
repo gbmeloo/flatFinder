@@ -13,6 +13,7 @@ import { FlatDetailsComponent } from './components/flat-details/flat-details.com
 import { FavoritesComponent } from './components/favorites/favorites.component';
 import { ChatComponent } from './components/chat/chat.component';
 import { UpdateFlatComponent } from './components/update-flat/update-flat.component';
+import { FlatEditComponent } from './components/flat-edit/flat-edit.component';
 
 export const routes: Routes = [
     {
@@ -57,28 +58,11 @@ export const routes: Routes = [
     {
 
         path: 'flat-details/:id',
-        component: FlatDetailsComponent,
-        canActivate: [AuthGuard]
-    }, 
-    {
-        path: 'favorites',
-        component: FavoritesComponent,
-        canActivate: [AuthGuard]
+        component: FlatDetailsComponent
     },
     {
-        path: 'chat',
-        component: ChatComponent,
+        path: 'flat-edit/:id',
+        component: FlatEditComponent,
         canActivate: [AuthGuard]
-    },
-    { 
-        path: 'chat/:chatId', 
-        component: ChatComponent,
-        canActivate: [AuthGuard]
-    },
-    {
-
-        path: 'update-flat/:id',
-        component: UpdateFlatComponent,
-        canActivate: [AuthGuard]
-    }, 
+    }
 ];

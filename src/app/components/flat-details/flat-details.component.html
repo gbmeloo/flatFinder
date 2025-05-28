@@ -12,4 +12,9 @@
   <div><strong>Date of availability:</strong> {{ flat.dateAvailable }}</div>
   <div><strong>Contact name:</strong> {{ flat.landlord_firstname }} {{ flat.landlord_lastname }}</div>
   <div><strong>Contact email:</strong> {{ flat.landlord_email }}</div>
+  <button *ngIf="flat.landlord_id === currentUserId"
+  class="edit-btn" edit (click)="goToEditFlat(flat.id)">
+  <mat-icon>edit</mat-icon>
+  Edit
+</button>
 </div>
